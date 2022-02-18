@@ -137,7 +137,7 @@ non terminal			procedimiento;
 non terminal			funcion;
 non terminal			selectorpof;
 
-non terminal            	parametrofuncionoproc;
+non terminal            parametrofuncionoproc;
 non terminal 			llamadafuncion ; 
 
 non terminal 			parteizquierdaasignacion;  
