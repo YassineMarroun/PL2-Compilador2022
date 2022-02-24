@@ -31,6 +31,41 @@ action code {:
 	ScopeManagerIF       scopeManager         = CompilerContext.getScopeManager ();
 	FinalCodeFactoryIF   finalCodeFactory     = CompilerContext.getFinalCodeFactory ();
 
+	// Lista para guardar quadruplas de cadenas
+	List<QuadrupleIF> listaCadenas = new ArrayList<QuadrupleIF>();
+
+	// Variable para evitar que las instrucciones if-else tengan el mismo nombre
+	int controlScope = 0;
+
+	// Devuelve el tipo de la expresión
+	public TypeIF getTypeExpresion(Expresion expresion) {
+		
+		// En caso de ser una expresión aritmética, será un entero
+		if (expresion.getExAritmetica() != null) {
+			return scopeManager.searchType("INTEGER");
+		}
+		
+		// En caso de ser una expresión lógica, será un booleano
+		if (expresion.getExLogica() != null) {
+			return scopeManager.searchType("BOOLEAN");
+		}
+		
+		// En caso de tener variables, se comprueba el tipo
+		if (expresion.getVariables() != null) {
+			if(scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType() instanceof TypeArray) {
+				TypeArray typeArray = (TypeArray)scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType();
+				return typeArray.getType();
+			} else if(scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType() instanceof TypeFunction) {
+				SymbolFunction symbolFunction = (SymbolFunction)scopeManager.searchSymbol(expresion.getVariables().getIdentificador());
+				TypeIF typeFunction = symbolFunction.getCabProcedure().getTipoRetorno().getIntOBool();
+				return typeFunction;
+			} else {
+				return scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType();
+			}
+		}
+		return null;
+	}
+
 :}	
 
 parser code {:
@@ -100,8 +135,8 @@ terminal Token ASIGNACION;
 // Declaración de no terminales
 
 
-non terminal  			program;
-non terminal Axiom		axiom;
+non terminal  				program;
+non terminal Axiom			axiom;
 non terminal  			epsilon;
 non terminal  			defconstantes;
 non terminal  			valorconstante;
@@ -111,7 +146,7 @@ non terminal  			tipovector;
 non terminal  			valorango;
 non terminal  			secciontipos;
 non terminal  			defvariables;
-non terminal			tipovariable;
+non terminal TypeIF			tipovariable;
 non terminal  			listavariables;
 non terminal  			seccionvariables;
 non terminal  			defsubprograma;
@@ -123,12 +158,27 @@ non terminal  			defprincipal;
 non terminal			selectorvalororeferencia;
 
 
-non terminal			expresion;
+non terminal Expresion		expresion;
 non terminal			expresionlvl2;
 non terminal			expresionlvl3;
 non terminal			expresionlvl4;
 non terminal			expresionlvl5;
 
+
+
+non terminal ExAritmetica 	exAritmetica;
+non terminal ExLogica 		exLogica;
+non terminal IdArray		idArray;
+non terminal ParFuncion		parFuncion;
+non terminal Parametros		parametros;
+non terminal CabProcedure	cabProcedure;
+non terminal TipoRetorno	tipoRetorno;
+non terminal ProcParenParam	procParenParam;
+non terminal ProcListParam	procListParam;
+non terminal ProcParam		procParam;
+non terminal CadIdVar		cadIdVar;
+non terminal TipoRetorno	tipoRetorno;
+non terminal Cuerpo			cuerpo;
 
 
 
@@ -168,8 +218,8 @@ non terminal			sentenciallamadafuncion;
 
 
 // Declaración de relaciones de precedencia
-precedence left		PIZQUIERDO, PDERECHO, YLOGICA, MENORQUE, IGUALDAD, CIZQUIERDO, CDERECHO, SUMA ;
-precedence left PRODUCTO;
+precedence left		PIZQUIERDO, PDERECHO, YLOGICA, MENORQUE, IGUALDAD, CIZQUIERDO, CDERECHO, SUMA;
+precedence left 	PRODUCTO;
 precedence right	NOLOGICO;
 
 // Declaración de reglas de producción
