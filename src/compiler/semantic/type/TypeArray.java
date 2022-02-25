@@ -2,17 +2,18 @@ package compiler.semantic.type;
 
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeBase;
+import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 /**
  * Class for TypeArray.
  */
 
-// TODO: Student work
-//       Include properties to characterize array type
-
 public class TypeArray
     extends TypeBase
 {   
+    private TypeIF type;
+	private int inicio;
+	private int fin;
     
 	/**
      * Constructor for TypeArray.
@@ -32,6 +33,15 @@ public class TypeArray
     {
         super (scope, name);
     }
+
+    // Constructor TypeArray pasándole ScopIF, String, int, int y TypeIF
+    public TypeArray (ScopeIF scope, String name, int inicio, int fin, TypeIF type)
+    {
+        super (scope, name);
+        this.inicio = inicio;
+        this.fin = fin;
+        this.type = type;
+    }
     
     /**
      * Returns the size of the type.
@@ -40,7 +50,36 @@ public class TypeArray
     @Override
     public int getSize ()
     {
-        // TODO: Student work
-        return 1;
+        return this.fin - this.inicio + 1;
     }
+
+    // Devuelve type
+	public TypeIF getType() {
+		return type;
+	}
+
+	// Modifica type
+	public void setType(TypeIF type) {
+		this.type = type;
+	}
+
+	// Devuelve inicio
+	public int getInicio() {
+		return inicio;
+	}
+
+	// Modifica inicio
+	public void setInicio(int inicio) {
+		this.inicio = inicio;
+	}
+
+	// Devuelve fin
+	public int getFin() {
+		return fin;
+	}
+
+	// Modifica fin
+	public void setFin(int fin) {
+		this.fin = fin;
+	}
 }
