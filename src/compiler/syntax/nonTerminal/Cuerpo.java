@@ -39,7 +39,7 @@ public class Cuerpo extends NonTerminal {
 		this.stmTipos = stmTipos;
 	}
 	
-	// Devuelve StmVar
+	// Devuelve stmVar
 	public StmVar getStmVar() {
 		return stmVar;
 	}
@@ -59,16 +59,12 @@ public class Cuerpo extends NonTerminal {
 		this.stmSubprogram = stmSubprogram;
 	}
 	
-	/*
-	 * Devuelve Sentencias
-	 */
+	// Devuelve sentencias
 	public Sentencias getSentencias() {
 		return sentencias;
 	}
 	
-	/*
-	 * Modifica sentencias
-	 */
+	// Modifica sentencias
 	public void setSentencias(Sentencias sentencias) {
 		this.sentencias = sentencias;
 	}	

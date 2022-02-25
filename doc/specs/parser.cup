@@ -179,6 +179,25 @@ non terminal ProcParam		procParam;
 non terminal CadIdVar		cadIdVar;
 non terminal TipoRetorno	tipoRetorno;
 non terminal Cuerpo			cuerpo;
+non terminal StmConstantes	stmConstantes;
+non terminal SentConst		sentConst;
+non terminal ExpConst		expConst;
+non terminal StmTipos		stmTipos;
+non terminal SentTipo		sentTipo;
+non terminal StmVar			stmVar;
+non terminal SentVar		sentVar;
+non terminal ExpVar			expVar;
+non terminal StmSubprogram	stmSubprogram;
+non terminal Sentencias		sentencias;
+non terminal ListSentencia	listSentencia;
+non terminal Sentencia		sentencia;
+non terminal SentProcedure	sentProcedure;
+non terminal SentAsign		sentAsign;
+non terminal SentReturn		sentReturn;
+non terminal SentElse		sentElse;
+non terminal SentFor		sentFor;
+non terminal SWriteInt		sWriteInt;
+non terminal SWriteLn		sWriteLn;
 
 
 
