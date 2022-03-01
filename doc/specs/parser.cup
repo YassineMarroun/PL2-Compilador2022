@@ -269,8 +269,23 @@ axiom ::= defprincipal;
 epsilon ::=;
 
 //Definición de constantes
-defconstantes ::=   IDEN ASIGNACION valorconstante DSENTENCIAS defconstantes | epsilon; 
-valorconstante ::=   FALSO | CIERTO | NUM ;
+defconstantes ::=   IDEN ASIGNACION valorconstante:valor DSENTENCIAS defconstantes
+{:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	String nombre = id.getLexema().toUpperCase();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	// Constante entera
+	if(valor.isEsValorEntero()){
+		SymbolConstantEntero simboloConstante = new SymbolConstantEntero();
+	}
+:} | epsilon; 
+valorconstante ::=   FALSO {:
+	RESULT = new ValorConstante(false);
+:}
+| CIERTO {:
+	RESULT = new ValorConstante(true);
+:}
+| NUM;
 seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
 
  //Definición de tipos
@@ -296,7 +311,20 @@ defsubprograma ::=selectorpof  defsubprograma | epsilon ;
 seccionsubprograma ::=COMIENZOSUBPROGRAMAS  defsubprograma  | epsilon ;
 
 // Definición de programa principal
-defprincipal ::= COMIENZOPROGRAMA IDEN DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA ;
+defprincipal ::= COMIENZOPROGRAMA IDEN:id
+{:
+	// Abrir ámbito principal
+	scopeManager.openScope(id.getLexema().toUpperCase());
+
+	// Añadir tipos primitivos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeEntero entero = new TypeEntero(ambito);
+	TypeLogico logico = new TypeLogico(ambito);
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	tiposTabla.addType(entero);
+	tiposTabla.addType(logico);
+:}
+DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
 
 expresion ::=  expresion MENORQUE  expresion |  expresion IGUALDAD  expresion | IDEN | llamadafuncion | CIERTO | FALSO | miembrovector | NUM | expresionlvl2;
 expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3 ;
