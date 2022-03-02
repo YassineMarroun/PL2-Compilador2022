@@ -195,7 +195,7 @@ defconstantes ::= IDEN:id ASIGNACION valorconstante:valor DSENTENCIAS defconstan
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 	
-	// Comprobacion unicidad
+	// Comprobación unicidad
 	if(simbolosTabla.containsSymbol(nombre)) {
 		semanticErrorManager.semanticFatalError("Error semántico: identificador "+ nombre +" duplicado");
 	}
@@ -263,11 +263,10 @@ defsubprograma ::=selectorpof  defsubprograma | epsilon ;
 seccionsubprograma ::=COMIENZOSUBPROGRAMAS  defsubprograma  | epsilon ;
 
 // Definición de programa principal
-defprincipal ::= COMIENZOPROGRAMA IDEN:id 
-{:
-	// Abrir ambito principal
+defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
+	// Abrir ámbito principal
 	scopeManager.openScope(id.getLexema().toUpperCase());
-	// A�adir tipos primitivos
+	// Añadir tipos primitivos
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeEntero entero = new TypeEntero(ambito);
 	TypeLogico logico = new TypeLogico(ambito);
@@ -275,52 +274,49 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id
 	tiposTabla.addType(entero);
 	tiposTabla.addType(logico);
 :}
-DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA ;
+DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
 
 expresion ::=  expresion MENORQUE  expresion |  expresion IGUALDAD  expresion | IDEN | llamadafuncion | CIERTO | FALSO | miembrovector | NUM | expresionlvl2;
-expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3 ;
+expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3;
 expresionlvl3 ::=  expresion YLOGICA expresion |  expresion PRODUCTO expresion | expresionlvl4;
-expresionlvl4 ::= NOLOGICO  expresion | expresionlvl5 ;
-expresionlvl5 ::= PIZQUIERDO expresion PDERECHO | CIZQUIERDO expresion CDERECHO  ;
+expresionlvl4 ::= NOLOGICO  expresion | expresionlvl5;
+expresionlvl5 ::= PIZQUIERDO expresion PDERECHO | CIZQUIERDO expresion CDERECHO;
 
 
 // Acceso a vectores
 miembrovector::= IDEN CIZQUIERDO valorango CDERECHO;
  
-// sentencias de asignacion
-parteizquierdaasignacion ::= IDEN |miembrovector  ;
+// Sentencias de asignación
+parteizquierdaasignacion ::= IDEN |miembrovector ;
 sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion DSENTENCIAS; 
-parametroasignacion ::= expresion ;
+parametroasignacion ::= expresion;
 
-// llamada a función
-parametrofuncionoproc ::=     listavariables ;
+// Llamada a función
+parametrofuncionoproc ::=     listavariables;
 llamadafuncion ::= IDEN PIZQUIERDO parametrofuncionoproc PDERECHO;  
 sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS;
 
 
 // Sentencias
-sentencia ::= sentenciadeasignacion | sentenciaif | sentenciafor | sentenciaEscribir | sentenciallamadafuncion ;
+sentencia ::= sentenciadeasignacion | sentenciaif | sentenciafor | sentenciaEscribir | sentenciallamadafuncion;
 sentenciaFuncion ::= sentenciadeasignacion | sentenciaifFuncion | sentenciaforFuncion | sentenciaEscribir | sentenciallamadafuncion | sentenciaDevolver;
 listaSentencias ::= sentencia  listaSentencias | epsilon;
 listaSentenciasFuncion ::= sentenciaFuncion listaSentenciasFuncion | epsilon;
 
 // if
-sentenciaif ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentencias rellenoif  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS ;
-sentenciaifFuncion ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentenciasFuncion rellenoifFuncion  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS ;
-rellenoifFuncion ::=  ALTERNATIVASI DELIMFUNC  listaSentenciasFuncion | epsilon ;
-rellenoif ::=  ALTERNATIVASI DELIMFUNC  listaSentencias | epsilon ;
+sentenciaif ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentencias rellenoif  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS;
+sentenciaifFuncion ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentenciasFuncion rellenoifFuncion  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS;
+rellenoifFuncion ::=  ALTERNATIVASI DELIMFUNC  listaSentenciasFuncion | epsilon;
+rellenoif ::=  ALTERNATIVASI DELIMFUNC  listaSentencias | epsilon;
 
 // for 
 sentenciafor ::= COMIENZOBUCLEPARA IDEN RANGOBUCLEPARA expresion RANGO expresion DELIMFUNC listaSentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS;
 sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN RANGOBUCLEPARA expresion RANGO expresion DELIMFUNC listaSentenciasFuncion FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS;
 
 
-// escribir. 
-parametroEscribir ::= STRING | expresion | epsilon ;
+// escribir
+parametroEscribir ::= STRING | expresion | epsilon;
 sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS;
 
 // devolver
 sentenciaDevolver ::= FRETURN expresion DSENTENCIAS;
-
-
-
