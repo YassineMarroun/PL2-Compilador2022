@@ -95,81 +95,70 @@ terminal Token MENORQUE;
 terminal Token ASIGNACION;
 
 
-
-
 // Declaración de no terminales
 
+non terminal  					program;
+non terminal Axiom				axiom;
+non terminal  					epsilon;
+non terminal  					defconstantes;
+non terminal ValorConstante		valorconstante;
+non terminal  					seccionconstantes;
+non terminal  					deftipos;
+non terminal TypeIF				tipovector;
+non terminal ValorRango			valorango;
+non terminal  					secciontipos;
+non terminal  					defvariables;
+non terminal					tipovariable;
+non terminal  					listavariables;
+non terminal  					seccionvariables;
+non terminal  					defsubprograma;
+non terminal					puntoycomaopcional;
 
-non terminal  			program;
-non terminal Axiom		axiom;
-non terminal  			epsilon;
-non terminal  			defconstantes;
-non terminal  			valorconstante;
-non terminal  			seccionconstantes;
-non terminal  			deftipos;
-non terminal  			tipovector;
-non terminal  			valorango;
-non terminal  			secciontipos;
-non terminal  			defvariables;
-non terminal			tipovariable;
-non terminal  			listavariables;
-non terminal  			seccionvariables;
-non terminal  			defsubprograma;
-non terminal			puntoycomaopcional;
+non terminal 					tiporetornofuncion;
+non terminal  					seccionsubprograma;
+non terminal  					defprincipal;
+non terminal					selectorvalororeferencia;
 
-non terminal 			tiporetornofuncion;
-non terminal  			seccionsubprograma;
-non terminal  			defprincipal;
-non terminal			selectorvalororeferencia;
+non terminal					expresion;
+non terminal					expresionlvl2;
+non terminal					expresionlvl3;
+non terminal					expresionlvl4;
+non terminal					expresionlvl5;
 
+non terminal					miembrovector;
+non terminal					procedimiento;
+non terminal					funcion;
+non terminal					selectorpof;
 
-non terminal			expresion;
-non terminal			expresionlvl2;
-non terminal			expresionlvl3;
-non terminal			expresionlvl4;
-non terminal			expresionlvl5;
+non terminal            		parametrofuncionoproc;
+non terminal 					llamadafuncion ; 
 
+non terminal 					parteizquierdaasignacion;  
+non terminal 					sentenciadeasignacion;
 
+non terminal 					parametroEscribir ;
+non terminal 					sentenciaEscribir ;
 
+non terminal 					sentencia;
+non terminal 					sentenciaFuncion;
+non terminal 					listaSentencias;
+non terminal 					listaSentenciasFuncion;
+non terminal 					sentenciaif;
+non terminal 					sentenciaifFuncion;
+non terminal 					rellenoif;
+non terminal 					rellenoifFuncion;
+non terminal 					sentenciafor;
+non terminal 					sentenciaforFuncion;
+non terminal 					sentenciaDevolver;
 
-non terminal			miembrovector;
-non terminal			procedimiento;
-non terminal			funcion;
-non terminal			selectorpof;
+non terminal					parametroasignacion;
 
-non terminal            	parametrofuncionoproc;
-non terminal 			llamadafuncion ; 
-
-non terminal 			parteizquierdaasignacion;  
-non terminal 			sentenciadeasignacion;
-
-non terminal 			parametroEscribir ;
-non terminal 			sentenciaEscribir ;
-
-non terminal 			sentencia;
-non terminal 			sentenciaFuncion;
-non terminal 			listaSentencias;
-non terminal 			listaSentenciasFuncion;
-non terminal 			sentenciaif;
-non terminal 			sentenciaifFuncion;
-non terminal 			rellenoif;
-non terminal 			rellenoifFuncion;
-non terminal 			sentenciafor;
-non terminal 			sentenciaforFuncion;
-non terminal 			sentenciaDevolver;
-
-
-non terminal			parametroasignacion;
-
-non terminal			sentenciallamadafuncion;
-
-
-
+non terminal					sentenciallamadafuncion;
 
 
 // Declaración de relaciones de precedencia
 precedence left		PIZQUIERDO, PDERECHO, YLOGICA, MENORQUE, IGUALDAD, CIZQUIERDO, CDERECHO, SUMA ;
-precedence left PRODUCTO;
+precedence left 	PRODUCTO;
 precedence right	NOLOGICO;
 
 // Declaración de reglas de producción
@@ -177,37 +166,84 @@ precedence right	NOLOGICO;
 start with program;
 
 program ::= 
-  {: 
-        syntaxErrorManager.syntaxInfo ("Starting parsing..."); 
-   :}
-  axiom:ax
-  {: 
-  		// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
+{: 
+	syntaxErrorManager.syntaxInfo ("Starting parsing..."); 
+:}
+axiom:ax
+{: 
+  	// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
   		
-  		//List intermediateCode = ax.getIntermediateCode ();
-  		//finalCodeFactory.create (intermediateCode);
+  	//List intermediateCode = ax.getIntermediateCode ();
+  	//finalCodeFactory.create (intermediateCode);
 
-  		// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
-  		// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
-  		// aún no se tendrá implementada la generación de código intermedio ni final.
-  		// Para la entrega final deberán descomentarse y usarse.
+  	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
+  	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
+  	// aún no se tendrá implementada la generación de código intermedio ni final.
+  	// Para la entrega final deberán descomentarse y usarse.
   		
-  		syntaxErrorManager.syntaxInfo ("Parsing process ended.");
-   :};
+  	syntaxErrorManager.syntaxInfo ("Parsing process ended.");
+:};
 
 axiom ::= defprincipal;
 
 epsilon ::=;
 
 //Definición de constantes
-defconstantes ::=   IDEN ASIGNACION valorconstante DSENTENCIAS defconstantes | epsilon; 
-valorconstante ::=   FALSO | CIERTO | NUM ;
+defconstantes ::= IDEN:id ASIGNACION valorconstante:valor DSENTENCIAS defconstantes {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	String nombre = id.getLexema().toUpperCase();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+	
+	// Comprobacion unicidad
+	if(simbolosTabla.containsSymbol(nombre)) {
+		semanticErrorManager.semanticFatalError("Error semántico: identificador "+ nombre +" duplicado");
+	}
+	
+	if(valor.isEsValorEntero()) {
+		// Constante entera
+		TypeIF tipo = tiposTabla.getType("ENTERO");
+		int valorEntero=valor.getValorEntero();
+		SymbolConstantEntero simboloConstante = new SymbolConstantEntero(ambito,nombre,tipo,valorEntero);
+		simbolosTabla.addSymbol(simboloConstante);
+	} else {
+		// Constante lógica
+		TypeIF tipo = tiposTabla.getType("LOGICO");
+		boolean valorLogico=valor.getValorLogico();
+		SymbolConstantLogico simboloConstante = new SymbolConstantLogico(ambito,nombre,tipo,valorLogico);
+		simbolosTabla.addSymbol(simboloConstante);
+	}
+:}
+	| epsilon; 
+
+valorconstante ::= FALSO {: RESULT = new ValorConstante(false); :}
+	| CIERTO {: RESULT = new ValorConstante(true); :} 
+	| NUM:n {: RESULT = new ValorConstante(Integer.parseInt(n.getLexema())); :};
+
 seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
 
  //Definición de tipos
-deftipos ::=IDEN ASIGNACION DECLVECTOR CIZQUIERDO valorango RANGO valorango CDERECHO ASIGNACIONVECTOR tipovector  DSENTENCIAS deftipos | epsilon;
-tipovector ::=BOOLEANO | ENTERO ;
+deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO valorango:valorn2 CDERECHO ASIGNACIONVECTOR tipovector:tipo  DSENTENCIAS deftipos {:
+	String nombre = id.getLexema().toUpperCase(); :} 
+	| epsilon;
+
+tipovector ::= BOOLEANO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	RESULT = tipo;
+:} 
+	| ENTERO {:
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("ENTERO");
+		RESULT = tipo;
+	:};
+
+// HASTA AQUI!!!!
 valorango ::= NUM | IDEN | miembrovector;
+// TipoVectorEnteros = vector [v[7]..3] de entero;
+
 secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon; 
 
 // Definición de variables
@@ -227,7 +263,19 @@ defsubprograma ::=selectorpof  defsubprograma | epsilon ;
 seccionsubprograma ::=COMIENZOSUBPROGRAMAS  defsubprograma  | epsilon ;
 
 // Definición de programa principal
-defprincipal ::= COMIENZOPROGRAMA IDEN DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA ;
+defprincipal ::= COMIENZOPROGRAMA IDEN:id 
+{:
+	// Abrir ambito principal
+	scopeManager.openScope(id.getLexema().toUpperCase());
+	// A�adir tipos primitivos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeEntero entero = new TypeEntero(ambito);
+	TypeLogico logico = new TypeLogico(ambito);
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	tiposTabla.addType(entero);
+	tiposTabla.addType(logico);
+:}
+DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA ;
 
 expresion ::=  expresion MENORQUE  expresion |  expresion IGUALDAD  expresion | IDEN | llamadafuncion | CIERTO | FALSO | miembrovector | NUM | expresionlvl2;
 expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3 ;
