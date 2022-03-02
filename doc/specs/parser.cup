@@ -31,41 +31,6 @@ action code {:
 	ScopeManagerIF       scopeManager         = CompilerContext.getScopeManager ();
 	FinalCodeFactoryIF   finalCodeFactory     = CompilerContext.getFinalCodeFactory ();
 
-	// Lista para guardar quadruplas de cadenas
-	List<QuadrupleIF> listaCadenas = new ArrayList<QuadrupleIF>();
-
-	// Variable para evitar que las instrucciones if-else tengan el mismo nombre
-	int controlScope = 0;
-
-	// Devuelve el tipo de la expresión
-	public TypeIF getTypeExpresion(Expresion expresion) {
-		
-		// En caso de ser una expresión aritmética, será un entero
-		if (expresion.getExAritmetica() != null) {
-			return scopeManager.searchType("INTEGER");
-		}
-		
-		// En caso de ser una expresión lógica, será un booleano
-		if (expresion.getExLogica() != null) {
-			return scopeManager.searchType("BOOLEAN");
-		}
-		
-		// En caso de tener variables, se comprueba el tipo
-		if (expresion.getVariables() != null) {
-			if(scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType() instanceof TypeArray) {
-				TypeArray typeArray = (TypeArray)scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType();
-				return typeArray.getType();
-			} else if(scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType() instanceof TypeFunction) {
-				SymbolFunction symbolFunction = (SymbolFunction)scopeManager.searchSymbol(expresion.getVariables().getIdentificador());
-				TypeIF typeFunction = symbolFunction.getCabProcedure().getTipoRetorno().getIntOBool();
-				return typeFunction;
-			} else {
-				return scopeManager.searchSymbol(expresion.getVariables().getIdentificador()).getType();
-			}
-		}
-		return null;
-	}
-
 :}	
 
 parser code {:
@@ -135,8 +100,8 @@ terminal Token ASIGNACION;
 // Declaración de no terminales
 
 
-non terminal  				program;
-non terminal Axiom			axiom;
+non terminal  			program;
+non terminal Axiom		axiom;
 non terminal  			epsilon;
 non terminal  			defconstantes;
 non terminal  			valorconstante;
@@ -146,7 +111,7 @@ non terminal  			tipovector;
 non terminal  			valorango;
 non terminal  			secciontipos;
 non terminal  			defvariables;
-non terminal TypeIF			tipovariable;
+non terminal			tipovariable;
 non terminal  			listavariables;
 non terminal  			seccionvariables;
 non terminal  			defsubprograma;
@@ -158,46 +123,12 @@ non terminal  			defprincipal;
 non terminal			selectorvalororeferencia;
 
 
-non terminal Expresion		expresion;
+non terminal			expresion;
 non terminal			expresionlvl2;
 non terminal			expresionlvl3;
 non terminal			expresionlvl4;
 non terminal			expresionlvl5;
 
-
-
-non terminal ExAritmetica 	exAritmetica;
-non terminal ExLogica 		exLogica;
-non terminal IdArray		idArray;
-non terminal ParFuncion		parFuncion;
-non terminal Parametros		parametros;
-non terminal CabProcedure	cabProcedure;
-non terminal TipoRetorno	tipoRetorno;
-non terminal ProcParenParam	procParenParam;
-non terminal ProcListParam	procListParam;
-non terminal ProcParam		procParam;
-non terminal CadIdVar		cadIdVar;
-non terminal TipoRetorno	tipoRetorno;
-non terminal Cuerpo			cuerpo;
-non terminal StmConstantes	stmConstantes;
-non terminal SentConst		sentConst;
-non terminal ExpConst		expConst;
-non terminal StmTipos		stmTipos;
-non terminal SentTipo		sentTipo;
-non terminal StmVar			stmVar;
-non terminal SentVar		sentVar;
-non terminal ExpVar			expVar;
-non terminal StmSubprogram	stmSubprogram;
-non terminal Sentencias		sentencias;
-non terminal ListSentencia	listSentencia;
-non terminal Sentencia		sentencia;
-non terminal SentProcedure	sentProcedure;
-non terminal SentAsign		sentAsign;
-non terminal SentReturn		sentReturn;
-non terminal SentElse		sentElse;
-non terminal SentFor		sentFor;
-non terminal SWriteInt		sWriteInt;
-non terminal SWriteLn		sWriteLn;
 
 
 
@@ -206,7 +137,7 @@ non terminal			procedimiento;
 non terminal			funcion;
 non terminal			selectorpof;
 
-non terminal            parametrofuncionoproc;
+non terminal            	parametrofuncionoproc;
 non terminal 			llamadafuncion ; 
 
 non terminal 			parteizquierdaasignacion;  
@@ -237,8 +168,8 @@ non terminal			sentenciallamadafuncion;
 
 
 // Declaración de relaciones de precedencia
-precedence left		PIZQUIERDO, PDERECHO, YLOGICA, MENORQUE, IGUALDAD, CIZQUIERDO, CDERECHO, SUMA;
-precedence left 	PRODUCTO;
+precedence left		PIZQUIERDO, PDERECHO, YLOGICA, MENORQUE, IGUALDAD, CIZQUIERDO, CDERECHO, SUMA ;
+precedence left PRODUCTO;
 precedence right	NOLOGICO;
 
 // Declaración de reglas de producción
@@ -269,23 +200,8 @@ axiom ::= defprincipal;
 epsilon ::=;
 
 //Definición de constantes
-defconstantes ::=   IDEN ASIGNACION valorconstante:valor DSENTENCIAS defconstantes
-{:
-	ScopeIF ambito = scopeManager.getCurrentScope();
-	String nombre = id.getLexema().toUpperCase();
-	TypeTableIF tiposTabla = ambito.getTypeTable();
-	// Constante entera
-	if(valor.isEsValorEntero()){
-		SymbolConstantEntero simboloConstante = new SymbolConstantEntero();
-	}
-:} | epsilon; 
-valorconstante ::=   FALSO {:
-	RESULT = new ValorConstante(false);
-:}
-| CIERTO {:
-	RESULT = new ValorConstante(true);
-:}
-| NUM;
+defconstantes ::=   IDEN ASIGNACION valorconstante DSENTENCIAS defconstantes | epsilon; 
+valorconstante ::=   FALSO | CIERTO | NUM ;
 seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
 
  //Definición de tipos
@@ -311,20 +227,7 @@ defsubprograma ::=selectorpof  defsubprograma | epsilon ;
 seccionsubprograma ::=COMIENZOSUBPROGRAMAS  defsubprograma  | epsilon ;
 
 // Definición de programa principal
-defprincipal ::= COMIENZOPROGRAMA IDEN:id
-{:
-	// Abrir ámbito principal
-	scopeManager.openScope(id.getLexema().toUpperCase());
-
-	// Añadir tipos primitivos
-	ScopeIF ambito = scopeManager.getCurrentScope();
-	TypeEntero entero = new TypeEntero(ambito);
-	TypeLogico logico = new TypeLogico(ambito);
-	TypeTableIF tiposTabla = ambito.getTypeTable();
-	tiposTabla.addType(entero);
-	tiposTabla.addType(logico);
-:}
-DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
+defprincipal ::= COMIENZOPROGRAMA IDEN DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA ;
 
 expresion ::=  expresion MENORQUE  expresion |  expresion IGUALDAD  expresion | IDEN | llamadafuncion | CIERTO | FALSO | miembrovector | NUM | expresionlvl2;
 expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3 ;
