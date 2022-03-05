@@ -224,7 +224,15 @@ seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
 
  //Definición de tipos
 deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO valorango:valorn2 CDERECHO ASIGNACIONVECTOR tipovector:tipo  DSENTENCIAS deftipos {:
-	String nombre = id.getLexema().toUpperCase(); :} 
+	String nombre = id.getLexema().toUpperCase();
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	// Se recupera valor de rango1
+	int rango1 = valorn1.getRangoVector();
+	int rango2 = valornr2.getRangoVector();
+
+	TypeArray tipoArray = new TypeArray(ambito, nombre, rango1, rango2, tipo);
+:} 
 	| epsilon;
 
 tipovector ::= BOOLEANO {:
@@ -240,17 +248,28 @@ tipovector ::= BOOLEANO {:
 		RESULT = tipo;
 	:};
 
-// HASTA AQUI!!!!
-valorango ::= NUM | IDEN | miembrovector;
-// TipoVectorEnteros = vector [v[7]..3] de entero;
+valorango ::= NUM:n  {:
+	ValorRango vRango = new ValorRango(Integer.parseInt(n.getLexema());
+	RESULT = vRango;
+:}
+	| IDEN:id {:
+		String nombre = id.getLexema().toUpperCase();
+		// Se busca el símbolo en la Tabla de Símbolos
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+		if(simbolosTabla.containsSymbol(nombre))
+	:}
+	| miembrovector {:
+	
+	:};
 
 secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon; 
 
 // Definición de variables
 tipovariable ::= BOOLEANO | ENTERO | IDEN ;
-selectorvalororeferencia ::=  PARAMETROVALOR IDEN |expresion ;
+selectorvalororeferencia ::=  PARAMETROVALOR IDEN | expresion ;
 defvariables ::= listavariables DELIMFUNC tipovariable puntoycomaopcional defvariables | epsilon; 
-listavariables ::= selectorvalororeferencia DIDENTIFICADORES listavariables {:System.out.println("\n\n1\n\n");:}| selectorvalororeferencia {:System.out.println("\n\n2\n\n");:}| epsilon ;
+listavariables ::= selectorvalororeferencia DIDENTIFICADORES listavariables {:System.out.println("\n\n1\n\n");:} | selectorvalororeferencia {:System.out.println("\n\n2\n\n");:} | epsilon ;
 seccionvariables ::= DECLVARIABLES defvariables | epsilon  ;
 puntoycomaopcional ::= DSENTENCIAS | epsilon;
 
@@ -276,7 +295,15 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 :}
 DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
 
-expresion ::=  expresion MENORQUE  expresion |  expresion IGUALDAD  expresion | IDEN | llamadafuncion | CIERTO | FALSO | miembrovector | NUM | expresionlvl2;
+expresion ::=  expresion MENORQUE  expresion
+	|  expresion IGUALDAD  expresion
+	| IDEN
+	| llamadafuncion
+	| CIERTO
+	| FALSO
+	| miembrovector
+	| NUM
+	| expresionlvl2;
 expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3;
 expresionlvl3 ::=  expresion YLOGICA expresion |  expresion PRODUCTO expresion | expresionlvl4;
 expresionlvl4 ::= NOLOGICO  expresion | expresionlvl5;

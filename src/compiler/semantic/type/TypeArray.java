@@ -6,14 +6,14 @@ import es.uned.lsi.compiler.semantic.type.TypeBase;
 /**
  * Class for TypeArray.
  */
-
-// TODO: Student work
-//       Include properties to characterize array type
-
 public class TypeArray
     extends TypeBase
 {   
-    
+   
+    private int rango1;
+    private int rango2;
+    private TypeIF tipo;
+
 	/**
      * Constructor for TypeArray.
      * @param scope The declaration scope.
@@ -40,7 +40,6 @@ public class TypeArray
     @Override
     public int getSize ()
     {
-        // TODO: Student work
-        return 1;
+        return rango2 - rango1 + 1;
     }
 }
