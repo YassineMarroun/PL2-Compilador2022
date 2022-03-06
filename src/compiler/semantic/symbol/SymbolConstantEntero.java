@@ -9,7 +9,7 @@ public class SymbolConstantEntero extends SymbolConstant {
 	
 	public SymbolConstantEntero(ScopeIF scope, String name, TypeIF type, int valorEntero) {
 		super(scope, name, type);
-		this.valorEntero=valorEntero;
+		this.valorEntero = valorEntero;
 	}
 
 	public int getValorEntero() {

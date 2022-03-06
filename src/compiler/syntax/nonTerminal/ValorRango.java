@@ -1,5 +1,6 @@
 package compiler.syntax.nonTerminal;
 
+import compiler.CompilerContext;
 import compiler.semantic.symbol.SymbolConstantEntero;
 import es.uned.lsi.compiler.semantic.SemanticErrorManager;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
@@ -10,15 +11,16 @@ public class ValorRango extends NonTerminal {
     private boolean esValorEntero;
     private SymbolIF simbolo;
     
-    public ValorRango(int numero, boolean esValorEntero) {
+    public ValorRango(int numero) {
         super();
         this.numero = numero;
-        this.esValorEntero = esValorEntero;
+        this.esValorEntero = true;
     }
 
     public ValorRango(SymbolIF simbolo) {
         super();
         this.simbolo = simbolo;
+        this.esValorEntero = false;
     }
 
     public int getNumero() {
@@ -46,15 +48,17 @@ public class ValorRango extends NonTerminal {
     }
 
     public int getRangoVector() {
-        if(esValorEntero){
+        if(esValorEntero) {
             return numero;
         } else {
+            int valor = 0;
             if(simbolo instanceof SymbolConstantEntero) {
-                    ((SymbolConstantEntero)simbolo).getValorEntero();
+                valor = ((SymbolConstantEntero)simbolo).getValorEntero();
             } else {
-                SemanticErrorManager.semanticFatalError("Error semántico: ");
+                SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager();
+                semanticErrorManager.semanticFatalError("Error semántico: el rango del vector no es una constante entera");
             }
-        }
-        return valor;
+            return valor;
+        }  
     }
 }

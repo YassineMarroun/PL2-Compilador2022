@@ -7,11 +7,11 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 /**
  * Class for SymbolVariable.
  */
-
 public class SymbolVariable
     extends SymbolBase
-{  
-   
+{
+    private int direccionMemoria;
+    
     /**
      * Constructor for SymbolVariable.
      * @param scope The declaration scope.
@@ -23,5 +23,13 @@ public class SymbolVariable
                            TypeIF type)
     {
         super (scope, name, type);
-    } 
+    }
+
+    public int getDireccionMemoria() {
+        return direccionMemoria;
+    }
+
+    public void setDireccionMemoria(int direccionMemoria) {
+        this.direccionMemoria = direccionMemoria;
+    }
 }

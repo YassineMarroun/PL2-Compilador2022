@@ -7,7 +7,6 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 /**
  * Class for SymbolConstant.
  */
-
 public class SymbolConstant
     extends SymbolBase
 {
