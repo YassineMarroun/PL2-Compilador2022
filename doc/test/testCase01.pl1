@@ -9,7 +9,11 @@ programa uno:
 	tipos
 		TipoVectorEnteros = vector [1..TAMANO] de entero;
 		TipoVectorBooleanos = vector [1..5] de booleano;
+	variables
+		x, z : entero;
+		cerrado : booleano;
+		v1, v2 : TipoVectorEnteros;
 comienzo
-
+		x = z + 2;
 fin.
 

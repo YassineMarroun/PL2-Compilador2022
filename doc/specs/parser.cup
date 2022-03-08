@@ -97,18 +97,18 @@ terminal Token ASIGNACION;
 
 // Declaración de no terminales
 
-non terminal  					program;
-non terminal Axiom				axiom;
-non terminal  					epsilon;
-non terminal  					defconstantes;
-non terminal ValorConstante		valorconstante;
-non terminal  					seccionconstantes;
-non terminal  					deftipos;
-non terminal TypeIF				tipovector;
-non terminal ValorRango			valorango;
-non terminal  					secciontipos;
-non terminal  					defvariables;
-non terminal TypeIF				tipovariable;
+non terminal  							program;
+non terminal Axiom						axiom;
+non terminal  							epsilon;
+non terminal  							defconstantes;
+non terminal ValorConstante				valorconstante;
+non terminal  							seccionconstantes;
+non terminal  							deftipos;
+non terminal TypeIF						tipovector;
+non terminal ValorRango					valorango;
+non terminal  							secciontipos;
+non terminal  							defvariables;
+non terminal TypeIF						tipovariable;
 non terminal ListaVariables 			listavariables;
 non terminal  							seccionvariables;
 non terminal  							defsubprograma;
@@ -120,40 +120,40 @@ non terminal  							defprincipal;
 non terminal SelectorValorOReferencia	selectorvalororeferencia;
 
 non terminal Expresion					expresion;
-non terminal Expresion							expresionlvl2;
-non terminal Expresion							expresionlvl3;
-non terminal Expresion							expresionlvl4;
-non terminal Expresion							expresionlvl5;
+non terminal Expresion					expresionlvl2;
+non terminal Expresion					expresionlvl3;
+non terminal Expresion					expresionlvl4;
+non terminal Expresion					expresionlvl5;
 
-non terminal					miembrovector;
-non terminal					procedimiento;
-non terminal					funcion;
-non terminal					selectorpof;
+non terminal							miembrovector;
+non terminal							procedimiento;
+non terminal							funcion;
+non terminal							selectorpof;
 
-non terminal            		parametrofuncionoproc;
-non terminal 					llamadafuncion ; 
+non terminal            				parametrofuncionoproc;
+non terminal 							llamadafuncion; 
 
-non terminal 					parteizquierdaasignacion;  
-non terminal 					sentenciadeasignacion;
+non terminal 							parteizquierdaasignacion;  
+non terminal 							sentenciadeasignacion;
 
-non terminal 					parametroEscribir ;
-non terminal 					sentenciaEscribir ;
+non terminal 							parametroEscribir;
+non terminal 							sentenciaEscribir;
 
-non terminal 					sentencia;
-non terminal 					sentenciaFuncion;
-non terminal 					listaSentencias;
-non terminal 					listaSentenciasFuncion;
-non terminal 					sentenciaif;
-non terminal 					sentenciaifFuncion;
-non terminal 					rellenoif;
-non terminal 					rellenoifFuncion;
-non terminal 					sentenciafor;
-non terminal 					sentenciaforFuncion;
-non terminal 					sentenciaDevolver;
+non terminal 							sentencia;
+non terminal 							sentenciaFuncion;
+non terminal 							listaSentencias;
+non terminal 							listaSentenciasFuncion;
+non terminal 							sentenciaif;
+non terminal 							sentenciaifFuncion;
+non terminal 							rellenoif;
+non terminal 							rellenoifFuncion;
+non terminal 							sentenciafor;
+non terminal 							sentenciaforFuncion;
+non terminal 							sentenciaDevolver;
 
-non terminal					parametroasignacion;
+non terminal							parametroasignacion;
 
-non terminal					sentenciallamadafuncion;
+non terminal							sentenciallamadafuncion;
 
 
 // Declaración de relaciones de precedencia
@@ -268,6 +268,7 @@ valorango ::= NUM:n {:
 		// Se busca el símbolo en la Tabla de Símbolos
 		ScopeIF ambito = scopeManager.getCurrentScope();
 		SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+		
 		if(simbolosTabla.containsSymbol(nombre)) {
 			SymbolIF s = simbolosTabla.getSymbol(nombre);
 			ValorRango vRango = new ValorRango(s);
@@ -286,17 +287,30 @@ secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon;
 tipovariable ::= BOOLEANO {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeTableIF tiposTabla = ambito.getTypeTable();
-	TypeIF 
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	RESULT = tipo;
 :}
 	| ENTERO {:
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("ENTERO");
+		RESULT = tipo;
 	
 	:}
 	| IDEN:id {:
 		String nombreTipo = id.getLexema().toUpperCase();
 		ScopeIF ambito = scopeManager.getCurrentScope();
-		Type
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+
+		if(tiposTabla.containsType(nombreTipo)) {
+			TypeIF tipo = tiposTabla.getType(nombreTipo);
+			RESULT = tipo;
+		} else {
+			semanticErrorManager.semanticFatalError("Error semántico: el tipo " + nombreTipo + " no está declarado");
+		}
 	:};
-selectorvalororeferencia ::=  PARAMETROVALOR IDEN:id {:
+
+selectorvalororeferencia ::= PARAMETROVALOR IDEN:id {:
 	String nombre = id.getLexema().toUpperCase();
 	SelectorValorOReferencia selector = new SelectorValorOReferencia(nombre);
 	RESULT = selector;
@@ -307,20 +321,47 @@ selectorvalororeferencia ::=  PARAMETROVALOR IDEN:id {:
 	:} ;
 
 defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycomaopcional defvariables {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 	ArrayList<SelectorValorOReferencia> identificadores = variables.getVariables();
+
+	for(SelectorValorOReferencia selector: identificadores) {
+		String nombre = selector.getExpresion().getIdentificador();
+		
+		// Comprobación unicidad
+		if(simbolosTabla.containsSymbol(nombre)) {
+			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " duplicado");
+		}
+		SymbolVariable simbolo = new SymbolVariable(ambito, nombre, tipo);
+		simbolosTabla.addSymbol(simbolo);
+	}
 :}
 	| epsilon; 
-listavariables ::= selectorvalororeferencia DIDENTIFICADORES listavariables {:System.out.println("\n\n1\n\n");:} | selectorvalororeferencia {:System.out.println("\n\n2\n\n");:} | epsilon ;
-seccionvariables ::= DECLVARIABLES defvariables | epsilon  ;
-puntoycomaopcional ::= DSENTENCIAS | epsilon ;
+
+listavariables ::= selectorvalororeferencia:selector DIDENTIFICADORES listavariables:variables {:
+	variables.addSelector(selector);
+	RESULT = variables;
+:}
+	| selectorvalororeferencia:selector {:
+		ListaVariables variables = new ListaVariables();
+		variables.addSelector(selector);
+		RESULT = variables;
+	:}
+	| epsilon {:
+		ListaVariables variables = new ListaVariables();
+		RESULT = variables;
+	:};
+
+seccionvariables ::= DECLVARIABLES defvariables | epsilon;
+puntoycomaopcional ::= DSENTENCIAS | epsilon;
 
 //reglas de subprogramas
-tiporetornofuncion ::= IDEN | tipovector ;
+tiporetornofuncion ::= IDEN | tipovector;
 procedimiento ::= COMIENZOPROCEDIMIENTO IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias   FINBLOQUESENTENCIAS DSENTENCIAS ;
 funcion ::= DECLAREFUNCION IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS  ;
-selectorpof ::= procedimiento | funcion ;
-defsubprograma ::=selectorpof  defsubprograma | epsilon ;
-seccionsubprograma ::=COMIENZOSUBPROGRAMAS  defsubprograma  | epsilon ;
+selectorpof ::= procedimiento | funcion;
+defsubprograma ::= selectorpof defsubprograma | epsilon;
+seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma | epsilon;
 
 // Definición de programa principal
 defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
@@ -336,8 +377,14 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 :}
 DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
 
-expresion ::=  expresion MENORQUE  expresion
-	|  expresion IGUALDAD  expresion
+expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+	TypeIF tipoExp2 = exp2.getTipoExpresion();
+:}
+	| expresion:exp1 IGUALDAD expresion:exp2 {:
+		TypeIF tipoExp1 = exp1.getTipoExpresion();
+		TypeIF tipoExp2 = exp2.getTipoExpresion();
+	:}
 	| IDEN:id {:
 		String identificador = id.getLexema().toUpperCase();
 		Expresion exp = new Expresion(identificador);
@@ -349,30 +396,76 @@ expresion ::=  expresion MENORQUE  expresion
 	| CIERTO {:
 		ScopeIF ambito = scopeManager.getCurrentScope();
 		TypeTableIF tiposTabla = ambito.getTypeTable();
-		
-		Expresion exp = new Expresion();
-
+		TypeIF tipo = tiposTabla.getType("LOGICO");
+		Expresion exp = new Expresion(tipo);
+		RESULT = exp;
 	:}
-	| FALSO
-	| miembrovector
-	| NUM
-	| expresionlvl2;
-expresionlvl2 ::=  expresion SUMA expresion | expresionlvl3;
-expresionlvl3 ::=  expresion YLOGICA expresion |  expresion PRODUCTO expresion | expresionlvl4;
-expresionlvl4 ::= NOLOGICO  expresion | expresionlvl5;
-expresionlvl5 ::= PIZQUIERDO expresion PDERECHO | CIZQUIERDO expresion CDERECHO;
+	| FALSO {:
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("LOGICO");
+		Expresion exp = new Expresion(tipo);
+		RESULT = exp;
+	:}
+	| miembrovector {:
+	
+	:}
+	| NUM {:
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("ENTERO");
+		Expresion exp = new Expresion(tipo);
+		RESULT = exp;
+	:}
+	| expresionlvl2:exp {:
+		RESULT = exp;
+	:};
+
+expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+	TypeIF tipoExp2 = exp2.getTipoExpresion();
+:}
+	| expresionlvl3:exp {:
+		RESULT = exp;
+	:};
+
+expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+	TypeIF tipoExp2 = exp2.getTipoExpresion();
+:}
+	| expresion:exp1 PRODUCTO expresion:exp2 {:
+		TypeIF tipoExp1 = exp1.getTipoExpresion();
+		TypeIF tipoExp2 = exp2.getTipoExpresion();
+	:}
+	| expresionlvl4:exp {:
+		RESULT = exp;
+	:};
+
+expresionlvl4 ::= NOLOGICO expresion:exp1 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+:}
+	| expresionlvl5:exp {:
+		RESULT = exp;
+	:};
+
+expresionlvl5 ::= PIZQUIERDO expresion:exp1 PDERECHO {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+:}
+	| CIZQUIERDO expresion:exp CDERECHO {:
+		RESULT = exp;
+	:};
 
 
 // Acceso a vectores
 miembrovector::= IDEN CIZQUIERDO valorango CDERECHO;
  
 // Sentencias de asignación
-parteizquierdaasignacion ::= IDEN |miembrovector ;
+parteizquierdaasignacion ::= IDEN | miembrovector;
 sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion DSENTENCIAS; 
 parametroasignacion ::= expresion;
 
 // Llamada a función
-parametrofuncionoproc ::=     listavariables;
+parametrofuncionoproc ::= listavariables;
 llamadafuncion ::= IDEN PIZQUIERDO parametrofuncionoproc PDERECHO;  
 sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS;
 
