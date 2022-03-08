@@ -108,22 +108,22 @@ non terminal TypeIF				tipovector;
 non terminal ValorRango			valorango;
 non terminal  					secciontipos;
 non terminal  					defvariables;
-non terminal					tipovariable;
-non terminal  					listavariables;
-non terminal  					seccionvariables;
-non terminal  					defsubprograma;
-non terminal					puntoycomaopcional;
+non terminal TypeIF				tipovariable;
+non terminal ListaVariables 			listavariables;
+non terminal  							seccionvariables;
+non terminal  							defsubprograma;
+non terminal							puntoycomaopcional;
 
-non terminal 					tiporetornofuncion;
-non terminal  					seccionsubprograma;
-non terminal  					defprincipal;
-non terminal					selectorvalororeferencia;
+non terminal 							tiporetornofuncion;
+non terminal  							seccionsubprograma;
+non terminal  							defprincipal;
+non terminal SelectorValorOReferencia	selectorvalororeferencia;
 
-non terminal					expresion;
-non terminal					expresionlvl2;
-non terminal					expresionlvl3;
-non terminal					expresionlvl4;
-non terminal					expresionlvl5;
+non terminal Expresion					expresion;
+non terminal Expresion							expresionlvl2;
+non terminal Expresion							expresionlvl3;
+non terminal Expresion							expresionlvl4;
+non terminal Expresion							expresionlvl5;
 
 non terminal					miembrovector;
 non terminal					procedimiento;
@@ -259,7 +259,7 @@ tipovector ::= BOOLEANO {:
 		RESULT = tipo;
 	:};
 
-valorango ::= NUM:n  {:
+valorango ::= NUM:n {:
 	ValorRango vRango = new ValorRango(Integer.parseInt(n.getLexema()));
 	RESULT = vRango;
 :}
@@ -283,12 +283,36 @@ valorango ::= NUM:n  {:
 secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon; 
 
 // Definición de variables
-tipovariable ::= BOOLEANO | ENTERO | IDEN ;
-selectorvalororeferencia ::=  PARAMETROVALOR IDEN | expresion ;
-defvariables ::= listavariables DELIMFUNC tipovariable puntoycomaopcional defvariables | epsilon; 
+tipovariable ::= BOOLEANO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF 
+:}
+	| ENTERO {:
+	
+	:}
+	| IDEN:id {:
+		String nombreTipo = id.getLexema().toUpperCase();
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		Type
+	:};
+selectorvalororeferencia ::=  PARAMETROVALOR IDEN:id {:
+	String nombre = id.getLexema().toUpperCase();
+	SelectorValorOReferencia selector = new SelectorValorOReferencia(nombre);
+	RESULT = selector;
+:}
+	| expresion:exp {:
+		SelectorValorOReferencia selector = new SelectorValorOReferencia(exp);
+		RESULT = selector;
+	:} ;
+
+defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycomaopcional defvariables {:
+	ArrayList<SelectorValorOReferencia> identificadores = variables.getVariables();
+:}
+	| epsilon; 
 listavariables ::= selectorvalororeferencia DIDENTIFICADORES listavariables {:System.out.println("\n\n1\n\n");:} | selectorvalororeferencia {:System.out.println("\n\n2\n\n");:} | epsilon ;
 seccionvariables ::= DECLVARIABLES defvariables | epsilon  ;
-puntoycomaopcional ::= DSENTENCIAS | epsilon;
+puntoycomaopcional ::= DSENTENCIAS | epsilon ;
 
 //reglas de subprogramas
 tiporetornofuncion ::= IDEN | tipovector ;
@@ -314,10 +338,21 @@ DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COM
 
 expresion ::=  expresion MENORQUE  expresion
 	|  expresion IGUALDAD  expresion
-	| IDEN {:
+	| IDEN:id {:
+		String identificador = id.getLexema().toUpperCase();
+		Expresion exp = new Expresion(identificador);
+		RESULT = exp;
 	:}
-	| llamadafuncion
-	| CIERTO
+	| llamadafuncion {:
+	
+	:}
+	| CIERTO {:
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		
+		Expresion exp = new Expresion();
+
+	:}
 	| FALSO
 	| miembrovector
 	| NUM
