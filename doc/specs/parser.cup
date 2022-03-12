@@ -134,26 +134,26 @@ non terminal            				parametrofuncionoproc;
 non terminal 							llamadafuncion; 
 
 non terminal 							parteizquierdaasignacion;  
-non terminal 							sentenciadeasignacion;
+non terminal SentenciaDeAsignacion 		sentenciadeasignacion;
 
-non terminal 							parametroEscribir;
-non terminal 							sentenciaEscribir;
+non terminal ParametroEscribir			parametroEscribir;
+non terminal SentenciaEscribir			sentenciaEscribir;
 
-non terminal 							sentencia;
-non terminal 							sentenciaFuncion;
+non terminal Sentencia 					sentencia;
+non terminal Sentencia					sentenciaFuncion;
 non terminal 							listaSentencias;
 non terminal 							listaSentenciasFuncion;
-non terminal 							sentenciaif;
-non terminal 							sentenciaifFuncion;
+non terminal SentenciaIf 				sentenciaif;
+non terminal SentenciaIf 				sentenciaifFuncion;
 non terminal 							rellenoif;
 non terminal 							rellenoifFuncion;
-non terminal 							sentenciafor;
-non terminal 							sentenciaforFuncion;
-non terminal 							sentenciaDevolver;
+non terminal SentenciaFor 				sentenciafor;
+non terminal SentenciaFor				sentenciaforFuncion;
+non terminal SentenciaDevolver 			sentenciaDevolver;
 
 non terminal							parametroasignacion;
 
-non terminal							sentenciallamadafuncion;
+non terminal SentenciaLlamadaFuncion	sentenciallamadafuncion;
 
 
 // Declaración de relaciones de precedencia
@@ -173,8 +173,8 @@ axiom:ax
 {: 
   	// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
   		
-  	//List intermediateCode = ax.getIntermediateCode ();
-  	//finalCodeFactory.create (intermediateCode);
+  	// List intermediateCode = ax.getIntermediateCode ();
+  	// finalCodeFactory.create (intermediateCode);
 
   	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
   	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
@@ -188,7 +188,7 @@ axiom ::= defprincipal;
 
 epsilon ::=;
 
-//Definición de constantes
+// Definición de constantes
 defconstantes ::= IDEN:id ASIGNACION valorconstante:valor DSENTENCIAS defconstantes {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	String nombre = id.getLexema().toUpperCase();
@@ -222,7 +222,7 @@ valorconstante ::= FALSO {: RESULT = new ValorConstante(false); :}
 
 seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
 
- //cDefinición de tipos
+ // Definición de tipos
 deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO valorango:valorn2 CDERECHO ASIGNACIONVECTOR tipovector:tipo DSENTENCIAS deftipos {:
 	String nombre = id.getLexema().toUpperCase();
 	ScopeIF ambito = scopeManager.getCurrentScope();
@@ -318,7 +318,7 @@ selectorvalororeferencia ::= PARAMETROVALOR IDEN:id {:
 	| expresion:exp {:
 		SelectorValorOReferencia selector = new SelectorValorOReferencia(exp);
 		RESULT = selector;
-	:} ;
+	:};
 
 defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycomaopcional defvariables {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
@@ -355,10 +355,10 @@ listavariables ::= selectorvalororeferencia:selector DIDENTIFICADORES listavaria
 seccionvariables ::= DECLVARIABLES defvariables | epsilon;
 puntoycomaopcional ::= DSENTENCIAS | epsilon;
 
-//reglas de subprogramas
+// Reglas de subprogramas
 tiporetornofuncion ::= IDEN | tipovector;
-procedimiento ::= COMIENZOPROCEDIMIENTO IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias   FINBLOQUESENTENCIAS DSENTENCIAS ;
-funcion ::= DECLAREFUNCION IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS  ;
+procedimiento ::= COMIENZOPROCEDIMIENTO IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS;
+funcion ::= DECLAREFUNCION IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS;
 selectorpof ::= procedimiento | funcion;
 defsubprograma ::= selectorpof defsubprograma | epsilon;
 seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma | epsilon;
@@ -380,10 +380,35 @@ DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COM
 expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
 	TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+	// Los dos tienen que ser de tipo ENTERO
+	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en < deben ser de tipo entero");
+	}
+
+	// Se genera una expresión de tipo LOGICO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
 :}
 	| expresion:exp1 IGUALDAD expresion:exp2 {:
 		TypeIF tipoExp1 = exp1.getTipoExpresion();
 		TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+		// Los dos tienen que ser de tipo ENTERO o los dos de tipo LOGICO
+		if((!((tipoExp1 instanceof TypeEntero) && (tipoExp2 instanceof TypeEntero))) && (!((tipoExp1 instanceof TypeLogico) && (tipoExp2 instanceof TypeLogico)))) {
+			semanticErrorManager.semanticFatalError("Error semántico:los dos operandos en == deben ser de tipo entero, o bien de tipo lógico");
+		}
+
+		// Se genera una expresión de tipo LOGICO
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("LOGICO");
+		Expresion exp = new Expresion(tipo);
+		// RESULT = exp; ????????????????????????????
+
 	:}
 	| IDEN:id {:
 		String identificador = id.getLexema().toUpperCase();
@@ -424,6 +449,18 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
 	TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+	// Los dos tienen que ser de tipo ENTERO
+	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en + deben ser de tipo entero");
+	}
+
+	// Se genera una expresión de tipo ENTERO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("ENTERO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
 :}
 	| expresionlvl3:exp {:
 		RESULT = exp;
@@ -432,10 +469,34 @@ expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
 	TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+	// Los dos tienen que ser de tipo LOGICO
+	if(!(tipoExp1 instanceof TypeLogico) || !(tipoExp2 instanceof TypeLogico)) {
+		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en Y deben ser de tipo lógico");
+	}
+
+	// Se genera una expresión de tipo LOGICO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
 :}
 	| expresion:exp1 PRODUCTO expresion:exp2 {:
 		TypeIF tipoExp1 = exp1.getTipoExpresion();
 		TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+		// Los dos tienen que ser de tipo ENTERO
+		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+			semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en * deben ser de tipo entero");
+		}
+
+		// Se genera una expresión de tipo ENTERO
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		TypeTableIF tiposTabla = ambito.getTypeTable();
+		TypeIF tipo = tiposTabla.getType("ENTERO");
+		Expresion exp = new Expresion(tipo);
+		RESULT = exp;
 	:}
 	| expresionlvl4:exp {:
 		RESULT = exp;
@@ -443,13 +504,25 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 
 expresionlvl4 ::= NOLOGICO expresion:exp1 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
+
+	// Tiene que ser de tipo LOGICO
+	if(!(tipoExp1 instanceof TypeLogico)) {
+		semanticErrorManager.semanticFatalError("Error semántico: el operando en NO debe ser de tipo lógico");
+	}
+
+	// Se genera una expresión de tipo LOGICO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
 :}
 	| expresionlvl5:exp {:
 		RESULT = exp;
 	:};
 
-expresionlvl5 ::= PIZQUIERDO expresion:exp1 PDERECHO {:
-	TypeIF tipoExp1 = exp1.getTipoExpresion();
+expresionlvl5 ::= PIZQUIERDO expresion:exp PDERECHO {:
+	RESULT = exp;
 :}
 	| CIZQUIERDO expresion:exp CDERECHO {:
 		RESULT = exp;
@@ -471,25 +544,132 @@ sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS;
 
 
 // Sentencias
-sentencia ::= sentenciadeasignacion | sentenciaif | sentenciafor | sentenciaEscribir | sentenciallamadafuncion;
+sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
+	| sentenciaif:s {: RESULT = s; :}
+	| sentenciafor:s {: RESULT = s; :}
+	| sentenciaEscribir:s {: RESULT = s; :}
+	| sentenciallamadafuncion:s {: RESULT = s; :};
+
 sentenciaFuncion ::= sentenciadeasignacion | sentenciaifFuncion | sentenciaforFuncion | sentenciaEscribir | sentenciallamadafuncion | sentenciaDevolver;
 listaSentencias ::= sentencia  listaSentencias | epsilon;
 listaSentenciasFuncion ::= sentenciaFuncion listaSentenciasFuncion | epsilon;
 
 // if
-sentenciaif ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentencias rellenoif  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS;
-sentenciaifFuncion ::= COMIENZOSI expresion  STARTIF DELIMFUNC listaSentenciasFuncion rellenoifFuncion  FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS;
-rellenoifFuncion ::=  ALTERNATIVASI DELIMFUNC  listaSentenciasFuncion | epsilon;
-rellenoif ::=  ALTERNATIVASI DELIMFUNC  listaSentencias | epsilon;
+sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias rellenoif FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
+	TypeIF tipoExp = exp.getTipoExpresion();
+
+	// Tiene que ser de tipo LOGICO
+	if(!(tipoExp instanceof TypeLogico)) {
+		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
+	}
+	
+	SentenciaIf s = new SentenciaIf();
+	RESULT = s;
+:};
+
+sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentenciasFuncion rellenoifFuncion FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
+	TypeIF tipoExp = exp.getTipoExpresion();
+
+	// Tiene que ser de tipo LOGICO
+	if(!(tipoExp instanceof TypeLogico)) {
+		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
+	}
+
+	SentenciaIf s = new SentenciaIf();
+	RESULT = s;
+:};
+
+rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion | epsilon;
+rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias | epsilon;
 
 // for 
-sentenciafor ::= COMIENZOBUCLEPARA IDEN RANGOBUCLEPARA expresion RANGO expresion DELIMFUNC listaSentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS;
-sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN RANGOBUCLEPARA expresion RANGO expresion DELIMFUNC listaSentenciasFuncion FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS;
+sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
+	// Se busca el símbolo en la Tabla de Símbolos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+	
+	if(simbolosTabla.containsSymbol(nombre)) {
+		TypeIF tipoIndice = simbolosTabla.getSymbol(nombre).getType();
+
+		// El índice tiene que ser de tipo ENTERO
+		if(!(tipoIndice instanceof TypeEntero)) {
+			semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no es de tipo entero");
+		}
+
+		TypeIF tipoExp1 = exp1.getTipoExpresion();
+		TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+		// Los dos tienen que ser de tipo ENTERO
+		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+			semanticErrorManager.semanticFatalError("Error semántico: el rango en sentencia FOR debe ser de tipo entero");
+		}
+
+		SentenciaFor s = new SentenciaFor();
+		RESULT = s;
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no está declarado");
+	}
+:};
+
+sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentenciasFuncion FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
+	// Se busca el símbolo en la Tabla de Símbolos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+
+	if(simbolosTabla.containsSymbol(nombre)) {
+		TypeIF tipoIndice = simbolosTabla.getSymbol(nombre).getType();
+
+		// El índice tiene que ser de tipo ENTERO
+		if(!(tipoIndice instanceof TypeEntero)) {
+			semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no es de tipo entero");
+		}
+
+		TypeIF tipoExp1 = exp1.getTipoExpresion();
+		TypeIF tipoExp2 = exp2.getTipoExpresion();
+
+		// Los dos tienen que ser de tipo ENTERO
+		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+			semanticErrorManager.semanticFatalError("Error semántico: el rango en sentencia FOR debe ser de tipo entero");
+		}
+
+		SentenciaFor s = new SentenciaFor();
+		RESULT = s;
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no está declarado");
+	}
+:};
 
 
 // escribir
-parametroEscribir ::= STRING | expresion | epsilon;
-sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS;
+parametroEscribir ::= STRING:texto {:
+	String cadena = texto.getLexema();
+
+	ParametroEscribir param = new ParametroEscribir(cadena);
+	RESULT = param;
+:}
+	| expresion:exp {:
+
+		TypeIF tipoExp1 = exp.getTipoExpresion();
+	
+		// Tiene que ser de tipo ENTERO
+		if(!(tipoExp1 instanceof TypeEntero)) {
+				semanticErrorManager.semanticFatalError("Error semántico: tipo de la expresión en sentencia ESCRIBIR no es entero");
+		}
+
+		ParametroEscribir param = new ParametroEscribir(exp);
+		RESULT = param;
+	:}
+	| epsilon {:
+		ParametroEscribir param = new ParametroEscribir();
+		RESULT = param;
+	:};
+
+sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS {:
+	SentenciaEscribir s = new SentenciaEscribir();
+	RESULT = s;
+:};
 
 // devolver
 sentenciaDevolver ::= FRETURN expresion DSENTENCIAS;

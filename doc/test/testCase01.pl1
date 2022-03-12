@@ -10,10 +10,11 @@ programa uno:
 		TipoVectorEnteros = vector [1..TAMANO] de entero;
 		TipoVectorBooleanos = vector [1..5] de booleano;
 	variables
-		x, z : entero;
-		cerrado : booleano;
+		x, z, a, b : entero;
+		cerrado, c : booleano;
 		v1, v2 : TipoVectorEnteros;
 comienzo
-		x = z + 2;
+		para a en 1 .. b:
+			escribir(a);
+		fin para;
 fin.
-
