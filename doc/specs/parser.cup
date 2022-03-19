@@ -277,8 +277,9 @@ valorango ::= NUM:n {:
 			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " no esta declarado");
 		}
 	:}
-	| miembrovector {:
-	
+	| miembrovector:miembro {:
+		ValorRango vRango = new ValorRango(miembro);
+		RESULT = vRango;
 	:};
 
 secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon; 
@@ -432,9 +433,8 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		Expresion exp = new Expresion(tipo);
 		RESULT = exp;
 	:}
-	| miembrovector:miembro {:
-		ValorRango vRango = new ValorRango(miembro);
-		RESULT = vRango;
+	| miembrovector {:
+
 	:}
 	| NUM {:
 		ScopeIF ambito = scopeManager.getCurrentScope();
@@ -533,9 +533,8 @@ expresionlvl5 ::= PIZQUIERDO expresion:exp PDERECHO {:
 // Acceso a vectores
 miembrovector::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 	String identificador = id.getLexema().toUpperCase();
-	MiembroVector m = 
-	// Obtener
-	// El tipo de la variable tiene que ser TypeArray
+	MiembroVector m = new MiembroVector(identificador, valorRango);
+	m.comprobarMiembroVector();
 :};
  
 // Sentencias de asignación
@@ -559,15 +558,22 @@ sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
 sentenciaFuncion ::= sentenciadeasignacion | sentenciaifFuncion | sentenciaforFuncion | sentenciaEscribir | sentenciallamadafuncion | sentenciaDevolver;
 
 listaSentencias ::= sentencia:s listaSentencias:lista {:
-
 	lista.addSentencia(s);
 	RESULT = lista;
 :}
 	| epsilon {:
-	
+		ListaSentencias lista = new ListaSentencias();
+		RESULT = lista;
 	:};
 
-listaSentenciasFuncion ::= sentenciaFuncion listaSentenciasFuncion | epsilon;
+listaSentenciasFuncion ::= sentenciaFuncion:s listaSentenciasFuncion:lista {:
+	lista.addSentencia(s);
+	RESULT = lista;
+:}
+	| epsilon {:
+		ListaSentencias lista = new ListaSentencias();
+		RESULT = lista;
+	:};
 
 // if
 sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sentenciasIF rellenoif:relleno FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
@@ -578,7 +584,7 @@ sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sente
 		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
 	}
 	
-	SentenciaIf s = new SentenciaIf();
+	SentenciaIf s = new SentenciaIf(sentenciasIF.getSentencias(), relleno.getSentencias());
 	RESULT = s;
 :};
 
@@ -590,22 +596,25 @@ sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencia
 		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
 	}
 
-	SentenciaIf s = new SentenciaIf();
+	SentenciaIf s = new SentenciaIf(sentenciasIF.getSentencias(), relleno.getSentencias());
 	RESULT = s;
 :};
 
-rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion
-
+rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion:sentencias {:
+	RellenoIf r = new RellenoIf(sentencias.getSentencias());
+	RESULT = r;
+:}
 	| epsilon {:
-		RellenoIf r = nwe RellenoIf();
+		RellenoIf r = new RellenoIf();
 		RESULT = r;
 	:};
-rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias {:
 
+rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias:sentencias {:
+	RellenoIf r = new RellenoIf(sentencias.getSentencias());
+	RESULT = r;
 :}
-
 	| epsilon {:
-		RellenoIf r = nwe RellenoIf();
+		RellenoIf r = new RellenoIf();
 		RESULT = r;
 	:};
 

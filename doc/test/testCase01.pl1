@@ -16,5 +16,10 @@ programa uno:
 comienzo
 		para a en 1 .. b:
 			escribir(a);
+			escribir(a);
+			escribir(a);
 		fin para;
+
+		escribir(a);
+		v1[3]=4;
 fin.
