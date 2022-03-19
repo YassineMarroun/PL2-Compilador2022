@@ -10,17 +10,21 @@ public class ValorRango extends NonTerminal {
     private int numero;
     private boolean esValorEntero;
     private SymbolIF simbolo;
+    private boolean esSimbolo;
+    private MiembroVector miembroVector;
     
     public ValorRango(int numero) {
         super();
         this.numero = numero;
         this.esValorEntero = true;
+        this.esSimbolo = false;
     }
 
     public ValorRango(SymbolIF simbolo) {
         super();
         this.simbolo = simbolo;
         this.esValorEntero = false;
+        this.esSimbolo = true;
     }
 
     public int getNumero() {

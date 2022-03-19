@@ -125,7 +125,7 @@ non terminal Expresion					expresionlvl3;
 non terminal Expresion					expresionlvl4;
 non terminal Expresion					expresionlvl5;
 
-non terminal							miembrovector;
+non terminal MiembroVector				miembrovector;
 non terminal							procedimiento;
 non terminal							funcion;
 non terminal							selectorpof;
@@ -141,12 +141,12 @@ non terminal SentenciaEscribir			sentenciaEscribir;
 
 non terminal Sentencia 					sentencia;
 non terminal Sentencia					sentenciaFuncion;
-non terminal 							listaSentencias;
-non terminal 							listaSentenciasFuncion;
+non terminal ListaSentencias			listaSentencias;
+non terminal ListaSentencias			listaSentenciasFuncion;
 non terminal SentenciaIf 				sentenciaif;
 non terminal SentenciaIf 				sentenciaifFuncion;
-non terminal 							rellenoif;
-non terminal 							rellenoifFuncion;
+non terminal RellenoIf					rellenoif;
+non terminal RellenoIf					rellenoifFuncion;
 non terminal SentenciaFor 				sentenciafor;
 non terminal SentenciaFor				sentenciaforFuncion;
 non terminal SentenciaDevolver 			sentenciaDevolver;
@@ -407,7 +407,7 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		TypeTableIF tiposTabla = ambito.getTypeTable();
 		TypeIF tipo = tiposTabla.getType("LOGICO");
 		Expresion exp = new Expresion(tipo);
-		// RESULT = exp; ????????????????????????????
+		RESULT = exp;
 
 	:}
 	| IDEN:id {:
@@ -432,8 +432,9 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		Expresion exp = new Expresion(tipo);
 		RESULT = exp;
 	:}
-	| miembrovector {:
-	
+	| miembrovector:miembro {:
+		ValorRango vRango = new ValorRango(miembro);
+		RESULT = vRango;
 	:}
 	| NUM {:
 		ScopeIF ambito = scopeManager.getCurrentScope();
@@ -530,7 +531,12 @@ expresionlvl5 ::= PIZQUIERDO expresion:exp PDERECHO {:
 
 
 // Acceso a vectores
-miembrovector::= IDEN CIZQUIERDO valorango CDERECHO;
+miembrovector::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
+	String identificador = id.getLexema().toUpperCase();
+	MiembroVector m = 
+	// Obtener
+	// El tipo de la variable tiene que ser TypeArray
+:};
  
 // Sentencias de asignación
 parteizquierdaasignacion ::= IDEN | miembrovector;
@@ -551,11 +557,20 @@ sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
 	| sentenciallamadafuncion:s {: RESULT = s; :};
 
 sentenciaFuncion ::= sentenciadeasignacion | sentenciaifFuncion | sentenciaforFuncion | sentenciaEscribir | sentenciallamadafuncion | sentenciaDevolver;
-listaSentencias ::= sentencia  listaSentencias | epsilon;
+
+listaSentencias ::= sentencia:s listaSentencias:lista {:
+
+	lista.addSentencia(s);
+	RESULT = lista;
+:}
+	| epsilon {:
+	
+	:};
+
 listaSentenciasFuncion ::= sentenciaFuncion listaSentenciasFuncion | epsilon;
 
 // if
-sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias rellenoif FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
+sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sentenciasIF rellenoif:relleno FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
 	TypeIF tipoExp = exp.getTipoExpresion();
 
 	// Tiene que ser de tipo LOGICO
@@ -567,7 +582,7 @@ sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias relle
 	RESULT = s;
 :};
 
-sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentenciasFuncion rellenoifFuncion FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
+sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentenciasFuncion:sentenciasIF rellenoifFuncion:relleno FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
 	TypeIF tipoExp = exp.getTipoExpresion();
 
 	// Tiene que ser de tipo LOGICO
@@ -579,8 +594,20 @@ sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencia
 	RESULT = s;
 :};
 
-rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion | epsilon;
-rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias | epsilon;
+rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion
+
+	| epsilon {:
+		RellenoIf r = nwe RellenoIf();
+		RESULT = r;
+	:};
+rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias {:
+
+:}
+
+	| epsilon {:
+		RellenoIf r = nwe RellenoIf();
+		RESULT = r;
+	:};
 
 // for 
 sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
@@ -672,4 +699,7 @@ sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS
 :};
 
 // devolver
-sentenciaDevolver ::= FRETURN expresion DSENTENCIAS;
+sentenciaDevolver ::= FRETURN expresion DSENTENCIAS {:
+	SentenciaDevolver s = new SentenciaDevolver();
+	RESULT = s;
+:};
