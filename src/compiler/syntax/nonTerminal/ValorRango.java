@@ -27,6 +27,13 @@ public class ValorRango extends NonTerminal {
         this.esSimbolo = true;
     }
 
+    public ValorRango(MiembroVector miembroVector) {
+        super();
+        this.miembroVector = miembroVector;
+        this.esValorEntero = false;
+        this.
+    }
+
     public int getNumero() {
         return numero;
     }

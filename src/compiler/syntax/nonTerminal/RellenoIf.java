@@ -10,4 +10,17 @@ public class RellenoIf extends NonTerminal {
         super();
         this.sentencias = sentencias;
     }
+
+    public RellenoIf() {
+        super();
+        this.sentencias = new ArrayList<Sentencia>();
+    }
+
+    public ArrayList<Sentencia> getSentencias() {
+        return sentencias;
+    }
+
+    public void setSentencias(ArrayList<Sentencia> sentencias) {
+        this.sentencias = sentencias;
+    }
 }

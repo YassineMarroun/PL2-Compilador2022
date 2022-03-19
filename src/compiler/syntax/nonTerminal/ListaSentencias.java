@@ -10,4 +10,17 @@ public class ListaSentencias extends NonTerminal {
         super();
         this.sentencias = new ArrayList<Sentencia>();
     }
+
+    public ArrayList<Sentencia> getSentencias() {
+        return sentencias;
+    }
+
+    public void setSentencias(ArrayList<Sentencia> sentencias) {
+        this.sentencias = sentencias;
+    }
+
+    public void addSentencia(Sentencia sentencia) {
+        this.sentencias.add(sentencia);
+        System.out.println("Nº de sentencias: " + sentencias.size());
+    }
 }
