@@ -1,19 +1,21 @@
 package compiler.syntax.nonTerminal;
 
-import java.lang.ProcessBuilder.Redirect.Type;
-
 import compiler.CompilerContext;
+import compiler.semantic.symbol.SymbolConstantEntero;
 import compiler.semantic.type.TypeArray;
+import compiler.semantic.type.TypeEntero;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.ScopeManagerIF;
 import es.uned.lsi.compiler.semantic.SemanticErrorManager;
 import es.uned.lsi.compiler.semantic.symbol.SymbolIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
+import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 public class MiembroVector extends NonTerminal {
     
     private String identificador;
     private ValorRango valorRango;
+    private TypeIF tipoMiembroVector;
 
     public MiembroVector(String identificador, ValorRango valorRango) {
         super();
@@ -37,6 +39,15 @@ public class MiembroVector extends NonTerminal {
         this.valorRango = valorRango;
     }
 
+    public TypeIF getTipoMiembroVector() {
+        return tipoMiembroVector;
+    }
+
+    public void setTipoMiembroVector(TypeIF tipoMiembroVector) {
+        this.tipoMiembroVector = tipoMiembroVector;
+    }
+
+
     public void comprobarMiembroVector() {
 
         ScopeManagerIF scopeManager = CompilerContext.getScopeManager();
@@ -56,18 +67,38 @@ public class MiembroVector extends NonTerminal {
         }
 
         TypeArray tipoVector = (TypeArray) simbolo.getType();
+        tipoMiembroVector = tipoVector.getTipo();
 
         // Se comprueba valorRango
         if(valorRango.isEsValorEntero()) {
             // Si es un número, tiene que estar entre rango1 y rango2 de tipoVector
             int valor = valorRango.getNumero();
             if(valor < tipoVector.getRango1() || valor > tipoVector.getRango2()) {
-                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable");
-            } else if (valorRango.isEsSimbolo()) {
-                
+                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + " tiene un rango incorrecto: " + valor);
+            }
+        } else if(valorRango.isEsSimbolo()) {
+            // Si es un símbolo el tipo tiene que ser entero
+            SymbolIF simboloValor = valorRango.getSimbolo();
+            if(simboloValor.getType() instanceof TypeEntero) {
+                // Si es un símbolo constante, se comprueba el valor
+                if(simboloValor instanceof SymbolConstantEntero) {
+                    int valor = ((SymbolConstantEntero)simboloValor).getValorEntero();
+                    if(valor < tipoVector.getRango1() || valor > tipoVector.getRango2()) {
+                        semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + " tiene rango incorrecto: " + valor);
+                    }
+                }
+            } else {
+                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + ", índice no entero");
+            }
+        } else {
+            // El índice es otro miembro vector
+            String idMiembroVector = valorRango.getMiembroVector().getIdentificador();
+            SymbolIF simboloVector = simbolosTabla.getSymbol(idMiembroVector);
+            TypeArray tipoMiembroVector = (TypeArray)simboloVector.getType();
+            // El tipo base del vector tiene que ser entero
+            if(!(tipoMiembroVector.getTipo() instanceof TypeEntero)) {
+                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + ", índice tipo vector no entero");
             }
         }
-
-        // ValorRango tiene que ser del mismo tipo que el vector
     }
 }

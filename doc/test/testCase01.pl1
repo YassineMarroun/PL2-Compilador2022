@@ -8,18 +8,18 @@ programa uno:
 		abierto2 = 50;
 	tipos
 		TipoVectorEnteros = vector [1..TAMANO] de entero;
-		TipoVectorBooleanos = vector [1..5] de booleano;
+		TipoVectorLogicos = vector [1..TAMANO] de booleano;
 	variables
 		x, z, a, b : entero;
 		cerrado, c : booleano;
 		v1, v2 : TipoVectorEnteros;
+		v3: TipoVectorLogicos;
 comienzo
-		para a en 1 .. b:
-			escribir(a);
-			escribir(a);
-			escribir(a);
-		fin para;
 
-		escribir(a);
-		v1[3]=4;
+		escribir(v1[6]);
+
+		x = 3;
+		x = v1[5];
+		v3[1] = cerrado;
+		cerrado = cierto;
 fin.

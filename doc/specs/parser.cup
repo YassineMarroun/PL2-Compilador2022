@@ -133,7 +133,7 @@ non terminal							selectorpof;
 non terminal            				parametrofuncionoproc;
 non terminal 							llamadafuncion; 
 
-non terminal 							parteizquierdaasignacion;  
+non terminal ParteIzquierdaAsignacion 	parteizquierdaasignacion;  
 non terminal SentenciaDeAsignacion 		sentenciadeasignacion;
 
 non terminal ParametroEscribir			parametroEscribir;
@@ -151,7 +151,7 @@ non terminal SentenciaFor 				sentenciafor;
 non terminal SentenciaFor				sentenciaforFuncion;
 non terminal SentenciaDevolver 			sentenciaDevolver;
 
-non terminal							parametroasignacion;
+non terminal Expresion					parametroasignacion;
 
 non terminal SentenciaLlamadaFuncion	sentenciallamadafuncion;
 
@@ -230,7 +230,7 @@ deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO va
 	
 	// Comprobación unicidad
 	if(tiposTabla.containsType(nombre)) {
-		semanticErrorManager.semanticFatalError("Error semántico: identificador del tipo " +  nombre + " duplicado");
+		semanticErrorManager.semanticFatalError("Error semántico: identificador del tipo " + nombre + " duplicado");
 	}
 
 	// Se recupera valor de rango1
@@ -326,7 +326,7 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 	ArrayList<SelectorValorOReferencia> identificadores = variables.getVariables();
 
-	for(SelectorValorOReferencia selector: identificadores) {
+	for(SelectorValorOReferencia selector : identificadores) {
 		String nombre = selector.getExpresion().getIdentificador();
 		
 		// Comprobación unicidad
@@ -357,9 +357,36 @@ seccionvariables ::= DECLVARIABLES defvariables | epsilon;
 puntoycomaopcional ::= DSENTENCIAS | epsilon;
 
 // Reglas de subprogramas
-tiporetornofuncion ::= IDEN | tipovector;
-procedimiento ::= COMIENZOPROCEDIMIENTO IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS;
-funcion ::= DECLAREFUNCION IDEN PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS;
+tiporetornofuncion ::= IDEN {:
+:}
+	| tipovector {:
+	
+	:};
+
+procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
+	// Al acceder al id del procedimiento se tiene que abrir el ámbito
+	String nombre = id.getLexema().toUpperCase();
+	scopeManager.openScope(nombre);
+	syntaxErrorManager.syntaxInfo("Ámbito procedimiento " + nombre + " abierto");
+:} PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
+
+	scopeManager.closeScope();
+	syntaxErrorManager.syntaxInfo("Ámbito procedimiento " + nombre + " cerrado");
+:};
+
+funcion ::= DECLAREFUNCION IDEN:id {:
+	// Al acceder al id de la función se tiene que abrir el ámbito
+	String nombre = id.getLexema().toUpperCase();
+	scopeManager.openScope(nombre);
+	syntaxErrorManager.syntaxInfo("Ámbito función " + nombre + " abierto");
+:} PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
+
+	scopeManager.closeScope();
+	syntaxErrorManager.syntaxInfo("Ámbito función " + nombre + " cerrado");
+:};
+
 selectorpof ::= procedimiento | funcion;
 defsubprograma ::= selectorpof defsubprograma | epsilon;
 seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma | epsilon;
@@ -433,8 +460,9 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		Expresion exp = new Expresion(tipo);
 		RESULT = exp;
 	:}
-	| miembrovector {:
-
+	| miembrovector:mVector {:
+		Expresion exp = new Expresion(mVector.getTipoMiembroVector());
+		RESULT = exp;
 	:}
 	| NUM {:
 		ScopeIF ambito = scopeManager.getCurrentScope();
@@ -535,16 +563,37 @@ miembrovector::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 	String identificador = id.getLexema().toUpperCase();
 	MiembroVector m = new MiembroVector(identificador, valorRango);
 	m.comprobarMiembroVector();
+	RESULT = m;
 :};
  
 // Sentencias de asignación
 parteizquierdaasignacion ::= IDEN:id {
-	
+	String identificador = id.getLexema().toUpperCase();
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+	if(!simbolosTabla.containsSymbol(identificador)) {
+		semanticErrorManager.semanticFatalError("Error semántico: identificador " + identificador + " no está declarado");
+	}
+	SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
+	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
+	RESULT = parteIzquierda;
 }
-	| miembrovector;
+	| miembrovector:mVector {:
+		ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
+		RESULT = parteIzquierda;
+	:};
 
-sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion:exp DSENTENCIAS {
+sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion:exp DSENTENCIAS {:
+	TypeIF tipoIzquierda = parteIzquierda.getTipoIzquierdo();
 	TypeIF tipoParametro = exp.getTipoExpresion();
+
+	// Los dos tienen que ser iguales
+	if((tipoIzquierda instanceof TypeEntero && tipoParametro instanceof TypeEntero) || (tipoIzquierda instanceof TypeLogico && tipoParametro instanceof TypeLogico)) {
+		SentenciaDeAsignacion sentencia = new SentenciaDeAsignacion;
+		RESULT = sentencia;
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: tipos incompatibles en la sentencia de asignación");
+	}
 };
 
 parametroasignacion ::= expresion:exp {
