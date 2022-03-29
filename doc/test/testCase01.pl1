@@ -15,7 +15,6 @@ programa uno:
 		v1, v2 : TipoVectorEnteros;
 		v3: TipoVectorLogicos;
 comienzo
-
 		escribir(v1[6]);
 
 		x = 3;

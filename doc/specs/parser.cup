@@ -559,7 +559,7 @@ expresionlvl5 ::= PIZQUIERDO expresion:exp PDERECHO {:
 
 
 // Acceso a vectores
-miembrovector::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
+miembrovector ::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 	String identificador = id.getLexema().toUpperCase();
 	MiembroVector m = new MiembroVector(identificador, valorRango);
 	m.comprobarMiembroVector();
