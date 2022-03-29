@@ -394,7 +394,9 @@ seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma | epsilon;
 // Definición de programa principal
 defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	// Abrir ámbito principal
-	scopeManager.openScope(id.getLexema().toUpperCase());
+	String nombre = id.getLexema().toUpperCase();
+	scopeManager.openScope(nombre);
+	syntaxErrorManager.syntaxInfo("Ámbito principal " + nombre + " abierto");
 	// Añadir tipos primitivos
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeEntero entero = new TypeEntero(ambito);
@@ -567,7 +569,7 @@ miembrovector ::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 :};
  
 // Sentencias de asignación
-parteizquierdaasignacion ::= IDEN:id {
+parteizquierdaasignacion ::= IDEN:id {:
 	String identificador = id.getLexema().toUpperCase();
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
@@ -577,28 +579,28 @@ parteizquierdaasignacion ::= IDEN:id {
 	SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
 	RESULT = parteIzquierda;
-}
+:}
 	| miembrovector:mVector {:
 		ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
 		RESULT = parteIzquierda;
 	:};
 
-sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion:exp DSENTENCIAS {:
+sentenciadeasignacion ::= parteizquierdaasignacion:parteIzquierda ASIGNACION parametroasignacion:exp DSENTENCIAS {:
 	TypeIF tipoIzquierda = parteIzquierda.getTipoIzquierdo();
 	TypeIF tipoParametro = exp.getTipoExpresion();
 
 	// Los dos tienen que ser iguales
 	if((tipoIzquierda instanceof TypeEntero && tipoParametro instanceof TypeEntero) || (tipoIzquierda instanceof TypeLogico && tipoParametro instanceof TypeLogico)) {
-		SentenciaDeAsignacion sentencia = new SentenciaDeAsignacion;
+		SentenciaDeAsignacion sentencia = new SentenciaDeAsignacion();
 		RESULT = sentencia;
 	} else {
 		semanticErrorManager.semanticFatalError("Error semántico: tipos incompatibles en la sentencia de asignación");
 	}
-};
+:};
 
-parametroasignacion ::= expresion:exp {
+parametroasignacion ::= expresion:exp {:
 	RESULT = exp;
-};
+:};
 
 // Llamada a función
 parametrofuncionoproc ::= listavariables;
