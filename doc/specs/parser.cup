@@ -538,9 +538,18 @@ miembrovector::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 :};
  
 // Sentencias de asignación
-parteizquierdaasignacion ::= IDEN | miembrovector;
-sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion DSENTENCIAS; 
-parametroasignacion ::= expresion;
+parteizquierdaasignacion ::= IDEN:id {
+	
+}
+	| miembrovector;
+
+sentenciadeasignacion ::= parteizquierdaasignacion ASIGNACION parametroasignacion:exp DSENTENCIAS {
+	TypeIF tipoParametro = exp.getTipoExpresion();
+};
+
+parametroasignacion ::= expresion:exp {
+	RESULT = exp;
+};
 
 // Llamada a función
 parametrofuncionoproc ::= listavariables;

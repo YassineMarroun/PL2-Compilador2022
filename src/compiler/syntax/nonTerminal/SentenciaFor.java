@@ -13,7 +13,7 @@ public class SentenciaFor extends Sentencia {
 
     public SentenciaFor() {
         super();
-        this.sentencias = sentencias;
+        this.sentencias = new ArrayList<Sentencia>();
     }
 
     public ArrayList<Sentencia> getSentencias() {

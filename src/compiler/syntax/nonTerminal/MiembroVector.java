@@ -1,5 +1,7 @@
 package compiler.syntax.nonTerminal;
 
+import java.lang.ProcessBuilder.Redirect.Type;
+
 import compiler.CompilerContext;
 import compiler.semantic.type.TypeArray;
 import es.uned.lsi.compiler.semantic.ScopeIF;
@@ -53,7 +55,18 @@ public class MiembroVector extends NonTerminal {
             semanticErrorManager.semanticFatalError("Error semántico: el tipo " + simbolo.getType().getName() + " no es de tipo vector");
         }
 
-        // Recuperar el tipo base del array
+        TypeArray tipoVector = (TypeArray) simbolo.getType();
+
+        // Se comprueba valorRango
+        if(valorRango.isEsValorEntero()) {
+            // Si es un número, tiene que estar entre rango1 y rango2 de tipoVector
+            int valor = valorRango.getNumero();
+            if(valor < tipoVector.getRango1() || valor > tipoVector.getRango2()) {
+                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable");
+            } else if (valorRango.isEsSimbolo()) {
+                
+            }
+        }
 
         // ValorRango tiene que ser del mismo tipo que el vector
     }
