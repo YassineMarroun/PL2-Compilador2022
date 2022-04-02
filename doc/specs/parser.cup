@@ -336,6 +336,8 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 		SymbolVariable simbolo = new SymbolVariable(ambito, nombre, tipo);
 		simbolosTabla.addSymbol(simbolo);
 	}
+
+	DefVariables defV = new DefVariables 
 :}
 	| epsilon; 
 
@@ -769,6 +771,13 @@ sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS
 
 // devolver
 sentenciaDevolver ::= FRETURN expresion DSENTENCIAS {:
+
+	// Recuperar el nombre del ámbito actual
+	String nombre = scopeManager.getCurrentScope().getName();
+	ScopeIF ambitoPadre = scopeManager.getParentScope();
+	TypeTableIF tiposTabla = ambitoPadre.getTypeTable();
+	Type
+
 	SentenciaDevolver s = new SentenciaDevolver();
 	RESULT = s;
 :};
