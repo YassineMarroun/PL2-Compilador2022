@@ -107,14 +107,14 @@ non terminal  							deftipos;
 non terminal TypeIF						tipovector;
 non terminal ValorRango					valorango;
 non terminal  							secciontipos;
-non terminal  							defvariables;
+non terminal DefVariables 				defvariables;
 non terminal TypeIF						tipovariable;
 non terminal ListaVariables 			listavariables;
 non terminal  							seccionvariables;
 non terminal  							defsubprograma;
 non terminal							puntoycomaopcional;
 
-non terminal 							tiporetornofuncion;
+non terminal TypeIF 					tiporetornofuncion;
 non terminal  							seccionsubprograma;
 non terminal  							defprincipal;
 non terminal SelectorValorOReferencia	selectorvalororeferencia;
@@ -325,6 +325,7 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 	ArrayList<SelectorValorOReferencia> identificadores = variables.getVariables();
+	ArrayList<SymbolVariable> parametros = new ArrayList<SymbolVariable>();
 
 	for(SelectorValorOReferencia selector : identificadores) {
 		String nombre = selector.getExpresion().getIdentificador();
@@ -333,11 +334,13 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 		if(simbolosTabla.containsSymbol(nombre)) {
 			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " duplicado");
 		}
-		SymbolVariable simbolo = new SymbolVariable(ambito, nombre, tipo);
+		SymbolVariable simbolo = new SymbolVariable(ambito, nombre, tipo, selector.isPasoReferencia());
 		simbolosTabla.addSymbol(simbolo);
+		parametros.add(simbolo);
 	}
 
-	DefVariables defV = new DefVariables 
+	DefVariables defV = new DefVariables(parametros);
+	RESULT = defV;
 :}
 	| epsilon; 
 
@@ -360,33 +363,60 @@ puntoycomaopcional ::= DSENTENCIAS | epsilon;
 
 // Reglas de subprogramas
 tiporetornofuncion ::= IDEN {:
+
 :}
-	| tipovector {:
-	
+	| tipovector:tipo {:
+		RESULT = tipo;
 	:};
 
 procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	// Al acceder al id del procedimiento se tiene que abrir el ámbito
 	String nombre = id.getLexema().toUpperCase();
 	scopeManager.openScope(nombre);
-	syntaxErrorManager.syntaxInfo("Ámbito procedimiento " + nombre + " abierto");
-:} PIZQUIERDO defvariables PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
+	// Añadir tipos primitivos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeEntero entero = new TypeEntero(ambito);
+	TypeLogico logico = new TypeLogico(ambito);
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	tiposTabla.addType(entero);
+	tiposTabla.addType(logico);
+	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " abierto");
+:} PIZQUIERDO defvariables:parametros {:
 	String nombre = id.getLexema().toUpperCase();
-
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	ScopeIF ambitoPadre = scopeManager.getParentScope();
+	TypeProcedure tipo = new TypeProcedure(ambitoPadre, nombre, parametros.getVariables());
+	tiposTabla.addType(tipo);
+:} PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
 	scopeManager.closeScope();
-	syntaxErrorManager.syntaxInfo("Ámbito procedimiento " + nombre + " cerrado");
+	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " cerrado");
 :};
 
 funcion ::= DECLAREFUNCION IDEN:id {:
 	// Al acceder al id de la función se tiene que abrir el ámbito
 	String nombre = id.getLexema().toUpperCase();
 	scopeManager.openScope(nombre);
-	syntaxErrorManager.syntaxInfo("Ámbito función " + nombre + " abierto");
-:} PIZQUIERDO defvariables PDERECHO DELIMFUNC tiporetornofuncion DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS {:
+	// Añadir tipos primitivos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeEntero entero = new TypeEntero(ambito);
+	TypeLogico logico = new TypeLogico(ambito);
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	tiposTabla.addType(entero);
+	tiposTabla.addType(logico);
+	syntaxErrorManager.syntaxInfo("Ambito funcion " + nombre + " abierto");
+:} PIZQUIERDO defvariables:parametros PDERECHO DELIMFUNC tiporetornofuncion:retorno {:
 	String nombre = id.getLexema().toUpperCase();
-
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	ScopeIF ambitoPadre = scopeManager.getParentScope();
+	TypeFunction tipo = new TypeFunction(ambitoPadre, nombre, parametros.getVariables(), retorno);
+	tiposTabla.addType(tipo);
+:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS {:
+	String nombre = id.getLexema().toUpperCase();
 	scopeManager.closeScope();
-	syntaxErrorManager.syntaxInfo("Ámbito función " + nombre + " cerrado");
+	syntaxErrorManager.syntaxInfo("Ambito funcion " + nombre + " cerrado");
 :};
 
 selectorpof ::= procedimiento | funcion;
@@ -398,7 +428,7 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	// Abrir ámbito principal
 	String nombre = id.getLexema().toUpperCase();
 	scopeManager.openScope(nombre);
-	syntaxErrorManager.syntaxInfo("Ámbito principal " + nombre + " abierto");
+	syntaxErrorManager.syntaxInfo("Ambito principal " + nombre + " abierto");
 	// Añadir tipos primitivos
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeEntero entero = new TypeEntero(ambito);
@@ -609,7 +639,6 @@ parametrofuncionoproc ::= listavariables;
 llamadafuncion ::= IDEN PIZQUIERDO parametrofuncionoproc PDERECHO;  
 sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS;
 
-
 // Sentencias
 sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
 	| sentenciaif:s {: RESULT = s; :}
@@ -773,10 +802,13 @@ sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS
 sentenciaDevolver ::= FRETURN expresion DSENTENCIAS {:
 
 	// Recuperar el nombre del ámbito actual
-	String nombre = scopeManager.getCurrentScope().getName();
-	ScopeIF ambitoPadre = scopeManager.getParentScope();
-	TypeTableIF tiposTabla = ambitoPadre.getTypeTable();
-	Type
+	String nombre = scopeManager.getCurrentScope().getName().toUpperCase();
+	TypeIF tipoSubprograma = scopeManager.searchType(nombre);
+	System.out.println("Tipo Subprograma: " + tipoSubprograma);
+
+	if(!(tipoSubprograma instanceof TypeFunction)) {
+		semanticErrorManager.semanticFatalError("Error semántico: sentencia DEVOLVER no está dentro de una función");
+	}
 
 	SentenciaDevolver s = new SentenciaDevolver();
 	RESULT = s;

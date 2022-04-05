@@ -1,18 +1,24 @@
 package compiler.semantic.type;
 
+import java.util.ArrayList;
+import compiler.semantic.symbol.SymbolVariable;
 import es.uned.lsi.compiler.semantic.ScopeIF;
+import es.uned.lsi.compiler.semantic.type.TypeIF;
 
 /**
  * Class for TypeFunction.
  */
 
-// TODO: Student work
-//       Include properties to characterize function declarations
-
 public class TypeFunction
     extends TypeProcedure
 {   
+    private TypeIF tipoRetorno;
     
+    public TypeFunction(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros, TypeIF tipoRetorno) {
+		super(scope, name, parametros);
+		this.tipoRetorno = tipoRetorno;
+	}
+
     /**
      * Constructor for TypeFunction.
      * @param scope The declaration scope.
@@ -39,7 +45,14 @@ public class TypeFunction
     @Override
     public int getSize ()
     {
-        // TODO: Student work
         return 1;
+    }
+
+    public TypeIF getTipoRetorno() {
+        return tipoRetorno;
+    }
+
+    public void setTipoRetorno(TypeIF tipoRetorno) {
+        this.tipoRetorno = tipoRetorno;
     }
 }

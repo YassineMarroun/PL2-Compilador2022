@@ -21,6 +21,6 @@ public class ListaSentencias extends NonTerminal {
 
     public void addSentencia(Sentencia sentencia) {
         this.sentencias.add(sentencia);
-        System.out.println("Nº de sentencias: " + sentencias.size());
+        System.out.println("Numero de sentencias: " + sentencias.size());
     }
 }

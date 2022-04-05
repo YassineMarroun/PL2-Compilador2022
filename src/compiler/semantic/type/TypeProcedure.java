@@ -1,5 +1,9 @@
 package compiler.semantic.type;
 
+import java.util.ArrayList;
+import compiler.semantic.symbol.SymbolVariable;
+import compiler.syntax.nonTerminal.SelectorValorOReferencia;
+import es.uned.lsi.compiler.semantic.Scope;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeBase;
 
@@ -7,12 +11,16 @@ import es.uned.lsi.compiler.semantic.type.TypeBase;
  * Class for TypeProcedure.
  */
 
-// TODO: Student work
-//       Include properties to characterize procedure declarations
-
 public class TypeProcedure
     extends TypeBase
 {   
+    private ArrayList<SymbolVariable> parametros;
+
+    public TypeProcedure(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros) {
+        super(scope, name);
+        this.parametros = parametros;
+    }
+
    /**
      * Constructor for TypeProcedure.
      * @param scope The declaration scope.
@@ -39,7 +47,6 @@ public class TypeProcedure
     @Override
     public int getSize ()
     {
-        // TODO: Student work
         return 1;
     }
 }

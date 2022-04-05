@@ -11,6 +11,12 @@ public class SymbolVariable
     extends SymbolBase
 {
     private int direccionMemoria;
+    private boolean pasoPorReferencia;
+    
+    public SymbolVariable (ScopeIF scope, String name, TypeIF type, boolean pasoPorReferencia) {
+        super(scope, name, type);
+        this.pasoPorReferencia = pasoPorReferencia;
+    }
     
     /**
      * Constructor for SymbolVariable.

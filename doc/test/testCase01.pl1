@@ -1,24 +1,17 @@
 # programa vacio
 programa uno:
-	constantes
-		TAMANO = 10;
-		MESES = 12;
-		ANYO = 2007;
-		ABIERTO = cierto;
-		abierto2 = 50;
-	tipos
-		TipoVectorEnteros = vector [1..TAMANO] de entero;
-		TipoVectorLogicos = vector [1..TAMANO] de booleano;
+	
 	variables
-		x, z, a, b : entero;
-		cerrado, c : booleano;
-		v1, v2 : TipoVectorEnteros;
-		v3: TipoVectorLogicos;
-comienzo
-		escribir(v1[6]);
+		x, z: entero;
+	
+	subprogramas
+		funcion sumar (a, b: entero): entero:
+			variables suma: entero;
+		comienzo
+			suma = a + b;
+			devolver a;
+		fin;
 
-		x = 3;
-		x = v1[5];
-		v3[1] = cerrado;
-		cerrado = cierto;
+comienzo
+	x = 3;
 fin.
