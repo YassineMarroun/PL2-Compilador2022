@@ -130,8 +130,8 @@ non terminal							procedimiento;
 non terminal							funcion;
 non terminal							selectorpof;
 
-non terminal            				parametrofuncionoproc;
-non terminal 							llamadafuncion; 
+non terminal ListaVariables          	parametrofuncionoproc;
+non terminal LlamadaFuncion				llamadafuncion; 
 
 non terminal ParteIzquierdaAsignacion 	parteizquierdaasignacion;  
 non terminal SentenciaDeAsignacion 		sentenciadeasignacion;
@@ -477,8 +477,14 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		Expresion exp = new Expresion(identificador);
 		RESULT = exp;
 	:}
-	| llamadafuncion {:
-	
+	| llamadafuncion:llamada {:
+		// Tiene que ser una función
+		TypeProcedure tipo = llamada.getTipoSubprograma();
+		if(tipo instanceof TypeFunction) {
+
+		} else {
+			
+		}
 	:}
 	| CIERTO {:
 		ScopeIF ambito = scopeManager.getCurrentScope();
@@ -635,9 +641,23 @@ parametroasignacion ::= expresion:exp {:
 :};
 
 // Llamada a función
-parametrofuncionoproc ::= listavariables;
-llamadafuncion ::= IDEN PIZQUIERDO parametrofuncionoproc PDERECHO;  
-sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS;
+parametrofuncionoproc ::= listavariables:lista {:
+	RESULT = lista;
+:};
+
+llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO {:
+	String nombre = id.getLexema().toUpperCase();
+
+	// Buscar en la Tabla de Tipos el tipo nombre
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	if(tiposTabla.containsType(nombre)) {
+
+	}
+:};  
+sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS {:
+
+:};
 
 // Sentencias
 sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
