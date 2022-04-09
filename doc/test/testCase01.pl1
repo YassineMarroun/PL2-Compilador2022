@@ -1,17 +1,7 @@
 # programa vacio
 programa uno:
-	
-	variables
-		x, z: entero;
-	
-	subprogramas
-		funcion sumar (a, b: entero): entero:
-			variables suma: entero;
-		comienzo
-			suma = a + b;
-			devolver a;
-		fin;
+
 
 comienzo
-	x = 3;
+
 fin.

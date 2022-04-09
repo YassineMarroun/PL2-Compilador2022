@@ -2,8 +2,6 @@ package compiler.semantic.type;
 
 import java.util.ArrayList;
 import compiler.semantic.symbol.SymbolVariable;
-import compiler.syntax.nonTerminal.SelectorValorOReferencia;
-import es.uned.lsi.compiler.semantic.Scope;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.type.TypeBase;
 
@@ -48,5 +46,13 @@ public class TypeProcedure
     public int getSize ()
     {
         return 1;
+    }
+
+    public ArrayList<SymbolVariable> getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(ArrayList<SymbolVariable> parametros) {
+        this.parametros = parametros;
     }
 }
