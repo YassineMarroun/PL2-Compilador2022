@@ -184,7 +184,14 @@ axiom:ax
   	syntaxErrorManager.syntaxInfo ("Parsing process ended.");
 :};
 
-axiom ::= defprincipal;
+axiom ::= defprincipal{:
+	AxiomPrincipal axiom = new AxiomPrincipal();
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+
+	cb.add
+	RESULT = axiom;
+:};
 
 epsilon ::=;
 
@@ -783,7 +790,7 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 	}
 :};
 
-sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentenciasFuncion FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
+sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentenciasFuncion:sentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
 	String nombre = id.getLexema().toUpperCase();
 	// Se busca el símbolo en la Tabla de Símbolos
 	ScopeIF ambito = scopeManager.getCurrentScope();
