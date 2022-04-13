@@ -11,7 +11,7 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
 public class Expresion extends NonTerminal {
     
     private String identificador;
-    private boolean esIdentificador;
+    private boolean esIdentificador = false;
     private TypeIF tipo;
 
     public Expresion(String identificador) {
@@ -56,7 +56,7 @@ public class Expresion extends NonTerminal {
         SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager();
 
         if(esIdentificador) {
-            // Se busca el identificador en la tabla de símbolos
+            // Se busca el identificador en la Tabla de Símbolos
             ScopeIF ambito = scopeManager.getCurrentScope();
             SymbolTableIF simbolosTabla = ambito.getSymbolTable();
             if(!simbolosTabla.containsSymbol(identificador)) {

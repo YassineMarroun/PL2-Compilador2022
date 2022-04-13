@@ -7,6 +7,11 @@ public class DefVariables extends NonTerminal {
 
     private ArrayList<SymbolVariable> variables;
 
+    public DefVariables() {
+        super();
+        this.variables = new ArrayList<SymbolVariable>();
+    }
+
     public DefVariables(ArrayList<SymbolVariable> variables) {
         super();
         this.variables = variables;

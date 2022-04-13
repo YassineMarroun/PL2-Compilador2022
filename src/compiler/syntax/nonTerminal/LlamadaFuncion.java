@@ -30,7 +30,7 @@ public class LlamadaFuncion {
             for(int i = 0; i < parametrosDeclaracion.size(); i++) {
                 TypeIF tipoDeclaracion = parametrosDeclaracion.get(i).getType();
                 Expresion expresionLlamada = parametrosLlamada.get(i).getExpresion();
-                TypeIF tipoLlamada = expresionLlamada.getTipo();
+                TypeIF tipoLlamada = expresionLlamada.getTipoExpresion();
 
                 // Los nomsbres de los tipos tienen que ser iguales
                 if(!tipoDeclaracion.getName().equalsIgnoreCase(tipoLlamada.getName())) {

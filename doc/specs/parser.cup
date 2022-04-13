@@ -196,7 +196,7 @@ axiom ::= defprincipal:defP {:
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 
 	cb.addQuadruple("INICIO");
-	CB.addQuadruples(defP.getIntermediateCode());
+	cb.addQuadruples(defP.getIntermediateCode());
 	cb.addQuadruple("HALT");
 
 	axiom.setIntermediateCode(cb.create());
@@ -445,7 +445,7 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 	tiposTabla.addType(logico);
 
 	syntaxErrorManager.syntaxInfo("Ambito funcion " + nombre + " abierto");
-:} PIZQUIERDO defvariables:parametros PDERECHO DELIMFUNC tiporetornofuncion:retorno DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion listaSentenciasFuncion FINBLOQUESENTENCIAS DSENTENCIAS {:
+:} PIZQUIERDO defvariables:parametros PDERECHO DELIMFUNC tiporetornofuncion:retorno DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentenciaFuncion:sentencia listaSentenciasFuncion:sentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
 	String nombre = id.getLexema().toUpperCase();
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	ScopeIF ambitoPadre = scopeManager.getParentScope();
@@ -737,11 +737,11 @@ sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
 | sentenciallamadafuncion:s {: RESULT = s; :};
 
 sentenciaFuncion ::= sentenciadeasignacion:s {: RESULT = s; :}
-| sentenciaifFuncion {: RESULT = s; :}
-| sentenciaforFuncion {: RESULT = s; :}
-| sentenciaEscribir {: RESULT = s; :}
-| sentenciallamadafuncion {: RESULT = s; :}
-| sentenciaDevolver {: RESULT = s; :};
+| sentenciaifFuncion:s {: RESULT = s; :}
+| sentenciaforFuncion:s {: RESULT = s; :}
+| sentenciaEscribir:s {: RESULT = s; :}
+| sentenciallamadafuncion:s {: RESULT = s; :}
+| sentenciaDevolver:s {: RESULT = s; :};
 
 listaSentencias ::= sentencia:s listaSentencias:lista {:
 	lista.addSentencia(s);
