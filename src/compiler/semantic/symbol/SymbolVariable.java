@@ -38,4 +38,12 @@ public class SymbolVariable
     public void setDireccionMemoria(int direccionMemoria) {
         this.direccionMemoria = direccionMemoria;
     }
+
+    public boolean isPasoPorReferencia() {
+        return pasoPorReferencia;
+    }
+
+    public void setPasoPorReferencia(boolean pasoPorReferencia) {
+        this.pasoPorReferencia = pasoPorReferencia;
+    }
 }

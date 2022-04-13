@@ -1,5 +1,8 @@
 package compiler.syntax.nonTerminal;
 
-public class DefPrincipal {
+public class DefPrincipal extends NonTerminal {
     
+    public DefPrincipal(){
+        super();
+    }
 }

@@ -20,22 +20,25 @@ public class Funcion extends NonTerminal {
             if(s instanceof SentenciaDevolver) {
                 numeroDevolver++;
             }
-
-            if(s instanceof SentenciaIf) {
+            // Si es un if o un for, comprobar su listado de sentencias
+            else if(s instanceof SentenciaIf) {
                 ArrayList<Sentencia> sIF = ((SentenciaIf)s).getSentenciasIF();
                 ArrayList<Sentencia> sElse = ((SentenciaIf)s).getSentenciasElse();
                 numeroDevolver += comprobarDevolver(sIF) + comprobarDevolver(sElse);
-            } else if(s instanceof SentenciaFor) {
-                ArrayList<Sentencia> sFor = ((SentenciaFor)s).getSentencias();
-
             }
-
-            // Si es un if o un for, comprobar su listado de sentencias
+            else if(s instanceof SentenciaFor) {
+                ArrayList<Sentencia> sFor = ((SentenciaFor)s).getSentencias();
+                numeroDevolver += comprobarDevolver(sFor);
+            }
         }
         return numeroDevolver;
     }
     
     public ArrayList<Sentencia> getSentencias() {
         return sentencias;
+    }
+
+    public void setSentencias(ArrayList<Sentencia> sentencias) {
+        this.sentencias = sentencias;
     }
 }

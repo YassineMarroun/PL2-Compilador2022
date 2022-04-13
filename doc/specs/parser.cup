@@ -116,7 +116,7 @@ non terminal							puntoycomaopcional;
 
 non terminal TypeIF 					tiporetornofuncion;
 non terminal  							seccionsubprograma;
-non terminal  							defprincipal;
+non terminal DefPrincipal 				defprincipal;
 non terminal SelectorValorOReferencia	selectorvalororeferencia;
 
 non terminal Expresion					expresion;
@@ -173,8 +173,14 @@ axiom:ax
 {: 
   	// No modificar esta estructura, aunque se pueden añadir más acciones semánticas
   		
-  	// List intermediateCode = ax.getIntermediateCode ();
-  	// finalCodeFactory.create (intermediateCode);
+  	List<QuadrupleIF> intermediateCode = ax.getIntermediateCode ();
+  	
+	syntaxErrorManager.syntaxInfo("CODIGO INTERMEDIO");
+	for(QuadrupleIF q : intermediateCode) {
+		syntaxErrorManager.syntaxInfo(q.toString());
+	}
+
+	// finalCodeFactory.create (intermediateCode);
 
   	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
   	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
@@ -184,12 +190,17 @@ axiom:ax
   	syntaxErrorManager.syntaxInfo ("Parsing process ended.");
 :};
 
-axiom ::= defprincipal{:
+axiom ::= defprincipal:defP {:
 	AxiomPrincipal axiom = new AxiomPrincipal();
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 
-	cb.add
+	cb.addQuadruple("INICIO");
+	CB.addQuadruples(defP.getIntermediateCode());
+	cb.addQuadruple("HALT");
+
+	axiom.setIntermediateCode(cb.create());
+
 	RESULT = axiom;
 :};
 
@@ -221,13 +232,14 @@ defconstantes ::= IDEN:id ASIGNACION valorconstante:valor DSENTENCIAS defconstan
 		simbolosTabla.addSymbol(simboloConstante);
 	}
 :}
-	| epsilon; 
+| epsilon; 
 
 valorconstante ::= FALSO {: RESULT = new ValorConstante(false); :}
-	| CIERTO {: RESULT = new ValorConstante(true); :} 
-	| NUM:n {: RESULT = new ValorConstante(Integer.parseInt(n.getLexema())); :};
+| CIERTO {: RESULT = new ValorConstante(true); :} 
+| NUM:n {: RESULT = new ValorConstante(Integer.parseInt(n.getLexema())); :};
 
-seccionconstantes ::= BCONSTANTES defconstantes | epsilon;
+seccionconstantes ::= BCONSTANTES defconstantes
+| epsilon;
 
  // Definición de tipos
 deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO valorango:valorn2 CDERECHO ASIGNACIONVECTOR tipovector:tipo DSENTENCIAS deftipos {:
@@ -251,7 +263,7 @@ deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO va
 		semanticErrorManager.semanticFatalError("Error semántico: el rango 2 del vector debe ser mayor o igual que el rango 1");
 	}
 :} 
-	| epsilon;
+| epsilon;
 
 tipovector ::= BOOLEANO {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
@@ -259,37 +271,38 @@ tipovector ::= BOOLEANO {:
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	RESULT = tipo;
 :} 
-	| ENTERO {:
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("ENTERO");
-		RESULT = tipo;
-	:};
+| ENTERO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("ENTERO");
+	RESULT = tipo;
+:};
 
 valorango ::= NUM:n {:
 	ValorRango vRango = new ValorRango(Integer.parseInt(n.getLexema()));
 	RESULT = vRango;
 :}
-	| IDEN:id {:
-		String nombre = id.getLexema().toUpperCase();
-		// Se busca el símbolo en la Tabla de Símbolos
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		SymbolTableIF simbolosTabla = ambito.getSymbolTable();
+| IDEN:id {:
+	String nombre = id.getLexema().toUpperCase();
+	// Se busca el símbolo en la Tabla de Símbolos
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 		
-		if(simbolosTabla.containsSymbol(nombre)) {
-			SymbolIF s = simbolosTabla.getSymbol(nombre);
-			ValorRango vRango = new ValorRango(s);
-			RESULT = vRango;
-		} else {
-			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " no esta declarado");
-		}
-	:}
-	| miembrovector:miembro {:
-		ValorRango vRango = new ValorRango(miembro);
+	if(simbolosTabla.containsSymbol(nombre)) {
+		SymbolIF s = simbolosTabla.getSymbol(nombre);
+		ValorRango vRango = new ValorRango(s);
 		RESULT = vRango;
-	:};
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " no esta declarado");
+	}
+:}
+| miembrovector:miembro {:
+	ValorRango vRango = new ValorRango(miembro);
+	RESULT = vRango;
+:};
 
-secciontipos ::= COMIENZODECLTIPOS deftipos | epsilon; 
+secciontipos ::= COMIENZODECLTIPOS deftipos
+| epsilon; 
 
 // Definición de variables
 tipovariable ::= BOOLEANO {:
@@ -298,35 +311,35 @@ tipovariable ::= BOOLEANO {:
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	RESULT = tipo;
 :}
-	| ENTERO {:
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("ENTERO");
-		RESULT = tipo;
+| ENTERO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("ENTERO");
+	RESULT = tipo;
 	
-	:}
-	| IDEN:id {:
-		String nombreTipo = id.getLexema().toUpperCase();
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
+:}
+| IDEN:id {:
+	String nombreTipo = id.getLexema().toUpperCase();
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
 
-		if(tiposTabla.containsType(nombreTipo)) {
-			TypeIF tipo = tiposTabla.getType(nombreTipo);
-			RESULT = tipo;
-		} else {
-			semanticErrorManager.semanticFatalError("Error semántico: el tipo " + nombreTipo + " no está declarado");
-		}
-	:};
+	if(tiposTabla.containsType(nombreTipo)) {
+		TypeIF tipo = tiposTabla.getType(nombreTipo);
+		RESULT = tipo;
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: el tipo " + nombreTipo + " no está declarado");
+	}
+:};
 
 selectorvalororeferencia ::= PARAMETROVALOR IDEN:id {:
 	String nombre = id.getLexema().toUpperCase();
 	SelectorValorOReferencia selector = new SelectorValorOReferencia(nombre);
 	RESULT = selector;
 :}
-	| expresion:exp {:
-		SelectorValorOReferencia selector = new SelectorValorOReferencia(exp);
-		RESULT = selector;
-	:};
+| expresion:exp {:
+	SelectorValorOReferencia selector = new SelectorValorOReferencia(exp);
+	RESULT = selector;
+:};
 
 defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycomaopcional defvariables {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
@@ -335,8 +348,14 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 	ArrayList<SymbolVariable> parametros = new ArrayList<SymbolVariable>();
 
 	for(SelectorValorOReferencia selector : identificadores) {
-		String nombre = selector.getExpresion().getIdentificador();
 		
+		String nombre;
+		if(selector.isPasoReferencia()) {
+			nombre = selector.getIdentificador();
+		} else {
+			nombre = selector.getExpresion().getIdentificador();
+		}
+
 		// Comprobación unicidad
 		if(simbolosTabla.containsSymbol(nombre)) {
 			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " duplicado");
@@ -349,32 +368,39 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 	DefVariables defV = new DefVariables(parametros);
 	RESULT = defV;
 :}
-	| epsilon; 
+| epsilon {:
+	DefVariables defV = new DefVariables();
+	RESULT = defV;
+:}; 
 
 listavariables ::= selectorvalororeferencia:selector DIDENTIFICADORES listavariables:variables {:
 	variables.addSelector(selector);
 	RESULT = variables;
 :}
-	| selectorvalororeferencia:selector {:
-		ListaVariables variables = new ListaVariables();
-		variables.addSelector(selector);
-		RESULT = variables;
-	:}
-	| epsilon {:
-		ListaVariables variables = new ListaVariables();
-		RESULT = variables;
-	:};
+| selectorvalororeferencia:selector {:
+	ListaVariables variables = new ListaVariables();
+	variables.addSelector(selector);
+	RESULT = variables;
+:}
+| epsilon {:
+	ListaVariables variables = new ListaVariables();
+	RESULT = variables;
+:};
 
-seccionvariables ::= DECLVARIABLES defvariables | epsilon;
-puntoycomaopcional ::= DSENTENCIAS | epsilon;
+seccionvariables ::= DECLVARIABLES defvariables
+| epsilon;
+
+puntoycomaopcional ::= DSENTENCIAS
+| epsilon;
 
 // Reglas de subprogramas
-tiporetornofuncion ::= IDEN {:
-
+tiporetornofuncion ::= IDEN:id {:
+	// No se puede devolver un vector
+	semanticErrorManager.semanticFatalError("La funcion no puede devolver un tipo que no sea primitivo");
 :}
-	| tipovector:tipo {:
-		RESULT = tipo;
-	:};
+| tipovector:tipo {:
+	RESULT = tipo;
+:};
 
 procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	// Al detectar el id del procedimiento se tiene que abrir el ámbito
@@ -398,6 +424,8 @@ procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	
 	TypeProcedure tipo = new TypeProcedure(ambitoPadre, nombre, parametros.getVariables());
 	tiposTablaPadre.addType(tipo);
+	
+
 	
 	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " cerrado");
 	scopeManager.closeScope();
@@ -425,14 +453,29 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 
 	TypeFunction tipo = new TypeFunction(ambitoPadre, nombre, parametros.getVariables(), retorno);
 	tiposTablaPadre.addType(tipo);
+	System.out.println("Tipo añadido: " + tipo);
+	
+	// Comprobar que al menos se tiene un DEVOLVER en el cuerpo de la función
+	Funcion funcion = new Funcion(sentencias.getSentencias(), sentencia);
+	int numeroDevolver = funcion.comprobarDevolver(funcion.getSentencias());
+	System.out.println("Numero sentencia devolver: " + numeroDevolver);
+	
+	if(numeroDevolver == 0) {
+		semanticErrorManager.semanticFatalError("Funcion " + nombre + " no tiene sentencia DEVOLVER");
+	}
 
 	syntaxErrorManager.syntaxInfo("Ambito funcion " + nombre + " cerrado");
 	scopeManager.closeScope();
 :};
 
-selectorpof ::= procedimiento | funcion;
-defsubprograma ::= selectorpof defsubprograma | epsilon;
-seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma | epsilon;
+selectorpof ::= procedimiento
+| funcion;
+
+defsubprograma ::= selectorpof defsubprograma
+| epsilon;
+
+seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma
+| epsilon;
 
 // Definición de programa principal
 defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
@@ -447,8 +490,10 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	tiposTabla.addType(entero);
 	tiposTabla.addType(logico);
-:}
-DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA;
+:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
+	DefPrincipal defP = new DefPrincipal();
+	RESULT = defP;
+:};
 
 expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -466,67 +511,66 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	Expresion exp = new Expresion(tipo);
 	RESULT = exp;
 :}
-	| expresion:exp1 IGUALDAD expresion:exp2 {:
-		TypeIF tipoExp1 = exp1.getTipoExpresion();
-		TypeIF tipoExp2 = exp2.getTipoExpresion();
+| expresion:exp1 IGUALDAD expresion:exp2 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+	TypeIF tipoExp2 = exp2.getTipoExpresion();
 
-		// Los dos tienen que ser de tipo ENTERO o los dos de tipo LOGICO
-		if((!((tipoExp1 instanceof TypeEntero) && (tipoExp2 instanceof TypeEntero))) && (!((tipoExp1 instanceof TypeLogico) && (tipoExp2 instanceof TypeLogico)))) {
-			semanticErrorManager.semanticFatalError("Error semántico:los dos operandos en == deben ser de tipo entero, o bien de tipo lógico");
-		}
+	// Los dos tienen que ser de tipo ENTERO o los dos de tipo LOGICO
+	if((!((tipoExp1 instanceof TypeEntero) && (tipoExp2 instanceof TypeEntero))) && (!((tipoExp1 instanceof TypeLogico) && (tipoExp2 instanceof TypeLogico)))) {
+		semanticErrorManager.semanticFatalError("Error semántico:los dos operandos en == deben ser de tipo entero, o bien de tipo lógico");
+	}
 
-		// Se genera una expresión de tipo LOGICO
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("LOGICO");
-		Expresion exp = new Expresion(tipo);
-		RESULT = exp;
+	// Se genera una expresión de tipo LOGICO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
 
-	:}
-	| IDEN:id {:
-		String identificador = id.getLexema().toUpperCase();
-		Expresion exp = new Expresion(identificador);
+:}
+| IDEN:id {:
+	String identificador = id.getLexema().toUpperCase();
+	Expresion exp = new Expresion(identificador);
+	RESULT = exp;
+:}
+| llamadafuncion:llamada {:
+	// Tiene que ser una función
+	TypeProcedure tipo = llamada.getTipoSubprograma();
+	if(tipo instanceof TypeFunction) {
+		TypeIF tipoRetorno = ((TypeFunction)tipo).getTipoRetorno();
+		Expresion exp = new Expresion(tipoRetorno);
 		RESULT = exp;
-	:}
-	| llamadafuncion:llamada {:
-		// Tiene que ser una función
-		TypeProcedure tipo = llamada.getTipoSubprograma();
-		if(tipo instanceof TypeFunction) {
-			TypeIF tipoRetorno = ((TypeFunction)tipo).getTipoRetorno();
-			Expresion exp = new Expresion(tipoRetorno);
-			RESULT = exp;
-		} else {
-			semanticErrorManager.semanticFatalError("Error semántico: expresión de llamada a función debe ser una función");
-		}
-	:}
-	| CIERTO {:
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("LOGICO");
-		Expresion exp = new Expresion(tipo);
-		RESULT = exp;
-	:}
-	| FALSO {:
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("LOGICO");
-		Expresion exp = new Expresion(tipo);
-		RESULT = exp;
-	:}
-	| miembrovector:mVector {:
-		Expresion exp = new Expresion(mVector.getTipoMiembroVector());
-		RESULT = exp;
-	:}
-	| NUM {:
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("ENTERO");
-		Expresion exp = new Expresion(tipo);
-		RESULT = exp;
-	:}
-	| expresionlvl2:exp {:
-		RESULT = exp;
-	:};
+	} else {
+		semanticErrorManager.semanticFatalError("Error semántico: expresión de llamada a función debe ser una función");
+	}
+:}
+| CIERTO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
+:}
+| FALSO {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
+:}
+| miembrovector:mVector {:
+	Expresion exp = new Expresion(mVector.getTipoMiembroVector());
+	RESULT = exp;
+:}
+| NUM {:
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("ENTERO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
+:}
+| expresionlvl2:exp {:
+	RESULT = exp;
+:};
 
 expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -544,9 +588,9 @@ expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 	Expresion exp = new Expresion(tipo);
 	RESULT = exp;
 :}
-	| expresionlvl3:exp {:
-		RESULT = exp;
-	:};
+| expresionlvl3:exp {:
+	RESULT = exp;
+:};
 
 expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -564,25 +608,25 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 	Expresion exp = new Expresion(tipo);
 	RESULT = exp;
 :}
-	| expresion:exp1 PRODUCTO expresion:exp2 {:
-		TypeIF tipoExp1 = exp1.getTipoExpresion();
-		TypeIF tipoExp2 = exp2.getTipoExpresion();
+| expresion:exp1 PRODUCTO expresion:exp2 {:
+	TypeIF tipoExp1 = exp1.getTipoExpresion();
+	TypeIF tipoExp2 = exp2.getTipoExpresion();
 
-		// Los dos tienen que ser de tipo ENTERO
-		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-			semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en * deben ser de tipo entero");
-		}
+	// Los dos tienen que ser de tipo ENTERO
+	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
+		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en * deben ser de tipo entero");
+	}
 
-		// Se genera una expresión de tipo ENTERO
-		ScopeIF ambito = scopeManager.getCurrentScope();
-		TypeTableIF tiposTabla = ambito.getTypeTable();
-		TypeIF tipo = tiposTabla.getType("ENTERO");
-		Expresion exp = new Expresion(tipo);
-		RESULT = exp;
-	:}
-	| expresionlvl4:exp {:
-		RESULT = exp;
-	:};
+	// Se genera una expresión de tipo ENTERO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("ENTERO");
+	Expresion exp = new Expresion(tipo);
+	RESULT = exp;
+:}
+| expresionlvl4:exp {:
+	RESULT = exp;
+:};
 
 expresionlvl4 ::= NOLOGICO expresion:exp1 {:
 	TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -599,16 +643,16 @@ expresionlvl4 ::= NOLOGICO expresion:exp1 {:
 	Expresion exp = new Expresion(tipo);
 	RESULT = exp;
 :}
-	| expresionlvl5:exp {:
-		RESULT = exp;
-	:};
+| expresionlvl5:exp {:
+	RESULT = exp;
+:};
 
 expresionlvl5 ::= PIZQUIERDO expresion:exp PDERECHO {:
 	RESULT = exp;
 :}
-	| CIZQUIERDO expresion:exp CDERECHO {:
-		RESULT = exp;
-	:};
+| CIZQUIERDO expresion:exp CDERECHO {:
+	RESULT = exp;
+:};
 
 
 // Acceso a vectores
@@ -631,10 +675,10 @@ parteizquierdaasignacion ::= IDEN:id {:
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
 	RESULT = parteIzquierda;
 :}
-	| miembrovector:mVector {:
-		ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
-		RESULT = parteIzquierda;
-	:};
+| miembrovector:mVector {:
+	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
+	RESULT = parteIzquierda;
+:};
 
 sentenciadeasignacion ::= parteizquierdaasignacion:parteIzquierda ASIGNACION parametroasignacion:exp DSENTENCIAS {:
 	TypeIF tipoIzquierda = parteIzquierda.getTipoIzquierdo();
@@ -687,35 +731,35 @@ sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS {:
 
 // Sentencias
 sentencia ::= sentenciadeasignacion:s {: RESULT = s; :}
-	| sentenciaif:s {: RESULT = s; :}
-	| sentenciafor:s {: RESULT = s; :}
-	| sentenciaEscribir:s {: RESULT = s; :}
-	| sentenciallamadafuncion:s {: RESULT = s; :};
+| sentenciaif:s {: RESULT = s; :}
+| sentenciafor:s {: RESULT = s; :}
+| sentenciaEscribir:s {: RESULT = s; :}
+| sentenciallamadafuncion:s {: RESULT = s; :};
 
-sentenciaFuncion ::= sentenciadeasignacion
-	| sentenciaifFuncion
-	| sentenciaforFuncion
-	| sentenciaEscribir
-	| sentenciallamadafuncion
-	| sentenciaDevolver;
+sentenciaFuncion ::= sentenciadeasignacion:s {: RESULT = s; :}
+| sentenciaifFuncion {: RESULT = s; :}
+| sentenciaforFuncion {: RESULT = s; :}
+| sentenciaEscribir {: RESULT = s; :}
+| sentenciallamadafuncion {: RESULT = s; :}
+| sentenciaDevolver {: RESULT = s; :};
 
 listaSentencias ::= sentencia:s listaSentencias:lista {:
 	lista.addSentencia(s);
 	RESULT = lista;
 :}
-	| epsilon {:
-		ListaSentencias lista = new ListaSentencias();
-		RESULT = lista;
-	:};
+| epsilon {:
+	ListaSentencias lista = new ListaSentencias();
+	RESULT = lista;
+:};
 
 listaSentenciasFuncion ::= sentenciaFuncion:s listaSentenciasFuncion:lista {:
 	lista.addSentencia(s);
 	RESULT = lista;
 :}
-	| epsilon {:
-		ListaSentencias lista = new ListaSentencias();
-		RESULT = lista;
-	:};
+| epsilon {:
+	ListaSentencias lista = new ListaSentencias();
+	RESULT = lista;
+:};
 
 // if
 sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sentenciasIF rellenoif:relleno FINBLOQUESENTENCIAS COMIENZOSI DSENTENCIAS {:
@@ -746,19 +790,19 @@ rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion:sentencias {
 	RellenoIf r = new RellenoIf(sentencias.getSentencias());
 	RESULT = r;
 :}
-	| epsilon {:
-		RellenoIf r = new RellenoIf();
-		RESULT = r;
-	:};
+| epsilon {:
+	RellenoIf r = new RellenoIf();
+	RESULT = r;
+:};
 
 rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias:sentencias {:
 	RellenoIf r = new RellenoIf(sentencias.getSentencias());
 	RESULT = r;
 :}
-	| epsilon {:
-		RellenoIf r = new RellenoIf();
-		RESULT = r;
-	:};
+| epsilon {:
+	RellenoIf r = new RellenoIf();
+	RESULT = r;
+:};
 
 // for 
 sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO expresion:exp2 DELIMFUNC listaSentencias:sentencias FINBLOQUESENTENCIAS COMIENZOBUCLEPARA DSENTENCIAS {:
@@ -827,21 +871,21 @@ parametroEscribir ::= STRING:texto {:
 	ParametroEscribir param = new ParametroEscribir(cadena);
 	RESULT = param;
 :}
-	| expresion:exp {:
-		TypeIF tipoExp1 = exp.getTipoExpresion();
+| expresion:exp {:
+	TypeIF tipoExp1 = exp.getTipoExpresion();
 	
-		// Tiene que ser de tipo ENTERO
-		if(!(tipoExp1 instanceof TypeEntero)) {
-				semanticErrorManager.semanticFatalError("Error semántico: tipo de la expresión en sentencia ESCRIBIR no es entero");
-		}
+	// Tiene que ser de tipo ENTERO
+	if(!(tipoExp1 instanceof TypeEntero)) {
+		semanticErrorManager.semanticFatalError("Error semántico: tipo de la expresión en sentencia ESCRIBIR no es entero");
+	}
 
-		ParametroEscribir param = new ParametroEscribir(exp);
-		RESULT = param;
-	:}
-	| epsilon {:
-		ParametroEscribir param = new ParametroEscribir();
-		RESULT = param;
-	:};
+	ParametroEscribir param = new ParametroEscribir(exp);
+	RESULT = param;
+:}
+| epsilon {:
+	ParametroEscribir param = new ParametroEscribir();
+	RESULT = param;
+:};
 
 sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS {:
 	SentenciaEscribir s = new SentenciaEscribir();
