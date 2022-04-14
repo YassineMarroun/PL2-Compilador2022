@@ -83,7 +83,7 @@ public class ValorRango extends NonTerminal {
                 valor = ((SymbolConstantEntero)simbolo).getValorEntero();
             } else {
                 SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager();
-                semanticErrorManager.semanticFatalError("Error semántico: el rango del vector no es una constante entera");
+                semanticErrorManager.semanticFatalError("Error semantico: el rango del vector no es una constante entera");
             }
             return valor;
         }  

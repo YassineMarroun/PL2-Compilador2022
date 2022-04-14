@@ -2,11 +2,7 @@ package compiler.code;
 
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.tree.TreeNode;
-
 import compiler.semantic.type.TypeSimple;
-
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
 import es.uned.lsi.compiler.code.RegisterDescriptorIF;
@@ -103,6 +99,14 @@ public class ExecutionEnvironmentEns2001
             case "INICIO":
                 break;
             case "HALT":
+                translate.append("HALT");
+                translate.append("\n");
+                break;
+            case "WSTRING":
+                break;
+            case "WLN":
+                break;
+            case "WINT":
                 break;
         }
         return translate.toString(); 

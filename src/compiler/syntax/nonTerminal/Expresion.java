@@ -60,7 +60,7 @@ public class Expresion extends NonTerminal {
             ScopeIF ambito = scopeManager.getCurrentScope();
             SymbolTableIF simbolosTabla = ambito.getSymbolTable();
             if(!simbolosTabla.containsSymbol(identificador)) {
-                semanticErrorManager.semanticFatalError("Error semántico: identificador " + identificador + " no está declarado");
+                semanticErrorManager.semanticFatalError("Error semantico: identificador " + identificador + " no esta declarado");
             }
             SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
             return simbolo.getType();

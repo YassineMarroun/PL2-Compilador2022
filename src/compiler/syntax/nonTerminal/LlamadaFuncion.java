@@ -12,9 +12,9 @@ public class LlamadaFuncion {
     private TypeProcedure tipoSubprograma;
     private ArrayList<SelectorValorOReferencia> parametrosLlamada;
 
-    public LlamadaFuncion(TypeProcedure tipoPrograma, ArrayList<SelectorValorOReferencia> parametrosLlamada) {
+    public LlamadaFuncion(TypeProcedure tipoSubprograma, ArrayList<SelectorValorOReferencia> parametrosLlamada) {
         super();
-        this.tipoSubprograma = tipoPrograma;
+        this.tipoSubprograma = tipoSubprograma;
         this.parametrosLlamada = parametrosLlamada;
     }
 
@@ -24,7 +24,7 @@ public class LlamadaFuncion {
         SemanticErrorManager semanticErrorManager = CompilerContext.getSemanticErrorManager();
 
         if(parametrosDeclaracion.size() != parametrosLlamada.size()) {
-            semanticErrorManager.semanticFatalError("Error semántico: número de parámetros incorrectos en la llamada a la función");
+            semanticErrorManager.semanticFatalError("Error semantico: numero de parametros incorrecto en la llamada a la funcion");
         } else {
             // Comparar uno a uno los tipos de los dos ArrayList
             for(int i = 0; i < parametrosDeclaracion.size(); i++) {
@@ -34,7 +34,7 @@ public class LlamadaFuncion {
 
                 // Los nomsbres de los tipos tienen que ser iguales
                 if(!tipoDeclaracion.getName().equalsIgnoreCase(tipoLlamada.getName())) {
-                    semanticErrorManager.semanticFatalError("Error semántico: tipo incorrecto en los parámetros de la llamada a la función");
+                    semanticErrorManager.semanticFatalError("Error semantico: tipo incorrecto en los parametros de la llamada a la funcion");
                 }
             }
         }

@@ -36,7 +36,6 @@ public class TypeArray
     
 
     public TypeArray(ScopeIF scope, String name, int rango1, int rango2, TypeIF tipo) {
-         
         super(scope, name);
         this.rango1 = rango1;
         this.rango2 = rango2;

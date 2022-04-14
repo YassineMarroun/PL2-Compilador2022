@@ -13,11 +13,6 @@ public class TypeFunction
     extends TypeProcedure
 {   
     private TypeIF tipoRetorno;
-    
-    public TypeFunction(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros, TypeIF tipoRetorno) {
-		super(scope, name, parametros);
-		this.tipoRetorno = tipoRetorno;
-	}
 
     /**
      * Constructor for TypeFunction.
@@ -38,6 +33,11 @@ public class TypeFunction
         super (scope, name);
     }
     
+    public TypeFunction(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros, TypeIF tipoRetorno) {
+		super(scope, name, parametros);
+		this.tipoRetorno = tipoRetorno;
+	}
+
     /**
      * Returns the size of the type.
      * @return the size of the type.

@@ -58,15 +58,15 @@ public class MiembroVector extends NonTerminal {
         SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 
         if(!simbolosTabla.containsSymbol(identificador)) {
-            semanticErrorManager.semanticFatalError("Error semántico: identificador " + identificador + " no está declarado");
+            semanticErrorManager.semanticFatalError("Error semantico: identificador " + identificador + " no esta declarado");
         }
 
         SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
         if(!(simbolo.getType() instanceof TypeArray)) {
-            semanticErrorManager.semanticFatalError("Error semántico: el tipo " + simbolo.getType().getName() + " no es de tipo vector");
+            semanticErrorManager.semanticFatalError("Error semantico: el tipo " + simbolo.getType().getName() + " no es de tipo vector");
         }
 
-        TypeArray tipoVector = (TypeArray) simbolo.getType();
+        TypeArray tipoVector = (TypeArray)simbolo.getType();
         tipoMiembroVector = tipoVector.getTipo();
 
         // Se comprueba valorRango
@@ -74,7 +74,7 @@ public class MiembroVector extends NonTerminal {
             // Si es un número, tiene que estar entre rango1 y rango2 de tipoVector
             int valor = valorRango.getNumero();
             if(valor < tipoVector.getRango1() || valor > tipoVector.getRango2()) {
-                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + " tiene un rango incorrecto: " + valor);
+                semanticErrorManager.semanticFatalError("Error semantico: acceso a la variable vector " + identificador + " tiene un rango incorrecto: " + valor);
             }
         } else if(valorRango.isEsSimbolo()) {
             // Si es un símbolo el tipo tiene que ser entero
@@ -84,11 +84,11 @@ public class MiembroVector extends NonTerminal {
                 if(simboloValor instanceof SymbolConstantEntero) {
                     int valor = ((SymbolConstantEntero)simboloValor).getValorEntero();
                     if(valor < tipoVector.getRango1() || valor > tipoVector.getRango2()) {
-                        semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + " tiene rango incorrecto: " + valor);
+                        semanticErrorManager.semanticFatalError("Error semantico: acceso a la variable vector " + identificador + " tiene rango incorrecto: " + valor);
                     }
                 }
             } else {
-                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + ", índice no entero");
+                semanticErrorManager.semanticFatalError("Error semantico: acceso a la variable vector " + identificador + ", indice no entero");
             }
         } else {
             // El índice es otro miembro vector
@@ -97,7 +97,7 @@ public class MiembroVector extends NonTerminal {
             TypeArray tipoMiembroVector = (TypeArray)simboloVector.getType();
             // El tipo base del vector tiene que ser entero
             if(!(tipoMiembroVector.getTipo() instanceof TypeEntero)) {
-                semanticErrorManager.semanticFatalError("Error semántico: acceso a la variable vector " + identificador + ", índice tipo vector no entero");
+                semanticErrorManager.semanticFatalError("Error semantico: acceso a la variable vector " + identificador + ", indice tipo vector no entero");
             }
         }
     }

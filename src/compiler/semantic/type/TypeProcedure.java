@@ -14,11 +14,6 @@ public class TypeProcedure
 {   
     private ArrayList<SymbolVariable> parametros;
 
-    public TypeProcedure(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros) {
-        super(scope, name);
-        this.parametros = parametros;
-    }
-
    /**
      * Constructor for TypeProcedure.
      * @param scope The declaration scope.
@@ -36,6 +31,11 @@ public class TypeProcedure
     public TypeProcedure (ScopeIF scope, String name)
     {
         super (scope, name);
+    }
+
+    public TypeProcedure(ScopeIF scope, String name, ArrayList<SymbolVariable> parametros) {
+        super(scope, name);
+        this.parametros = parametros;
     }
     
     /**
