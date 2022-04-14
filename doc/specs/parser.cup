@@ -5,6 +5,7 @@ package compiler.syntax;
 
 import java_cup.runtime.Symbol;
 import java.util.*;
+import java.util.Map.Entry;
 
 import es.uned.lsi.compiler.lexical.*;
 import es.uned.lsi.compiler.code.*;
@@ -94,7 +95,6 @@ terminal Token DSENTENCIAS;
 terminal Token MENORQUE;
 terminal Token ASIGNACION;
 
-
 // Declaración de no terminales
 
 non terminal  							program;
@@ -175,13 +175,21 @@ axiom:ax
   		
   	List<QuadrupleIF> intermediateCode = ax.getIntermediateCode ();
   	
+	HashMap<String, String> textos = Textos.getTextos();
+	syntaxErrorManager.syntaxInfo("TEXTOS: ");
+	syntaxErrorManager.syntaxInfo("*****************");
+	for(Entry<String, String> e : textos.entrySet()) {
+		syntaxErrorManager.syntaxInfo(e.getKey() + ": " + e.getValue());
+	}
+
 	syntaxErrorManager.syntaxInfo("CODIGO INTERMEDIO");
+	syntaxErrorManager.syntaxInfo("*****************");
 	for(QuadrupleIF q : intermediateCode) {
 		syntaxErrorManager.syntaxInfo(q.toString());
 	}
 
 	finalCodeFactory.setEnvironment(CompilerContext.getExecutionEnvironment());
-	finalCodeFactory.create (intermediateCode);
+	finalCodeFactory.create(intermediateCode);
 
   	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
   	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
@@ -216,7 +224,7 @@ defconstantes ::= IDEN:id ASIGNACION valorconstante:valor DSENTENCIAS defconstan
 	
 	// Comprobación unicidad
 	if(simbolosTabla.containsSymbol(nombre)) {
-		semanticErrorManager.semanticFatalError("Error semántico: identificador "+ nombre +" duplicado");
+		semanticErrorManager.semanticFatalError("Error semantico: identificador "+ nombre +" duplicado");
 	}
 	
 	if(valor.isEsValorEntero()) {
@@ -250,10 +258,10 @@ deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO va
 	
 	// Comprobación unicidad
 	if(tiposTabla.containsType(nombre)) {
-		semanticErrorManager.semanticFatalError("Error semántico: identificador del tipo " + nombre + " duplicado");
+		semanticErrorManager.semanticFatalError("Error semantico: identificador del tipo " + nombre + " duplicado");
 	}
 
-	// Se recupera valor de rango1
+	// Se recupera valor de rango
 	int rango1 = valorn1.getRangoVector();
 	int rango2 = valorn2.getRangoVector();
 
@@ -261,7 +269,7 @@ deftipos ::= IDEN:id ASIGNACION DECLVECTOR CIZQUIERDO valorango:valorn1 RANGO va
 		TypeArray tipoArray = new TypeArray(ambito, nombre, rango1, rango2, tipo);
 		tiposTabla.addType(tipoArray);
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: el rango 2 del vector debe ser mayor o igual que el rango 1");
+		semanticErrorManager.semanticFatalError("Error semantico: el rango 2 del vector debe ser mayor o igual que el rango 1");
 	}
 :} 
 | epsilon;
@@ -294,7 +302,7 @@ valorango ::= NUM:n {:
 		ValorRango vRango = new ValorRango(s);
 		RESULT = vRango;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " no esta declarado");
+		semanticErrorManager.semanticFatalError("Error semantico: identificador " + nombre + " no esta declarado");
 	}
 :}
 | miembrovector:miembro {:
@@ -328,7 +336,7 @@ tipovariable ::= BOOLEANO {:
 		TypeIF tipo = tiposTabla.getType(nombreTipo);
 		RESULT = tipo;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: el tipo " + nombreTipo + " no está declarado");
+		semanticErrorManager.semanticFatalError("Error semantico: el tipo " + nombreTipo + " no esta declarado");
 	}
 :};
 
@@ -359,7 +367,7 @@ defvariables ::= listavariables:variables DELIMFUNC tipovariable:tipo puntoycoma
 
 		// Comprobación unicidad
 		if(simbolosTabla.containsSymbol(nombre)) {
-			semanticErrorManager.semanticFatalError("Error semántico: identificador " + nombre + " duplicado");
+			semanticErrorManager.semanticFatalError("Error semantico: identificador " + nombre + " duplicado");
 		}
 		SymbolVariable simbolo = new SymbolVariable(ambito, nombre, tipo, selector.isPasoReferencia());
 		simbolosTabla.addSymbol(simbolo);
@@ -396,7 +404,7 @@ puntoycomaopcional ::= DSENTENCIAS
 
 // Reglas de subprogramas
 tiporetornofuncion ::= IDEN:id {:
-	// No se puede devolver un vector
+	// No se permite devolver un vector
 	semanticErrorManager.semanticFatalError("La funcion no puede devolver un tipo que no sea primitivo");
 :}
 | tipovector:tipo {:
@@ -426,14 +434,12 @@ procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	TypeProcedure tipo = new TypeProcedure(ambitoPadre, nombre, parametros.getVariables());
 	tiposTablaPadre.addType(tipo);
 	
-
-	
 	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " cerrado");
 	scopeManager.closeScope();
 :};
 
 funcion ::= DECLAREFUNCION IDEN:id {:
-	// Al detectar al id de la función se tiene que abrir el ámbito
+	// Al detectar el id de la función se tiene que abrir el ámbito
 	String nombre = id.getLexema().toUpperCase();
 	scopeManager.openScope(nombre);
 	
@@ -450,7 +456,7 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 	String nombre = id.getLexema().toUpperCase();
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	ScopeIF ambitoPadre = scopeManager.getParentScope();
-	TypeTableIF tiposTablaPadre = ambito.getTypeTable();
+	TypeTableIF tiposTablaPadre = ambitoPadre.getTypeTable();
 
 	TypeFunction tipo = new TypeFunction(ambitoPadre, nombre, parametros.getVariables(), retorno);
 	tiposTablaPadre.addType(tipo);
@@ -496,7 +502,9 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 
 	// CÓDIGO INTERMEDIO
 	ScopeIF ambito = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(sentencias.getIntermediateCode());
+	defP.setIntermediateCode(cb.create());
 
 	RESULT = defP;
 :};
@@ -507,7 +515,7 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 
 	// Los dos tienen que ser de tipo ENTERO
 	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en < deben ser de tipo entero");
+		semanticErrorManager.semanticFatalError("Error semantico: los dos operandos en < deben ser de tipo entero");
 	}
 
 	// Se genera una expresión de tipo LOGICO
@@ -523,7 +531,7 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 
 	// Los dos tienen que ser de tipo ENTERO o los dos de tipo LOGICO
 	if((!((tipoExp1 instanceof TypeEntero) && (tipoExp2 instanceof TypeEntero))) && (!((tipoExp1 instanceof TypeLogico) && (tipoExp2 instanceof TypeLogico)))) {
-		semanticErrorManager.semanticFatalError("Error semántico:los dos operandos en == deben ser de tipo entero, o bien de tipo lógico");
+		semanticErrorManager.semanticFatalError("Error semantico:los dos operandos en == deben ser de tipo entero, o bien de tipo logico");
 	}
 
 	// Se genera una expresión de tipo LOGICO
@@ -547,12 +555,13 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 		Expresion exp = new Expresion(tipoRetorno);
 		RESULT = exp;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: expresión de llamada a función debe ser una función");
+		semanticErrorManager.semanticFatalError("Error semantico: expresion de llamada a funcion debe ser una funcion");
 	}
 :}
 | CIERTO {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
-	TypeTableIF tiposTabla = ambito.getTypeTable();	TypeIF tipo = tiposTabla.getType("LOGICO");
+	TypeTableIF tiposTabla = ambito.getTypeTable();
+	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
 	RESULT = exp;
 :}
@@ -567,11 +576,21 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	Expresion exp = new Expresion(mVector.getTipoMiembroVector());
 	RESULT = exp;
 :}
-| NUM {:
+| NUM:n {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("ENTERO");
+	int num = Integer.parseInt(n.getLexema());
 	Expresion exp = new Expresion(tipo);
+
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruple("MV", temp, new Value(num));
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+
 	RESULT = exp;
 :}
 | expresionlvl2:exp {:
@@ -584,7 +603,7 @@ expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 
 	// Los dos tienen que ser de tipo ENTERO
 	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en + deben ser de tipo entero");
+		semanticErrorManager.semanticFatalError("Error semantico: los dos operandos en + deben ser de tipo entero");
 	}
 
 	// Se genera una expresión de tipo ENTERO
@@ -604,7 +623,7 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 
 	// Los dos tienen que ser de tipo LOGICO
 	if(!(tipoExp1 instanceof TypeLogico) || !(tipoExp2 instanceof TypeLogico)) {
-		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en Y deben ser de tipo lógico");
+		semanticErrorManager.semanticFatalError("Error semantico: los dos operandos en Y deben ser de tipo logico");
 	}
 
 	// Se genera una expresión de tipo LOGICO
@@ -620,7 +639,7 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 
 	// Los dos tienen que ser de tipo ENTERO
 	if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-		semanticErrorManager.semanticFatalError("Error semántico: los dos operandos en * deben ser de tipo entero");
+		semanticErrorManager.semanticFatalError("Error semantico: los dos operandos en * deben ser de tipo entero");
 	}
 
 	// Se genera una expresión de tipo ENTERO
@@ -639,7 +658,7 @@ expresionlvl4 ::= NOLOGICO expresion:exp1 {:
 
 	// Tiene que ser de tipo LOGICO
 	if(!(tipoExp1 instanceof TypeLogico)) {
-		semanticErrorManager.semanticFatalError("Error semántico: el operando en NO debe ser de tipo lógico");
+		semanticErrorManager.semanticFatalError("Error semantico: el operando en NO debe ser de tipo logico");
 	}
 
 	// Se genera una expresión de tipo LOGICO
@@ -675,7 +694,7 @@ parteizquierdaasignacion ::= IDEN:id {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	SymbolTableIF simbolosTabla = ambito.getSymbolTable();
 	if(!simbolosTabla.containsSymbol(identificador)) {
-		semanticErrorManager.semanticFatalError("Error semántico: identificador " + identificador + " no está declarado");
+		semanticErrorManager.semanticFatalError("Error semantico: identificador " + identificador + " no esta declarado");
 	}
 	SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
@@ -695,7 +714,7 @@ sentenciadeasignacion ::= parteizquierdaasignacion:parteIzquierda ASIGNACION par
 		SentenciaDeAsignacion sentencia = new SentenciaDeAsignacion();
 		RESULT = sentencia;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: tipos incompatibles en la sentencia de asignación");
+		semanticErrorManager.semanticFatalError("Error semantico: tipos incompatibles en la sentencia de asignacion");
 	}
 :};
 
@@ -723,10 +742,10 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 			llamada.comprobarLlamada();
 			RESULT = llamada;
 		} else {
-			semanticErrorManager.semanticFatalError("Error semántico: " + nombre + " no es un subprograma");
+			semanticErrorManager.semanticFatalError("Error semantico: " + nombre + " no es un subprograma");
 		}
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: no existe la función " + nombre);
+		semanticErrorManager.semanticFatalError("Error semantico: no existe la funcion " + nombre);
 	}
 :};
 
@@ -753,6 +772,11 @@ listaSentencias ::= sentencia:s listaSentencias:lista {:
 	lista.addSentencia(s);
 	
 	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(s.getIntermediateCode());
+	cb.addQuadruples(lista.getIntermediateCode());
+	lista.setIntermediateCode(cb.create());
 
 	RESULT = lista;
 :}
@@ -763,6 +787,14 @@ listaSentencias ::= sentencia:s listaSentencias:lista {:
 
 listaSentenciasFuncion ::= sentenciaFuncion:s listaSentenciasFuncion:lista {:
 	lista.addSentencia(s);
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(s.getIntermediateCode());
+	cb.addQuadruples(lista.getIntermediateCode());
+	lista.setIntermediateCode(cb.create());
+
 	RESULT = lista;
 :}
 | epsilon {:
@@ -825,7 +857,7 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 
 		// El índice tiene que ser de tipo ENTERO
 		if(!(tipoIndice instanceof TypeEntero)) {
-			semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no es de tipo entero");
+			semanticErrorManager.semanticFatalError("Error semantico: indice " + nombre + " en sentencia FOR no es de tipo entero");
 		}
 
 		TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -833,13 +865,13 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 
 		// Los dos tienen que ser de tipo ENTERO
 		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-			semanticErrorManager.semanticFatalError("Error semántico: el rango en sentencia FOR debe ser de tipo entero");
+			semanticErrorManager.semanticFatalError("Error semantico: el rango en sentencia FOR debe ser de tipo entero");
 		}
 
-		SentenciaFor s = new SentenciaFor();
+		SentenciaFor s = new SentenciaFor(sentencias.getSentencias());
 		RESULT = s;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no está declarado");
+		semanticErrorManager.semanticFatalError("Error semantico: indice " + nombre + " en sentencia FOR no esta declarado");
 	}
 :};
 
@@ -854,7 +886,7 @@ sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 
 
 		// El índice tiene que ser de tipo ENTERO
 		if(!(tipoIndice instanceof TypeEntero)) {
-			semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no es de tipo entero");
+			semanticErrorManager.semanticFatalError("Error semantico: índice " + nombre + " en sentencia FOR no es de tipo entero");
 		}
 
 		TypeIF tipoExp1 = exp1.getTipoExpresion();
@@ -862,16 +894,15 @@ sentenciaforFuncion ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 
 
 		// Los dos tienen que ser de tipo ENTERO
 		if(!(tipoExp1 instanceof TypeEntero) || !(tipoExp2 instanceof TypeEntero)) {
-			semanticErrorManager.semanticFatalError("Error semántico: el rango en sentencia FOR debe ser de tipo entero");
+			semanticErrorManager.semanticFatalError("Error semantico: el rango en sentencia FOR debe ser de tipo entero");
 		}
 
-		SentenciaFor s = new SentenciaFor();
+		SentenciaFor s = new SentenciaFor(sentencias.getSentencias());
 		RESULT = s;
 	} else {
-		semanticErrorManager.semanticFatalError("Error semántico: índice " + nombre + " en sentencia FOR no está declarado");
+		semanticErrorManager.semanticFatalError("Error semantico: indice " + nombre + " en sentencia FOR no esta declarado");
 	}
 :};
-
 
 // escribir
 parametroEscribir ::= STRING:texto {:
@@ -885,7 +916,7 @@ parametroEscribir ::= STRING:texto {:
 	
 	// Tiene que ser de tipo ENTERO
 	if(!(tipoExp1 instanceof TypeEntero)) {
-		semanticErrorManager.semanticFatalError("Error semántico: tipo de la expresión en sentencia ESCRIBIR no es entero");
+		semanticErrorManager.semanticFatalError("Error semantico: tipo de la expresion en sentencia ESCRIBIR no es entero");
 	}
 
 	ParametroEscribir param = new ParametroEscribir(exp);
@@ -904,8 +935,15 @@ sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir:parametro PDERECHO D
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 	
 	if(parametro.isEsCadena()) {
-		cb.addQuadruple("WSTRING");
-	} else if(parametro.)
+		String label = Textos.addTexto(parametro.getCadena());
+		cb.addQuadruple("WSTRING", label);
+	} else if(parametro.isEsExpresion()) {
+		cb.addQuadruples(parametro.getExpresion().getIntermediateCode());
+		cb.addQuadruple("WINT", parametro.getExpresion().getTemporal());
+	} else {
+		cb.addQuadruple("WLN");
+	}
+	s.setIntermediateCode(cb.create());
 	
 	RESULT = s;
 :};
@@ -916,7 +954,6 @@ sentenciaDevolver ::= FRETURN expresion DSENTENCIAS {:
 	// Recuperar el nombre del ámbito actual
 	String nombre = scopeManager.getCurrentScope().getName().toUpperCase();
 	TypeIF tipoSubprograma = scopeManager.searchType(nombre);
-	System.out.println("Tipo Subprograma: " + tipoSubprograma);
 
 	SentenciaDevolver s = new SentenciaDevolver();
 	RESULT = s;
