@@ -3,6 +3,8 @@ package compiler.code;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.tree.TreeNode;
+
 import compiler.semantic.type.TypeSimple;
 
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
@@ -93,7 +95,16 @@ public class ExecutionEnvironmentEns2001
     @Override
     public final String translate (QuadrupleIF quadruple)
     {      
-        //TODO: Student work
-        return quadruple.toString(); 
+        StringBuilder translate = new StringBuilder();
+        translate.append(";" + quadruple.toString());
+        translate.append("\n");
+        
+        switch(quadruple.getOperation()) {
+            case "INICIO":
+                break;
+            case "HALT":
+                break;
+        }
+        return translate.toString(); 
     }
 }

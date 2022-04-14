@@ -180,7 +180,8 @@ axiom:ax
 		syntaxErrorManager.syntaxInfo(q.toString());
 	}
 
-	// finalCodeFactory.create (intermediateCode);
+	finalCodeFactory.setEnvironment(CompilerContext.getExecutionEnvironment());
+	finalCodeFactory.create (intermediateCode);
 
   	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
   	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
@@ -490,8 +491,13 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	tiposTabla.addType(entero);
 	tiposTabla.addType(logico);
-:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
+:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias:sentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
 	DefPrincipal defP = new DefPrincipal();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder
+
 	RESULT = defP;
 :};
 
@@ -745,6 +751,9 @@ sentenciaFuncion ::= sentenciadeasignacion:s {: RESULT = s; :}
 
 listaSentencias ::= sentencia:s listaSentencias:lista {:
 	lista.addSentencia(s);
+	
+	// CÓDIGO INTERMEDIO
+
 	RESULT = lista;
 :}
 | epsilon {:
@@ -887,8 +896,17 @@ parametroEscribir ::= STRING:texto {:
 	RESULT = param;
 :};
 
-sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir PDERECHO DSENTENCIAS {:
+sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir:parametro PDERECHO DSENTENCIAS {:
 	SentenciaEscribir s = new SentenciaEscribir();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	
+	if(parametro.isEsCadena()) {
+		cb.addQuadruple("WSTRING");
+	} else if(parametro.)
+	
 	RESULT = s;
 :};
 
