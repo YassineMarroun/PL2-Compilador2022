@@ -204,6 +204,9 @@ axiom ::= defprincipal:defP {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 
+	// Se asignan direcciones de memoria
+	MemoriaPrograma 
+
 	cb.addQuadruple("INICIO");
 	cb.addQuadruples(defP.getIntermediateCode());
 	cb.addQuadruple("HALT");

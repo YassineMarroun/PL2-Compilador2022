@@ -1,12 +1,18 @@
 package compiler.code;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import compiler.intermediate.MemoriaPrograma;
+import compiler.intermediate.Textos;
 import compiler.semantic.type.TypeSimple;
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
 import es.uned.lsi.compiler.code.RegisterDescriptorIF;
+import es.uned.lsi.compiler.intermediate.OperandIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
+import es.uned.lsi.compiler.intermediate.TemporalIF;
 
 /**
  * Class for the ENS2001 Execution environment.
@@ -97,6 +103,17 @@ public class ExecutionEnvironmentEns2001
         
         switch(quadruple.getOperation()) {
             case "INICIO":
+
+                MemoriaPrograma memoria = new MemoriaPrograma();
+                int sizeTextos = memoria.sizeTextos;
+
+                // Salto incondicional al inicio del programa
+                translate.append("BR /" + quadruple.getResult());
+                translate.append("\n");
+                int inicioTextos = Integer.parseInt(quadruple.getResult().toString()) - memoria.sizeTextos;
+                // Añadir los textos
+                HashMap<String, String> textos = Textos.getTextos();
+                
                 break;
             case "HALT":
                 translate.append("HALT");
@@ -110,5 +127,14 @@ public class ExecutionEnvironmentEns2001
                 break;
         }
         return translate.toString(); 
+    }
+
+    private String getDireccion(OperandIF operando) {
+
+        if(operando instanceof TemporalIF) {
+            return "/" + ((TemporalIF)operando);
+        }
+
+        return "";
     }
 }
