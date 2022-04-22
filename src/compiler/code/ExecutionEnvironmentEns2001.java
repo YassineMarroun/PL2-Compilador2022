@@ -3,9 +3,11 @@ package compiler.code;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map.Entry;
 import compiler.intermediate.MemoriaPrograma;
 import compiler.intermediate.Textos;
+import compiler.intermediate.Value;
+
 import compiler.semantic.type.TypeSimple;
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
