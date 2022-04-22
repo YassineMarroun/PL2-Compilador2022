@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import compiler.intermediate.MemoriaPrograma;
 import compiler.intermediate.Textos;
 import compiler.intermediate.Value;
-
 import compiler.semantic.type.TypeSimple;
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
@@ -105,27 +104,47 @@ public class ExecutionEnvironmentEns2001
         
         switch(quadruple.getOperation()) {
             case "INICIO":
-
                 MemoriaPrograma memoria = new MemoriaPrograma();
-                int sizeTextos = memoria.sizeTextos;
 
                 // Salto incondicional al inicio del programa
                 translate.append("BR /" + quadruple.getResult());
                 translate.append("\n");
-                int inicioTextos = Integer.parseInt(quadruple.getResult().toString()) - memoria.sizeTextos;
+
+                translate.append("ORG " + memoria.direccionInicio);
+                translate.append("\n");
+                
                 // Añadir los textos
                 HashMap<String, String> textos = Textos.getTextos();
-                
+                for(Entry<String, String> e : textos.entrySet()) {
+                    translate.append(e.getKey() + ": DATA " + e.getValue());
+                    translate.append("\n");
+                }
+                translate.append("ORG " + quadruple.getResult());
+                translate.append("\n");
                 break;
             case "HALT":
                 translate.append("HALT");
                 translate.append("\n");
                 break;
             case "WSTRING":
+                translate.append("WRSTR /" + quadruple.getResult());
+                translate.append("\n");
+                translate.append("WRCHAR #10");
+                translate.append("\n");
                 break;
             case "WLN":
+                translate.append("WRCHAR #10");
+                translate.append("\n");
                 break;
             case "WINT":
+                translate.append("WRINT " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("WRCHAR #10");
+                translate.append("\n");
+                break;
+            case "MV":
+                translate.append("MOVE " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
                 break;
         }
         return translate.toString(); 
@@ -134,7 +153,10 @@ public class ExecutionEnvironmentEns2001
     private String getDireccion(OperandIF operando) {
 
         if(operando instanceof TemporalIF) {
-            return "/" + ((TemporalIF)operando);
+            return "/" + ((TemporalIF)operando).getAddress();
+        }
+        if(operando instanceof Value) {
+            return "#" + ((Value)operando).getValue();
         }
 
         return "";

@@ -205,9 +205,10 @@ axiom ::= defprincipal:defP {:
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 
 	// Se asignan direcciones de memoria
-	MemoriaPrograma 
+	MemoriaPrograma memoria = new MemoriaPrograma();
+	memoria.asignarMemoria();
 
-	cb.addQuadruple("INICIO");
+	cb.addQuadruple("INICIO", new Value(memoria.direccionInicio));
 	cb.addQuadruples(defP.getIntermediateCode());
 	cb.addQuadruple("HALT");
 

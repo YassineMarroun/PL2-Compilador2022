@@ -3,5 +3,9 @@ programa uno:
 
 
 comienzo
+    escribir("HOLA");
+    escribir("MUNDO");
+    escribir(4);
+    escribir();
 
 fin.

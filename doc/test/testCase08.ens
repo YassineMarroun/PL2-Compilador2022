@@ -1,4 +1,7 @@
-;Quadruple - [INICIO null, null, null]
+;Quadruple - [INICIO 4, null, null]
+BR /4
+ORG 2
+ORG 4
 
 ;Quadruple - [HALT null, null, null]
 HALT
