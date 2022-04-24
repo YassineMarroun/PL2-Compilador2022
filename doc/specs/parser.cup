@@ -549,6 +549,41 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 | IDEN:id {:
 	String identificador = id.getLexema().toUpperCase();
 	Expresion exp = new Expresion(identificador);
+
+	// CÓDIGO INTERMEDIO
+	if(scopeManager.containsSymbol(identificador)) {
+		SymbolIF simboloID = scopeManager.searchSymbol(identificador);
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+		TemporalFactory tF = new TemporalFactory(ambito);
+		TemporalIF temp = tF.create();
+
+		// Es una variable
+		if(simboloID instanceof SymbolVariable) {
+			TemporalIF tempMVP = tF.create();
+			cb.addQuadruple("MVA", temp, new Variable((SymbolVariable)simboloID));
+			cb.addQuadruple("MVP", tempMVP, temp);
+			exp.setTemporal(tempMVP);
+		}
+		// Es una constante de tipo ENTERO
+		else if (simboloID instanceof SymbolConstantEntero) {
+			int num = ((SymbolConstantEntero)simboloID).getValorEntero();
+			cb.addQuadruple("MV", temp, new Value(num));
+			exp.setTemporal(temp);
+		}
+		// Es una contante de tipo LÓGICO
+		else {
+			boolean logico = ((SymbolConstantLogico)simboloID).getValorLogico();
+			if(logico) {
+				cb.addQuadruple("MV", temp, new Value(1));
+				exp.setTemporal(temp);
+			} else {
+				cb.addQuadruple("MV", temp, new Value(0));
+				exp.setTemporal(temp);
+			}
+		}
+		exp.setIntermediateCode(cb.create());
+	}
 	RESULT = exp;
 :}
 | llamadafuncion:llamada {:
@@ -615,6 +650,19 @@ expresionlvl2 ::= expresion:exp1 SUMA expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("ENTERO");
 	Expresion exp = new Expresion(tipo);
+
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	TemporalIF tempEx1 = exp1.getTemporal();
+	TemporalIF tempEx2 = exp2.getTemporal();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	cb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruple("ADD", temp, tempEx1, tempEx2);
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+
 	RESULT = exp;
 :}
 | expresionlvl3:exp {:
@@ -651,6 +699,19 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("ENTERO");
 	Expresion exp = new Expresion(tipo);
+	
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	TemporalIF tempEx1 = exp1.getTemporal();
+	TemporalIF tempEx2 = exp2.getTemporal();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	cb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruple("MUL", temp, tempEx1, tempEx2);
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+	
 	RESULT = exp;
 :}
 | expresionlvl4:exp {:

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import compiler.intermediate.MemoriaPrograma;
 import compiler.intermediate.Textos;
 import compiler.intermediate.Value;
+import compiler.intermediate.Variable;
 import compiler.semantic.type.TypeSimple;
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
@@ -146,6 +147,28 @@ public class ExecutionEnvironmentEns2001
                 translate.append("MOVE " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getResult()));
                 translate.append("\n");
                 break;
+            case "ADD":
+                translate.append("ADD " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                translate.append("MOVE .A, " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
+            case "MUL":
+                translate.append("MUL " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                translate.append("MOVE .A, " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
+            case "MVA":
+                String direccion = getDireccion(quadruple.getFirstOperand());
+                String valorDireccion = direccion.replace("/", "#");
+                translate.append("MOVE " + valorDireccion + ",.R1");
+                translate.append("\n");
+                translate.append("MOVE .R1," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
+            case "MVP":
+                break;
         }
         return translate.toString(); 
     }
@@ -157,6 +180,10 @@ public class ExecutionEnvironmentEns2001
         }
         if(operando instanceof Value) {
             return "#" + ((Value)operando).getValue();
+        }
+
+        if(operando instanceof Variable) {
+            return "/" + ((Variable)operando).getSymbol().getDireccionMemoria();
         }
 
         return "";

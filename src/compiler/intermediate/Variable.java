@@ -1,5 +1,6 @@
 package compiler.intermediate;
 
+import compiler.semantic.symbol.SymbolVariable;
 import es.uned.lsi.compiler.intermediate.VariableIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 
@@ -12,7 +13,15 @@ public class Variable
 {
     private String  name     = null;
     private ScopeIF scope    = null;
-        
+    private SymbolVariable symbol = null;
+     
+    public Variable(SymbolVariable symbol) {
+        super();
+        this.name = symbol.getName();
+        this.scope = symbol.getScope();
+        this.symbol = symbol;
+    }
+
     /**
      * Constructor for Variable.
      * @param name The name.
@@ -111,5 +120,21 @@ public class Variable
     public final String toString ()
     {    
         return name;
+    }
+
+    public SymbolVariable getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(SymbolVariable symbol) {
+        this.symbol = symbol;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScope(ScopeIF scope) {
+        this.scope = scope;
     }
 }

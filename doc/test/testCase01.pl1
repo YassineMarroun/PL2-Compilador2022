@@ -1,11 +1,11 @@
 # programa vacio
 programa uno:
 
+variables
+    b,c,d,e,f,g,h,i: entero;
 
 comienzo
     escribir("HOLA");
     escribir("MUNDO");
-    escribir(4);
-    escribir();
-
+    escribir(b);
 fin.
