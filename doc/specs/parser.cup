@@ -560,7 +560,7 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TemporalFactory tF = new TemporalFactory(ambito);
 	TemporalIF temp = tF.create();
 	cb.addQuadruples(exp1.getIntermediateCode());
-	xb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruples(exp2.getIntermediateCode());
 	cb.addQuadruple("EQ", temp, exp1.getTemporal(), exp2.getTemporal());
 	exp.setIntermediateCode(cb.create());
 	exp.setTemporal(temp);
@@ -642,7 +642,12 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	Expresion exp = new Expresion(tipo);
 
 	// CÓDIGO INTERMEDIO
-	
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruple("MV", temp, new Value(0));
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
 
 	RESULT = exp;
 :}
@@ -718,6 +723,17 @@ expresionlvl3 ::= expresion:exp1 YLOGICA expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+	
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	cb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruple("AND", temp, exp1.getTemporal(), exp2.getTemporal());
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+	
 	RESULT = exp;
 :}
 | expresion:exp1 PRODUCTO expresion:exp2 {:
@@ -766,6 +782,16 @@ expresionlvl4 ::= NOLOGICO expresion:exp1 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+	
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	cb.addQuadruple("NOT", temp, exp1.getTemporal());
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+
 	RESULT = exp;
 :}
 | expresionlvl5:exp {:
@@ -800,6 +826,12 @@ parteizquierdaasignacion ::= IDEN:id {:
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
 	
 	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruple("MVA", temp, new Variable((SymbolVariable)simbolo));
+	parteIzquierda.setIntermediateCode(cb.create());
+	parteIzquierda.setTemporal(temp);
 	
 	RESULT = parteIzquierda;
 :}
@@ -815,6 +847,17 @@ sentenciadeasignacion ::= parteizquierdaasignacion:parteIzquierda ASIGNACION par
 	// Los dos tienen que ser iguales
 	if((tipoIzquierda instanceof TypeEntero && tipoParametro instanceof TypeEntero) || (tipoIzquierda instanceof TypeLogico && tipoParametro instanceof TypeLogico)) {
 		SentenciaDeAsignacion sentencia = new SentenciaDeAsignacion();
+		
+		// CÓDIGO INTERMEDIO
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+		TemporalFactory tF = new TemporalFactory(ambito);
+		TemporalIF temp = tF.create();
+		cb.addQuadruples(exp.getIntermediateCode());
+		cb.addQuadruples(parteIzquierda.getIntermediateCode());
+		cb.addQuadruple("STP", parteIzquierda.getTemporal(), exp.getTemporal());
+		sentencia.setIntermediateCode(cb.create());
+
 		RESULT = sentencia;
 	} else {
 		semanticErrorManager.semanticFatalError("Error semantico: tipos incompatibles en la sentencia de asignacion");
