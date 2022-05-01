@@ -2,10 +2,11 @@
 programa uno:
 
 variables
-    b,c,d,e,f,g,h,i: entero;
+    a,b,c,d: logico;
 
 comienzo
-    escribir("HOLA");
-    escribir("MUNDO");
-    escribir(b);
+    a = no cierto;
+    b = no falso;
+    c = no (8 == 7);
+    d = no (cierto == cierto);
 fin.

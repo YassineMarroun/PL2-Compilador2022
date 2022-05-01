@@ -12,6 +12,9 @@ import compiler.semantic.type.TypeSimple;
 import es.uned.lsi.compiler.code.ExecutionEnvironmentIF;
 import es.uned.lsi.compiler.code.MemoryDescriptorIF;
 import es.uned.lsi.compiler.code.RegisterDescriptorIF;
+import es.uned.lsi.compiler.intermediate.LabelFactory;
+import es.uned.lsi.compiler.intermediate.LabelFactoryIF;
+import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.OperandIF;
 import es.uned.lsi.compiler.intermediate.QuadrupleIF;
 import es.uned.lsi.compiler.intermediate.TemporalIF;
@@ -100,6 +103,7 @@ public class ExecutionEnvironmentEns2001
     public final String translate (QuadrupleIF quadruple)
     {      
         StringBuilder translate = new StringBuilder();
+        LabelFactoryIF lF = new LabelFactory();
         translate.append(";" + quadruple.toString());
         translate.append("\n");
         
@@ -160,6 +164,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 break;
             case "MVA":
+                // Guardar una dirección de una variable    
                 String direccion = getDireccion(quadruple.getFirstOperand());
                 String valorDireccion = direccion.replace("/", "#");
                 translate.append("MOVE " + valorDireccion + ",.R1");
@@ -168,6 +173,91 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 break;
             case "MVP":
+                // Acceder a la posición de memoria y guardar el resultado
+                String direccionP = getDireccion(quadruple.getFirstOperand());
+                String valorDireccionP = direccionP.replace("/", "#");
+                translate.append("MOVE " + valorDireccionP + ",.R1");
+                translate.append("\n");
+                translate.append("MOVE [.R1], .R2");
+                translate.append("\n");
+                translate.append("MOVE [.R2], " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
+            case "STP":
+                // Guardar un valor en una dirección de memoria
+                String direccionS = getDireccion(quadruple.getResult());
+                String valorDireccionS = direccionS.replace("/", "#");
+                translate.append("MOVE " + valorDireccionS + ",.R1");
+                translate.append("\n");
+                translate.append("MOVE [.R1], .R2");
+                translate.append("\n");
+                translate.append("MOVE " + getDireccion(quadruple.getFirstOperand()) + ",[.R2]");
+                translate.append("\n");
+                break;
+            case "LS":
+                LabelIF labelLSV = lF.create();
+                LabelIF labelLSF = lF.create();
+                // Se comparan los dos operandos
+                translate.append("CMP " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                // Se comprueba bit de signo (1 si es negativo)
+                translate.append("BN /" + labelLSV);
+                translate.append("\n");
+                translate.append("MOVE #0," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("BR /" + labelLSF);
+                translate.append("\n");
+                translate.append(labelLSV + ":");
+                translate.append("\n");
+                translate.append("MOVE #1," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append(labelLSF + ":");
+                translate.append("\n");
+                break;
+            case "EQ":
+                LabelIF labelEQV = lF.create();
+                LabelIF labelEQF = lF.create();
+                // Se comparan los dos operandos
+                translate.append("CMP " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                // Se comprueba bit de signo (1 si es negativo)
+                translate.append("BZ /" + labelEQV);
+                translate.append("\n");
+                translate.append("MOVE #0," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("BR /" + labelEQF);
+                translate.append("\n");
+                translate.append(labelEQV + ":");
+                translate.append("\n");
+                translate.append("MOVE #1," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append(labelEQF + ":");
+                translate.append("\n");
+                break;
+            case "AND":
+                translate.append("AND " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                translate.append("MOVE .A" + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
+            case "NOT":
+                LabelIF labelNV = lF.create();
+                LabelIF labelNF = lF.create();
+                // Se comparan los dos operandos
+                translate.append("CMP #1, " + getDireccion(quadruple.getFirstOperand()));
+                translate.append("\n");
+                // Se comprueba si es cero
+                translate.append("BZ /" + labelNV);
+                translate.append("\n");
+                translate.append("MOVE #0," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("BR /" + labelNF);
+                translate.append("\n");
+                translate.append(labelNV + ":");
+                translate.append("MOVE #1," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append(labelNF + ":");
+                translate.append("\n");
                 break;
         }
         return translate.toString(); 

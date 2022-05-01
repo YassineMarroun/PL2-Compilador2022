@@ -527,6 +527,17 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	cb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruple("LS", temp, exp1.getTemporal(), exp2.getTemporal());
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+
 	RESULT = exp;
 :}
 | expresion:exp1 IGUALDAD expresion:exp2 {:
@@ -543,6 +554,17 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+	
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(exp1.getIntermediateCode());
+	xb.addQuadruples(exp2.getIntermediateCode());
+	cb.addQuadruple("EQ", temp, exp1.getTemporal(), exp2.getTemporal());
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+	
 	RESULT = exp;
 
 :}
@@ -602,6 +624,15 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+	
+	// CÓDIGO INTERMEDIO
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruple("MV", temp, new Value(1));
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
+	
 	RESULT = exp;
 :}
 | FALSO {:
@@ -609,6 +640,10 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("LOGICO");
 	Expresion exp = new Expresion(tipo);
+
+	// CÓDIGO INTERMEDIO
+	
+
 	RESULT = exp;
 :}
 | miembrovector:mVector {:
@@ -763,6 +798,9 @@ parteizquierdaasignacion ::= IDEN:id {:
 	}
 	SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(simbolo.getType());
+	
+	// CÓDIGO INTERMEDIO
+	
 	RESULT = parteIzquierda;
 :}
 | miembrovector:mVector {:
