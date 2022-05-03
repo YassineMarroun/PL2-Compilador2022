@@ -2,11 +2,11 @@
 programa uno:
 
 variables
-    a,b,c,d: logico;
+    a: entero;
 
 comienzo
-    a = no cierto;
-    b = no falso;
-    c = no (8 == 7);
-    d = no (cierto == cierto);
+    a = 2;
+    escribir(a);
+    escribir("Hola");
+    escribir("mundo");
 fin.

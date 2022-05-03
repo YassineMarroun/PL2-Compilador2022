@@ -110,11 +110,10 @@ public class ExecutionEnvironmentEns2001
         switch(quadruple.getOperation()) {
             case "INICIO":
                 MemoriaPrograma memoria = new MemoriaPrograma();
-
+                memoria.asignarMemoria();
                 // Salto incondicional al inicio del programa
                 translate.append("BR /" + quadruple.getResult());
                 translate.append("\n");
-
                 translate.append("ORG " + memoria.inicioTextos);
                 translate.append("\n");
                 
@@ -262,7 +261,7 @@ public class ExecutionEnvironmentEns2001
              case "BRTRUE":
                 translate.append("CMP #1, " + getDireccion(quadruple.getResult()));
                 translate.append("\n");
-                translate.append("BZ / ");
+                translate.append("BZ /" + quadruple.getFirstOperand());
                 translate.append("\n");
                 break;
              case "BR":
@@ -275,8 +274,8 @@ public class ExecutionEnvironmentEns2001
                 translate.append("NOP");
                 translate.append("\n");
                 break;
-            case "GRE":
-                
+            // Menor o igual    
+            case "LSE":
                 break;
         }
         return translate.toString(); 

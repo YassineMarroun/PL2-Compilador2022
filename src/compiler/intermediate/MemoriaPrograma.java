@@ -1,6 +1,5 @@
 package compiler.intermediate;
 
-import java.lang.constant.DirectMethodHandleDesc;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import compiler.CompilerContext;
@@ -49,8 +48,4 @@ public class MemoriaPrograma {
             direccionInicio += e.getValue().length();
         }
     } 
-
-    public int getInicioTextos() {
-        return direccionInicio - sizeTextos;
-    }
 }

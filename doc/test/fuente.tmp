@@ -1,111 +1,42 @@
-;Quadruple - [INICIO 26, null, null]
-BR /26
-ORG 2
-ORG 26
+;Quadruple - [INICIO 21, null, null]
+BR /21
+ORG 8
+text_1: DATA "Hola"
+text_2: DATA "mundo"
+ORG 21
 
-;Quadruple - [MV T_1, 1, null]
-MOVE #1,/7
-
-;Quadruple - [NOT T_2, T_1, null]
-CMP #1, /7
-BZ /L_0
-MOVE #0,/8
-BR /L_1
-L_0:MOVE #1,/8
-L_1:
+;Quadruple - [MV T_1, 2, null]
+MOVE #2,/4
 
 ;Quadruple - [MVA T_0, A, null]
 MOVE #2,.R1
+MOVE .R1,/3
+
+;Quadruple - [STP T_0, T_1, null]
+MOVE #3,.R1
+MOVE [.R1], .R2
+MOVE /4,[.R2]
+
+;Quadruple - [MVA T_3, A, null]
+MOVE #2,.R1
 MOVE .R1,/6
 
-;Quadruple - [STP T_0, T_2, null]
+;Quadruple - [MVP T_4, T_3, null]
 MOVE #6,.R1
 MOVE [.R1], .R2
-MOVE /8,[.R2]
+MOVE [.R2], /7
 
-;Quadruple - [MV T_5, 0, null]
-MOVE #0,/11
+;Quadruple - [WINT T_4, null, null]
+WRINT /7
+WRCHAR #10
 
-;Quadruple - [NOT T_6, T_5, null]
-CMP #1, /11
-BZ /L_2
-MOVE #0,/12
-BR /L_3
-L_2:MOVE #1,/12
-L_3:
+;Quadruple - [WSTRING text_1, null, null]
+WRSTR /text_1
+WRCHAR #10
 
-;Quadruple - [MVA T_4, B, null]
-MOVE #3,.R1
-MOVE .R1,/10
-
-;Quadruple - [STP T_4, T_6, null]
-MOVE #10,.R1
-MOVE [.R1], .R2
-MOVE /12,[.R2]
-
-;Quadruple - [MV T_9, 8, null]
-MOVE #8,/15
-
-;Quadruple - [MV T_10, 7, null]
-MOVE #7,/16
-
-;Quadruple - [EQ T_11, T_9, T_10]
-CMP /15,/16
-BZ /L_4
-MOVE #0,/17
-BR /L_5
-L_4:
-MOVE #1,/17
-L_5:
-
-;Quadruple - [NOT T_12, T_11, null]
-CMP #1, /17
-BZ /L_6
-MOVE #0,/18
-BR /L_7
-L_6:MOVE #1,/18
-L_7:
-
-;Quadruple - [MVA T_8, C, null]
-MOVE #4,.R1
-MOVE .R1,/14
-
-;Quadruple - [STP T_8, T_12, null]
-MOVE #14,.R1
-MOVE [.R1], .R2
-MOVE /18,[.R2]
-
-;Quadruple - [MV T_15, 1, null]
-MOVE #1,/21
-
-;Quadruple - [MV T_16, 1, null]
-MOVE #1,/22
-
-;Quadruple - [EQ T_17, T_15, T_16]
-CMP /21,/22
-BZ /L_8
-MOVE #0,/23
-BR /L_9
-L_8:
-MOVE #1,/23
-L_9:
-
-;Quadruple - [NOT T_18, T_17, null]
-CMP #1, /23
-BZ /L_10
-MOVE #0,/24
-BR /L_11
-L_10:MOVE #1,/24
-L_11:
-
-;Quadruple - [MVA T_14, D, null]
-MOVE #5,.R1
-MOVE .R1,/20
-
-;Quadruple - [STP T_14, T_18, null]
-MOVE #20,.R1
-MOVE [.R1], .R2
-MOVE /24,[.R2]
+;Quadruple - [WSTRING text_2, null, null]
+WRSTR /text_2
+WRCHAR #10
 
 ;Quadruple - [HALT null, null, null]
 HALT

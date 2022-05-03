@@ -965,8 +965,18 @@ sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sente
 	TemporalFactory tF = new TemporalFactory(ambito);
 	TemporalIF temp = tF.create();
 	LabelFactoryIF lF = new LabelFactory();
-
-	
+	LabelIF labelVerdadero = lF.create();
+	LabelIF labelFin = lF.create();
+	cb.addQuadruples(exp.getIntermediateCode());
+	// Si es CIERTO la etiqueta if
+	cb.addQuadruple("BRTRUE", exp.getTemporal(), labelVerdadero);
+	// Código FALSE
+	cb.addQuadruples(relleno.getIntermediateCode());
+	cb.addQuadruple("BR", labelFin);
+	cb.addQuadruple("INLABEL", labelVerdadero);
+	cb.addQuadruples(sentenciasIF.getIntermediateCode());
+	cb.addQuadruple("INLABEL", labelFin);
+	s.setIntermediateCode(cb.create());
 
 	RESULT = s;
 :};
@@ -985,6 +995,13 @@ sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencia
 
 rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion:sentencias {:
 	RellenoIf r = new RellenoIf(sentencias.getSentencias());
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(sentencias.getIntermediateCode());
+	r.setIntermediateCode(cb.create());
+
 	RESULT = r;
 :}
 | epsilon {:
@@ -1010,6 +1027,7 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 	
 	if(simbolosTabla.containsSymbol(nombre)) {
 		TypeIF tipoIndice = simbolosTabla.getSymbol(nombre).getType();
+		SymbolIF simboloIndice = simbolosTabla.getSymbol(nombre);
 
 		// El índice tiene que ser de tipo ENTERO
 		if(!(tipoIndice instanceof TypeEntero)) {
@@ -1025,6 +1043,26 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 		}
 
 		SentenciaFor s = new SentenciaFor(sentencias.getSentencias());
+
+		// CÓDIGO INTERMEDIO
+		IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+		TemporalFactory tF = new TemporalFactory(ambito);
+		LabelFactoryIF lF = new LabelFactory();
+		LabelIF labelInicio = lF.create();
+		LabelIF labelFin = lF.create();
+		TemporalIF tempDireccion = tF.create();
+		cb.addQuadruples(exp1.getIntermediateCode());
+		cb.addQuadruple("MVA", tempDireccion, new Variable((SymbolVariable)simboloIndice));
+		cb.addQuadruple("STP", tempDireccion, exp1.getTemporal());
+		TemporalIF tempComparacion = tF.create();
+		cb.addQuadruple("INLABEL", labelInicio);
+		cb.addQuadruple("GR", tempComparacion, exp1.getTemporal(), exp2.getTemporal());
+		cb.addQuadruple("BRTRUE", labelFin);
+		cb.addQuadruples(sentencias.getIntermediateCode());
+		cb.addQuadruple("BR", labelInicio);
+		cb.addQuadruple("INLABEL", labelFin);
+		s.setIntermediateCode(cb.create());
+
 		RESULT = s;
 	} else {
 		semanticErrorManager.semanticFatalError("Error semantico: indice " + nombre + " en sentencia FOR no esta declarado");
