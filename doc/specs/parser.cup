@@ -956,8 +956,18 @@ sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sente
 	if(!(tipoExp instanceof TypeLogico)) {
 		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
 	}
-	
+
 	SentenciaIf s = new SentenciaIf(sentenciasIF.getSentencias(), relleno.getSentencias());
+	
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	LabelFactoryIF lF = new LabelFactory();
+
+	
+
 	RESULT = s;
 :};
 

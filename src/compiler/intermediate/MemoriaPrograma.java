@@ -1,5 +1,6 @@
 package compiler.intermediate;
 
+import java.lang.constant.DirectMethodHandleDesc;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import compiler.CompilerContext;
@@ -15,6 +16,7 @@ public class MemoriaPrograma {
 
     public int sizeTextos = 0;
     public int direccionInicio = 2;
+    public int inicioTextos = 2;
 
     public void asignarMemoria() {
 
@@ -39,13 +41,13 @@ public class MemoriaPrograma {
             	temporal.setAddress(direccionInicio);
                 direccionInicio++;
         }
+        inicioTextos = direccionInicio;
 
         // Direcciones de memoria para los textos
         HashMap<String, String> textos = Textos.getTextos();
         for(Entry<String, String> e : textos.entrySet()) {
-            sizeTextos = sizeTextos + e.getValue().length();
+            direccionInicio += e.getValue().length();
         }
-        direccionInicio = direccionInicio + sizeTextos;
     } 
 
     public int getInicioTextos() {

@@ -115,7 +115,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("BR /" + quadruple.getResult());
                 translate.append("\n");
 
-                translate.append("ORG " + memoria.direccionInicio);
+                translate.append("ORG " + memoria.inicioTextos);
                 translate.append("\n");
                 
                 // Añadir los textos
@@ -258,6 +258,25 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 translate.append(labelNF + ":");
                 translate.append("\n");
+                break;
+             case "BRTRUE":
+                translate.append("CMP #1, " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("BZ / ");
+                translate.append("\n");
+                break;
+             case "BR":
+                translate.append("BR /" + quadruple.getResult());
+                translate.append("\n");
+                break;
+             case "INLABEL":
+                translate.append(quadruple.getResult() + ":");
+                translate.append("\n");
+                translate.append("NOP");
+                translate.append("\n");
+                break;
+            case "GRE":
+                
                 break;
         }
         return translate.toString(); 
