@@ -1,42 +1,7 @@
-;Quadruple - [INICIO 21, null, null]
-BR /21
-ORG 8
-text_1: DATA "Hola"
-text_2: DATA "mundo"
-ORG 21
-
-;Quadruple - [MV T_1, 2, null]
-MOVE #2,/4
-
-;Quadruple - [MVA T_0, A, null]
-MOVE #2,.R1
-MOVE .R1,/3
-
-;Quadruple - [STP T_0, T_1, null]
-MOVE #3,.R1
-MOVE [.R1], .R2
-MOVE /4,[.R2]
-
-;Quadruple - [MVA T_3, A, null]
-MOVE #2,.R1
-MOVE .R1,/6
-
-;Quadruple - [MVP T_4, T_3, null]
-MOVE #6,.R1
-MOVE [.R1], .R2
-MOVE [.R2], /7
-
-;Quadruple - [WINT T_4, null, null]
-WRINT /7
-WRCHAR #10
-
-;Quadruple - [WSTRING text_1, null, null]
-WRSTR /text_1
-WRCHAR #10
-
-;Quadruple - [WSTRING text_2, null, null]
-WRSTR /text_2
-WRCHAR #10
+;Quadruple - [INICIO 2, null, null]
+BR /2
+ORG 2
+ORG 2
 
 ;Quadruple - [HALT null, null, null]
 HALT

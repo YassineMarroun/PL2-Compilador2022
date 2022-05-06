@@ -1,12 +1,7 @@
 # programa vacio
 programa uno:
 
-variables
-    a: entero;
 
 comienzo
-    a = 2;
-    escribir(a);
-    escribir("Hola");
-    escribir("mundo");
+
 fin.

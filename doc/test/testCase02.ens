@@ -1,0 +1,21 @@
+;Quadruple - [INICIO 15, null, null]
+BR /15
+ORG 2
+text_1: DATA "hola"
+text_2: DATA "mundo"
+ORG 15
+
+;Quadruple - [WSTRING text_1, null, null]
+WRSTR /text_1
+WRCHAR #10
+
+;Quadruple - [WLN null, null, null]
+WRCHAR #10
+
+;Quadruple - [WSTRING text_2, null, null]
+WRSTR /text_2
+WRCHAR #10
+
+;Quadruple - [HALT null, null, null]
+HALT
+

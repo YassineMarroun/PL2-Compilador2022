@@ -1,0 +1,171 @@
+;Quadruple - [INICIO 54, null, null]
+BR /54
+ORG 39
+text_1: DATA "cierto"
+text_2: DATA "falso"
+ORG 54
+
+;Quadruple - [MV T_1, 10, null]
+MOVE #10,/7
+
+;Quadruple - [MV T_2, 20, null]
+MOVE #20,/8
+
+;Quadruple - [ADD T_3, T_1, T_2]
+ADD /7,/8
+MOVE .A, /9
+
+;Quadruple - [MVA T_0, SUMA, null]
+MOVE #3,.R1
+MOVE .R1,/6
+
+;Quadruple - [STP T_0, T_3, null]
+MOVE #6,.R1
+MOVE [.R1], .R2
+MOVE /9,[.R2]
+
+;Quadruple - [MVA T_6, SUMA, null]
+MOVE #3,.R1
+MOVE .R1,/12
+
+;Quadruple - [MVP T_7, T_6, null]
+MOVE #12,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /13
+
+;Quadruple - [MV T_8, 10, null]
+MOVE #10,/14
+
+;Quadruple - [MUL T_9, T_7, T_8]
+MUL /13,/14
+MOVE .A, /15
+
+;Quadruple - [MV T_10, 4, null]
+MOVE #4,/16
+
+;Quadruple - [ADD T_11, T_9, T_10]
+ADD /15,/16
+MOVE .A, /17
+
+;Quadruple - [MVA T_5, RESULTADO, null]
+MOVE #5,.R1
+MOVE .R1,/11
+
+;Quadruple - [STP T_5, T_11, null]
+MOVE #11,.R1
+MOVE [.R1], .R2
+MOVE /17,[.R2]
+
+;Quadruple - [MVA T_13, SUMA, null]
+MOVE #3,.R1
+MOVE .R1,/19
+
+;Quadruple - [MVP T_14, T_13, null]
+MOVE #19,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /20
+
+;Quadruple - [WINT T_14, null, null]
+WRINT /20
+WRCHAR #10
+
+;Quadruple - [MVA T_15, RESULTADO, null]
+MOVE #5,.R1
+MOVE .R1,/21
+
+;Quadruple - [MVP T_16, T_15, null]
+MOVE #21,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /22
+
+;Quadruple - [WINT T_16, null, null]
+WRINT /22
+WRCHAR #10
+
+;Quadruple - [MV T_18, 1, null]
+MOVE #1,/24
+
+;Quadruple - [MV T_19, 0, null]
+MOVE #0,/25
+
+;Quadruple - [AND T_20, T_18, T_19]
+AND /24,/25
+MOVE .A/26
+
+;Quadruple - [MVA T_17, CONJUNCION, null]
+MOVE #2,.R1
+MOVE .R1,/23
+
+;Quadruple - [STP T_17, T_20, null]
+MOVE #23,.R1
+MOVE [.R1], .R2
+MOVE /26,[.R2]
+
+;Quadruple - [MVA T_23, CONJUNCION, null]
+MOVE #2,.R1
+MOVE .R1,/29
+
+;Quadruple - [MVP T_24, T_23, null]
+MOVE #29,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /30
+
+;Quadruple - [MV T_25, 10, null]
+MOVE #10,/31
+
+;Quadruple - [MV T_26, 20, null]
+MOVE #20,/32
+
+;Quadruple - [LS T_27, T_25, T_26]
+CMP /31,/32
+BN /L_2
+MOVE #0,/33
+BR /L_3
+L_2:
+MOVE #1,/33
+L_3:
+
+;Quadruple - [AND T_28, T_24, T_27]
+AND /30,/33
+MOVE .A/34
+
+;Quadruple - [MVA T_22, RESULTADOLOGICO, null]
+MOVE #4,.R1
+MOVE .R1,/28
+
+;Quadruple - [STP T_22, T_28, null]
+MOVE #28,.R1
+MOVE [.R1], .R2
+MOVE /34,[.R2]
+
+;Quadruple - [MVA T_30, CONJUNCION, null]
+MOVE #2,.R1
+MOVE .R1,/36
+
+;Quadruple - [MVP T_31, T_30, null]
+MOVE #36,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /37
+
+;Quadruple - [BRTRUE T_31, L_0, null]
+CMP #1, /37
+BZ /L_0
+
+;Quadruple - [BR L_1, null, null]
+BR /L_1
+
+;Quadruple - [INLABEL L_0, null, null]
+L_0:
+NOP
+
+;Quadruple - [WSTRING text_1, null, null]
+WRSTR /text_1
+WRCHAR #10
+
+;Quadruple - [INLABEL L_1, null, null]
+L_1:
+NOP
+
+;Quadruple - [HALT null, null, null]
+HALT
+

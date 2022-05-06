@@ -1,0 +1,22 @@
+;Quadruple - [INICIO 5, null, null]
+BR /5
+ORG 5
+ORG 5
+
+;Quadruple - [MV T_0, 8, null]
+MOVE #8,/2
+
+;Quadruple - [MV T_1, 2, null]
+MOVE #2,/3
+
+;Quadruple - [ADD T_2, T_0, T_1]
+ADD /2,/3
+MOVE .A, /4
+
+;Quadruple - [WINT T_2, null, null]
+WRINT /4
+WRCHAR #10
+
+;Quadruple - [HALT null, null, null]
+HALT
+
