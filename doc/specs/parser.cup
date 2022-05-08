@@ -292,7 +292,13 @@ tipovector ::= BOOLEANO {:
 :};
 
 valorango ::= NUM:n {:
+	int val = Integer.parseInt(n.getLexema());
 	ValorRango vRango = new ValorRango(Integer.parseInt(n.getLexema()));
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+
+
 	RESULT = vRango;
 :}
 | IDEN:id {:
@@ -653,6 +659,13 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 :}
 | miembrovector:mVector {:
 	Expresion exp = new Expresion(mVector.getTipoMiembroVector());
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = 
+
 	RESULT = exp;
 :}
 | NUM:n {:
@@ -811,6 +824,21 @@ miembrovector ::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 	String identificador = id.getLexema().toUpperCase();
 	MiembroVector m = new MiembroVector(identificador, valorRango);
 	m.comprobarMiembroVector();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+
+	cb.addQuadruples(valorRango.getIntermediateCode());
+	TemporalIF  temp = tF.create();
+	TemporalIF tempAddress = tF.create();
+	// Desplazamiento
+	int rango1 = m.getTipoVector(),getRango1();
+	cb.addQuadruple("SUB", temp, valorRango.getTemporal(), rango1);
+	SymbolIF simbolo = m.getSimboloVector();
+	cb.addQuadruple("MVA", )
+
 	RESULT = m;
 :};
  
@@ -837,6 +865,9 @@ parteizquierdaasignacion ::= IDEN:id {:
 :}
 | miembrovector:mVector {:
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
+	
+	// CÓDIGO INTERMEDIO
+	
 	RESULT = parteIzquierda;
 :};
 
