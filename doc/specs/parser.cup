@@ -293,11 +293,16 @@ tipovector ::= BOOLEANO {:
 
 valorango ::= NUM:n {:
 	int val = Integer.parseInt(n.getLexema());
-	ValorRango vRango = new ValorRango(Integer.parseInt(n.getLexema()));
+	ValorRango vRango = new ValorRango(val);
 
 	// CÓDIGO INTERMEDIO
 	ScopeIF ambito = scopeManager.getCurrentScope();
-
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruple("MV", temp, new Value(val));
+	vRango.setIntermediateCode(cb.create());
+	vRango.setTemporal(temp);
 
 	RESULT = vRango;
 :}
@@ -310,6 +315,22 @@ valorango ::= NUM:n {:
 	if(simbolosTabla.containsSymbol(nombre)) {
 		SymbolIF s = simbolosTabla.getSymbol(nombre);
 		ValorRango vRango = new ValorRango(s);
+
+		// CÓDIGO INTERMEDIO
+		IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+		TemporalFactory tF = new TemporalFactory(ambito);
+		TemporalIF temp = tF.create();
+
+		if(s instanceof SymbolVariable) {
+			//cb.addQuadruple("MVA", temp, new Variable((SymbolVariable)simbolo));
+			//cb.addQuadruple("MVP", temp, new Variable((SymbolVariable)simbolo));
+		} else if(s instanceof SymbolConstantEntero) {
+			//cb.addQuadruple("MV", temp, 1);
+		}
+
+		vRango.setIntermediateCode(cb.create());
+		vRango.setTemporal(temp);
+
 		RESULT = vRango;
 	} else {
 		semanticErrorManager.semanticFatalError("Error semantico: identificador " + nombre + " no esta declarado");

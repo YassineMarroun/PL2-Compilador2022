@@ -156,6 +156,12 @@ public class ExecutionEnvironmentEns2001
                 translate.append("MOVE .A, " + getDireccion(quadruple.getResult()));
                 translate.append("\n");
                 break;
+            case "SUB":
+                translate.append("SUB " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
+                translate.append("\n");
+                translate.append("MOVE .A," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                break;
             case "MUL":
                 translate.append("MUL " + getDireccion(quadruple.getFirstOperand()) + "," + getDireccion(quadruple.getSecondOperand()));
                 translate.append("\n");
@@ -274,8 +280,26 @@ public class ExecutionEnvironmentEns2001
                 translate.append("NOP");
                 translate.append("\n");
                 break;
-            // Menor o igual    
-            case "LSE":
+            // Mayor    
+            case "GR":
+                LabelIF labelGRV = lF.create();
+                LabelIF labelGRF = lF.create();
+                // Se comparan los dos operandos
+                translate.append("CMP " + getDireccion(quadruple.getSecondOperand()) + "," + getDireccion(quadruple.getFirstOperand()));
+                translate.append("\n");
+                // Se comprueba bit de signo (1 si es negativo)
+                translate.append("BN /" + labelGRV);
+                translate.append("\n");
+                translate.append("NOVE #0," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append("BR /" + labelGRF);
+                translate.append("\n");
+                translate.append(labelGRV + ":");
+                translate.append("\n");
+                translate.append("MOVE #1," + getDireccion(quadruple.getResult()));
+                translate.append("\n");
+                translate.append(labelGRF + ":");
+                translate.append("\n");
                 break;
         }
         return translate.toString(); 
