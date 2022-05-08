@@ -16,6 +16,8 @@ public class MiembroVector extends NonTerminal {
     private String identificador;
     private ValorRango valorRango;
     private TypeIF tipoMiembroVector;
+    private TypeArray tipoVector;
+    private SymbolIF simbolo;
 
     public MiembroVector(String identificador, ValorRango valorRango) {
         super();
@@ -47,6 +49,17 @@ public class MiembroVector extends NonTerminal {
         this.tipoMiembroVector = tipoMiembroVector;
     }
 
+    public TypeArray getTipoVector() {
+        return tipoVector;
+    }
+
+    public void setTipoVector(TypeArray tipoVector) {
+        this.tipoVector = tipoVector;
+    }
+
+    public SymbolIF getSimbolo() {
+        return simbolo;
+    }
 
     public void comprobarMiembroVector() {
 
@@ -61,7 +74,7 @@ public class MiembroVector extends NonTerminal {
             semanticErrorManager.semanticFatalError("Error semantico: identificador " + identificador + " no esta declarado");
         }
 
-        SymbolIF simbolo = simbolosTabla.getSymbol(identificador);
+        simbolo = simbolosTabla.getSymbol(identificador);
         if(!(simbolo.getType() instanceof TypeArray)) {
             semanticErrorManager.semanticFatalError("Error semantico: el tipo " + simbolo.getType().getName() + " no es de tipo vector");
         }
