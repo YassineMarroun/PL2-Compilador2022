@@ -685,7 +685,11 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 	TemporalFactory tF = new TemporalFactory(ambito);
-	TemporalIF temp = 
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(mVector.getIntermediateCode());
+	cb.addQuadruple("MVP", temp, mVector.getTemporal());
+	exp.setIntermediateCode(cb.create());
+	exp.setTemporal(temp);
 
 	RESULT = exp;
 :}
@@ -850,15 +854,18 @@ miembrovector ::= IDEN:id CIZQUIERDO valorango:valorRango CDERECHO {:
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 	TemporalFactory tF = new TemporalFactory(ambito);
-
 	cb.addQuadruples(valorRango.getIntermediateCode());
-	TemporalIF  temp = tF.create();
+	TemporalIF temp = tF.create();
+	TemporalIF tempBase = tF.create();
 	TemporalIF tempAddress = tF.create();
 	// Desplazamiento
-	int rango1 = m.getTipoVector(),getRango1();
+	int rango1 = m.getTipoVector().getRango1();
 	cb.addQuadruple("SUB", temp, valorRango.getTemporal(), rango1);
-	SymbolIF simbolo = m.getSimboloVector();
-	cb.addQuadruple("MVA", )
+	SymbolIF simbolo = m.getSimbolo();
+	cb.addQuadruple("MVA", tempBase, new Variable((SymbolVariable)simbolo));
+	cb.addQuadruple("ADD", tempAddress, tempBase, temp);
+	m.setIntermediateCode(cb.create());
+	m.setTemporal(tempAddress);
 
 	RESULT = m;
 :};
@@ -888,6 +895,13 @@ parteizquierdaasignacion ::= IDEN:id {:
 	ParteIzquierdaAsignacion parteIzquierda = new ParteIzquierdaAsignacion(mVector.getTipoMiembroVector());
 	
 	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+	cb.addQuadruples(mVector.getIntermediateCode());
+	parteIzquierda.setIntermediateCode(cb.create());
+	parteIzquierda.setTemporal(mVector.getTemporal());
 	
 	RESULT = parteIzquierda;
 :};
@@ -1106,11 +1120,15 @@ sentenciafor ::= COMIENZOBUCLEPARA IDEN:id RANGOBUCLEPARA expresion:exp1 RANGO e
 		cb.addQuadruples(exp1.getIntermediateCode());
 		cb.addQuadruple("MVA", tempDireccion, new Variable((SymbolVariable)simboloIndice));
 		cb.addQuadruple("STP", tempDireccion, exp1.getTemporal());
+		cb.addQuadruples(exp2.getIntermediateCode());
 		TemporalIF tempComparacion = tF.create();
 		cb.addQuadruple("INLABEL", labelInicio);
 		cb.addQuadruple("GR", tempComparacion, exp1.getTemporal(), exp2.getTemporal());
-		cb.addQuadruple("BRTRUE", labelFin);
+		cb.addQuadruple("BRTRUE", tempComparacion, labelFin);
 		cb.addQuadruples(sentencias.getIntermediateCode());
+		// Incremento de la variable
+		cb.addQuadruple("ADD", exp1.getTemporal(), exp1.getTemporal(), 1);
+		cb.addQuadruple("STP", tempDireccion, exp1.getTemporal());
 		cb.addQuadruple("BR", labelInicio);
 		cb.addQuadruple("INLABEL", labelFin);
 		s.setIntermediateCode(cb.create());
