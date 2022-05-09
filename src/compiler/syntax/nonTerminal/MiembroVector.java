@@ -79,7 +79,7 @@ public class MiembroVector extends NonTerminal {
             semanticErrorManager.semanticFatalError("Error semantico: el tipo " + simbolo.getType().getName() + " no es de tipo vector");
         }
 
-        TypeArray tipoVector = (TypeArray)simbolo.getType();
+        tipoVector = (TypeArray)simbolo.getType();
         tipoMiembroVector = tipoVector.getTipo();
 
         // Se comprueba valorRango
