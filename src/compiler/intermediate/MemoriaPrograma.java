@@ -1,6 +1,7 @@
 package compiler.intermediate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import compiler.CompilerContext;
 import compiler.semantic.symbol.SymbolVariable;
@@ -16,32 +17,59 @@ public class MemoriaPrograma {
     public int sizeTextos = 0;
     public int direccionInicio = 2;
     public int inicioTextos = 2;
-
+    public int sizePrincipal = 0;
+    public HashMap<String, Integer> ambitosSize = new HashMap<String, Integer>();
+ 
     public void asignarMemoria() {
 
-        //Se recupera el ámbito principal
+        int direccionLocal = 1;
         ScopeManagerIF scopeManager = CompilerContext.getScopeManager();
-        ScopeIF ambitoPrincipal = scopeManager.getScope(0);
 
-        // Direcciones de memoria para las variables
-        SymbolTableIF tablaSimbolosPrincipal = ambitoPrincipal.getSymbolTable();
-        for(SymbolIF simbolo : tablaSimbolosPrincipal.getSymbols()) {
-            // Los únicos símbolos con dirección de memoria son las variables
-            if(simbolo instanceof SymbolVariable) {
-                SymbolVariable simboloVariable = (SymbolVariable)simbolo;
-                simboloVariable.setDireccionMemoria(direccionInicio);
-                direccionInicio += simboloVariable.getType().getSize();
+        // Se recuperan todos los ambitos
+        List<ScopeIF> ambitos = scopeManager.getAllScopes();
+
+        for(ScopeIF ambito : ambitos) {
+
+            // Se inicializa la dirección local del ámbito
+            direccionLocal = 1;
+            String ambitoNombre = ambito.getName();
+
+            // Direcciones de memoria para las variables
+            SymbolTableIF tablaSimbolosPrincipal = ambito.getSymbolTable();
+            for(SymbolIF simbolo : tablaSimbolosPrincipal.getSymbols()) {
+                
+                if(simbolo instanceof SymbolVariable) {
+                    
+                    if(ambito.getLevel() == 0) {
+                        // Si es el ámbito principal, la dirección es global
+                        SymbolVariable simboloVariable = (SymbolVariable)simbolo;
+                        simboloVariable.setDireccionMemoria(direccionInicio);
+                        direccionInicio += simboloVariable.getType().getSize();
+                    } else {
+                        // Si es un subprograma la dirección es local
+                        SymbolVariable simboloVariable = (SymbolVariable)simbolo;
+                        simboloVariable.setDireccionMemoria(direccionLocal);
+                        direccionLocal += simboloVariable.getType().getSize();
+                    }    
+                }
             }
-        }
 
-        // Direcciones de memoria para los temporales
-        TemporalTableIF tablaTemporalesPrincipal = ambitoPrincipal.getTemporalTable();
-        for(TemporalIF temporal : tablaTemporalesPrincipal.getTemporals()) {
-            	temporal.setAddress(direccionInicio);
-                direccionInicio++;
-        }
+            // Direcciones de memoria para los temporales: direcciones locales
+            TemporalTableIF tablaTemporales = ambito.getTemporalTable();
+            for(TemporalIF temporal : tablaTemporales.getTemporals()) {
+            	temporal.setAddress(direccionLocal);
+                direccionLocal++;
+            }
+
+            // Se añade el ámbito y su tamaño en el HashMap
+            ambitosSize.put(ambitoNombre, direccionLocal);
+        
+            if(ambito.getLevel() == 0) {
+                this.sizePrincipal = direccionLocal;
+            }
+        }    
+        
         inicioTextos = direccionInicio;
-
         // Direcciones de memoria para los textos
         HashMap<String, String> textos = Textos.getTextos();
         for(Entry<String, String> e : textos.entrySet()) {

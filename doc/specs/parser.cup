@@ -175,6 +175,7 @@ axiom:ax
   		
   	List<QuadrupleIF> intermediateCode = ax.getIntermediateCode ();
   	
+	// Se muestran los textos del programa
 	HashMap<String, String> textos = Textos.getTextos();
 	syntaxErrorManager.syntaxInfo("TEXTOS: ");
 	syntaxErrorManager.syntaxInfo("*****************");
@@ -182,6 +183,7 @@ axiom:ax
 		syntaxErrorManager.syntaxInfo(e.getKey() + ": " + e.getValue());
 	}
 
+	// Se muestra el código intermedio del programa
 	syntaxErrorManager.syntaxInfo("CODIGO INTERMEDIO");
 	syntaxErrorManager.syntaxInfo("*****************");
 	for(QuadrupleIF q : intermediateCode) {
@@ -191,11 +193,6 @@ axiom:ax
 	finalCodeFactory.setEnvironment(CompilerContext.getExecutionEnvironment());
 	finalCodeFactory.create(intermediateCode);
 
-  	// En caso de no comentarse las dos sentencias anteriores puede generar una excepcion
-  	// en las llamadas a cupTest si el compilador no está completo. Esto es debido a que 
-  	// aún no se tendrá implementada la generación de código intermedio ni final.
-  	// Para la entrega final deberán descomentarse y usarse.
-  		
   	syntaxErrorManager.syntaxInfo ("Parsing process ended.");
 :};
 
@@ -322,10 +319,12 @@ valorango ::= NUM:n {:
 		TemporalIF temp = tF.create();
 
 		if(s instanceof SymbolVariable) {
-			//cb.addQuadruple("MVA", temp, new Variable((SymbolVariable)simbolo));
-			//cb.addQuadruple("MVP", temp, new Variable((SymbolVariable)simbolo));
+			TemporalIF temp1 = tF.create();
+			cb.addQuadruple("MVA", temp1, new Variable((SymbolVariable)s));
+			cb.addQuadruple("MVP", temp, temp1);
 		} else if(s instanceof SymbolConstantEntero) {
-			//cb.addQuadruple("MV", temp, 1);
+			int posicion = ((SymbolConstantEntero)s).getValorEntero();
+			cb.addQuadruple("MV", temp, new Value(posicion));
 		}
 
 		vRango.setIntermediateCode(cb.create());
@@ -338,6 +337,19 @@ valorango ::= NUM:n {:
 :}
 | miembrovector:miembro {:
 	ValorRango vRango = new ValorRango(miembro);
+
+	// 	CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+
+	cb.addQuadruples(miembro.getIntermediateCode());
+	cb.addQuadruple("MVP", temp, miembro.getTemporal());
+
+	vRango.setIntermediateCode(cb.create());
+	vRango.setTemporal(temp);
+
 	RESULT = vRango;
 :};
 
@@ -491,12 +503,10 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 
 	TypeFunction tipo = new TypeFunction(ambitoPadre, nombre, parametros.getVariables(), retorno);
 	tiposTablaPadre.addType(tipo);
-	System.out.println("Tipo añadido: " + tipo);
 	
 	// Comprobar que al menos se tiene un DEVOLVER en el cuerpo de la función
 	Funcion funcion = new Funcion(sentencias.getSentencias(), sentencia);
 	int numeroDevolver = funcion.comprobarDevolver(funcion.getSentencias());
-	System.out.println("Numero sentencia devolver: " + numeroDevolver);
 	
 	if(numeroDevolver == 0) {
 		semanticErrorManager.semanticFatalError("Funcion " + nombre + " no tiene sentencia DEVOLVER");
@@ -944,7 +954,6 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 	// Se busca el tipo nombre en la Tabla de Tipos
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	TypeTableIF tiposTabla = ambito.getTypeTable();
-	System.out.println(tiposTabla);
 	TypeIF tipo = tiposTabla.getType(nombre);
 
 	if(tipo != null) {
@@ -1061,13 +1070,6 @@ sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencia
 
 rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion:sentencias {:
 	RellenoIf r = new RellenoIf(sentencias.getSentencias());
-
-	// CÓDIGO INTERMEDIO
-	ScopeIF ambito = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
-	cb.addQuadruples(sentencias.getIntermediateCode());
-	r.setIntermediateCode(cb.create());
-
 	RESULT = r;
 :}
 | epsilon {:
@@ -1077,6 +1079,13 @@ rellenoifFuncion ::= ALTERNATIVASI DELIMFUNC listaSentenciasFuncion:sentencias {
 
 rellenoif ::= ALTERNATIVASI DELIMFUNC listaSentencias:sentencias {:
 	RellenoIf r = new RellenoIf(sentencias.getSentencias());
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(sentencias.getIntermediateCode());
+	r.setIntermediateCode(cb.create());
+
 	RESULT = r;
 :}
 | epsilon {:

@@ -4,6 +4,10 @@ ORG 2
 text_1: DATA "hola"
 text_2: DATA "mundo"
 ORG 15
+MOVE #64999, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
 
 ;Quadruple - [WSTRING text_1, null, null]
 WRSTR /text_1

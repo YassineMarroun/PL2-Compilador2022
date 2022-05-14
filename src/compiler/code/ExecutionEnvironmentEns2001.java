@@ -26,8 +26,12 @@ import es.uned.lsi.compiler.intermediate.TemporalIF;
 public class ExecutionEnvironmentEns2001 
     implements ExecutionEnvironmentIF
 {    
-    private final static int      MAX_ADDRESS = 65535; 
-    private final static String[] REGISTERS   = {
+    private final static int MAX_ADDRESS = 65535;
+    private final static int STACK_ADDRESS = 65000;
+    private final static int DISPLAY_ADDRESS = 65001;
+    private final static int FP_ADDRESS = 64999;
+
+    private final static String[] REGISTERS = {
        ".PC", ".SP", ".SR", ".IX", ".IY", ".A", 
        ".R0", ".R1", ".R2", ".R3", ".R4", 
        ".R5", ".R6", ".R7", ".R8", ".R9"
@@ -124,6 +128,17 @@ public class ExecutionEnvironmentEns2001
                     translate.append("\n");
                 }
                 translate.append("ORG " + quadruple.getResult());
+                translate.append("\n");
+
+                // Registro de Activación del Programa Principal
+                int sizeProgramaPrincipal = STACK_ADDRESS - memoria.sizePrincipal;
+                translate.append("MOVE #" + sizeProgramaPrincipal + ", .SP");
+                translate.append("\n");
+                translate.append("MOVE #" + DISPLAY_ADDRESS + ", .R0");
+                translate.append("\n");
+                translate.append("MOVE #" + FP_ADDRESS + ", [.R0]");
+                translate.append("\n");
+                translate.append("MOVE #" + FP_ADDRESS + ", .IX");
                 translate.append("\n");
                 break;
             case "HALT":

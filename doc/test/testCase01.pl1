@@ -1,24 +1,8 @@
 # programa vacio
-programa cinco:
-    tipos
-        tvector = vector [5..10] de entero;
-    variables
-        v: tvector;
-        a: entero;
+programa uno:
+
 
 comienzo
 
-    v[5] = 11;
-    v[6] = 12;
-    v[7] = 13;
-    v[8] = 14;
-    v[9] = 15;
-    v[10] = 16;
-
-    escribir(v[5]);
-    escribir(v[6]);
-    escribir(v[7]);
-    escribir(v[8]);
-    escribir(v[9]);
-    escribir(v[10]);
 fin.
+
