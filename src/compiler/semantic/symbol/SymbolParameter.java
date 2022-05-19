@@ -1,5 +1,6 @@
 package compiler.semantic.symbol;
 
+import es.uned.lsi.compiler.intermediate.TemporalIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
 import es.uned.lsi.compiler.semantic.symbol.SymbolBase;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
@@ -15,6 +16,10 @@ public class SymbolParameter
     extends SymbolBase
 {  
    
+    private boolean pasoReferencia = false;
+    private int direccionMemoria = 0;
+    private TemporalIF temporal;
+
     /**
      * Constructor for SymbolParameter.
      * @param scope The declaration scope.

@@ -316,6 +316,8 @@ public class ExecutionEnvironmentEns2001
                 translate.append(labelGRF + ":");
                 translate.append("\n");
                 break;
+            case "CALL";
+                break;
         }
         return translate.toString(); 
     }
@@ -323,7 +325,8 @@ public class ExecutionEnvironmentEns2001
     private String getDireccion(OperandIF operando) {
 
         if(operando instanceof TemporalIF) {
-            return "/" + ((TemporalIF)operando).getAddress();
+            // .iX
+            return "#-" + ((TemporalIF)operando).getAddress();
         }
         if(operando instanceof Value) {
             return "#" + ((Value)operando).getValue();
@@ -334,5 +337,9 @@ public class ExecutionEnvironmentEns2001
         }
 
         return "";
+    }
+
+    private boolean esLocal(Variable variable) {
+        return 
     }
 }

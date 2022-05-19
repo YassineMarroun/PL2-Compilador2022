@@ -972,6 +972,11 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 
 sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS {:
 	SentenciaLlamadaFuncion s = new SentenciaLlamadaFuncion();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder
+
 	RESULT = s;
 :};
 
