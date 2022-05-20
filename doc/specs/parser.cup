@@ -130,7 +130,7 @@ non terminal							procedimiento;
 non terminal							funcion;
 non terminal							selectorpof;
 
-non terminal ListaVariables          	parametrofuncionoproc;
+non terminal ParametroFuncionOProc		parametrofuncionoproc;
 non terminal LlamadaFuncion				llamadafuncion; 
 
 non terminal ParteIzquierdaAsignacion 	parteizquierdaasignacion;  
@@ -368,7 +368,6 @@ tipovariable ::= BOOLEANO {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	TypeIF tipo = tiposTabla.getType("ENTERO");
 	RESULT = tipo;
-	
 :}
 | IDEN:id {:
 	String nombreTipo = id.getLexema().toUpperCase();
@@ -946,7 +945,9 @@ parametroasignacion ::= expresion:exp {:
 
 // Llamada a función
 parametrofuncionoproc ::= listavariables:lista {:
-	RESULT = lista;
+	
+	ParametroFuncionOProc param = new ParametroFuncionOProc(lista.getVariables());
+	RESULT = param;
 :};
 
 llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO {:
@@ -970,12 +971,19 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 	}
 :};
 
-sentenciallamadafuncion ::= llamadafuncion DSENTENCIAS {:
+sentenciallamadafuncion ::= llamadafuncion:llamada DSENTENCIAS {:
 	SentenciaLlamadaFuncion s = new SentenciaLlamadaFuncion();
 
 	// CÓDIGO INTERMEDIO
 	ScopeIF ambito = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	TemporalFactory tF = new TemporalFactory(ambito);
+	TemporalIF temp = tF.create();
+
+	// Pendiente
+	cb.addQuadruple("CALL");
+
+	s.setIntermediateCode(cb.create());
 
 	RESULT = s;
 :};
@@ -1034,7 +1042,7 @@ sentenciaif ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencias:sente
 
 	// Tiene que ser de tipo LOGICO
 	if(!(tipoExp instanceof TypeLogico)) {
-		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
+		semanticErrorManager.semanticFatalError("Error semantico: la expresion en sentencia IF debe ser de tipo logico");
 	}
 
 	SentenciaIf s = new SentenciaIf(sentenciasIF.getSentencias(), relleno.getSentencias());
@@ -1066,7 +1074,7 @@ sentenciaifFuncion ::= COMIENZOSI expresion:exp STARTIF DELIMFUNC listaSentencia
 
 	// Tiene que ser de tipo LOGICO
 	if(!(tipoExp instanceof TypeLogico)) {
-		semanticErrorManager.semanticFatalError("Error semántico: la expresión en sentencia IF debe ser de tipo lógico");
+		semanticErrorManager.semanticFatalError("Error semantico: la expresion en sentencia IF debe ser de tipo logico");
 	}
 
 	SentenciaIf s = new SentenciaIf(sentenciasIF.getSentencias(), relleno.getSentencias());

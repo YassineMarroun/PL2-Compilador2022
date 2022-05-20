@@ -1,9 +1,7 @@
 package compiler.syntax.nonTerminal;
 
 import java.util.ArrayList;
-
 import compiler.CompilerContext;
-import compiler.semantic.symbol.SymbolParameter;
 import es.uned.lsi.compiler.semantic.ScopeManagerIF;
 
 public class ParametroFuncionOProc extends NonTerminal {
@@ -15,6 +13,7 @@ public class ParametroFuncionOProc extends NonTerminal {
         super();
         this.variables = variables;
         this.parametros = new ArrayList<Parametro>();
+        setParametros();
     }
     
     private void setParametros() {
@@ -30,9 +29,20 @@ public class ParametroFuncionOProc extends NonTerminal {
                 Expresion exp = s.getExpresion();
                 if(exp.isEsIdentificador()) {
                     String nombreIDExp = exp.getIdentificador();
-                    param = new Parametro(scopeManager.searchSymbol(nombreIDExp))
+                    param = new Parametro(scopeManager.searchSymbol(nombreIDExp), false);
+                } else {
+                    param = new Parametro(exp.getTemporal());
                 }
             }
+            parametros.add(param);
         }
+    }
+
+    public ArrayList<SelectorValorOReferencia> getVariables() {
+        return variables;
+    }
+
+    public ArrayList<Parametro> getParametros() {
+        return parametros;
     }
 }

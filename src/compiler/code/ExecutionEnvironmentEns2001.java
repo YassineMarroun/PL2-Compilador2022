@@ -316,7 +316,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append(labelGRF + ":");
                 translate.append("\n");
                 break;
-            case "CALL";
+            case "CALL":
                 break;
         }
         return translate.toString(); 
@@ -326,13 +326,15 @@ public class ExecutionEnvironmentEns2001
 
         if(operando instanceof TemporalIF) {
             // .iX
-            return "#-" + ((TemporalIF)operando).getAddress();
+            return "#-" + ((TemporalIF)operando).getAddress() + "[.IX]";
         }
+
         if(operando instanceof Value) {
             return "#" + ((Value)operando).getValue();
         }
 
         if(operando instanceof Variable) {
+            // Comprobar si la variable es global o si es local (función)
             return "/" + ((Variable)operando).getSymbol().getDireccionMemoria();
         }
 
@@ -340,6 +342,6 @@ public class ExecutionEnvironmentEns2001
     }
 
     private boolean esLocal(Variable variable) {
-        return 
+        return variable.getScope().getLevel() == Display.getDisplay().getNivelActual();
     }
 }

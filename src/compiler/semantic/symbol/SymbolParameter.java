@@ -9,9 +9,6 @@ import es.uned.lsi.compiler.semantic.type.TypeIF;
  * Class for SymbolVariable.
  */
 
-// TODO: Student work
-//       Include properties to characterize parameters
-
 public class SymbolParameter
     extends SymbolBase
 {  
@@ -31,5 +28,36 @@ public class SymbolParameter
                            TypeIF type)
     {
         super (scope, name, type);
-    } 
+    }
+
+    public SymbolParameter(ScopeIF scope, String name, TypeIF type, boolean pasoReferencia, int direccionMemoria, TemporalIF temporal) {
+        super(scope, name, type);
+        this.pasoReferencia = pasoReferencia;
+        this.direccionMemoria = direccionMemoria;
+        this.temporal = temporal;
+    }
+
+    public boolean isPasoReferencia() {
+        return pasoReferencia;
+    }
+
+    public void setPasoReferencia(boolean pasoReferencia) {
+        this.pasoReferencia = pasoReferencia;
+    }
+
+    public int getDireccionMemoria() {
+        return direccionMemoria;
+    }
+
+    public void setDireccionMemoria(int direccionMemoria) {
+        this.direccionMemoria = direccionMemoria;
+    }
+    
+    public TemporalIF getTemporal() {
+        return temporal;
+    }
+
+    public void setTemporal(TemporalIF temporal) {
+        this.temporal = temporal;
+    }
 }

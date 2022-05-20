@@ -1,6 +1,57 @@
-;Quadruple - [INICIO null, null, null]
+;Quadruple - [INICIO 5, null, null]
+BR /5
+ORG 5
+ORG 5
+MOVE #64985, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
 
-;Quadruple - [WINT null, null, null]
+;Quadruple - [MV T_1, 5, null]
+MOVE #5,#-2[.IX]
+
+;Quadruple - [MVA T_0, C, null]
+MOVE #3,.R1
+MOVE .R1,#-1[.IX]
+
+;Quadruple - [STP T_0, T_1, null]
+MOVE #-1[.IX],.R1
+MOVE [.R1], .R2
+MOVE #-2[.IX],[.R2]
+
+;Quadruple - [MV T_4, 18, null]
+MOVE #18,#-5[.IX]
+
+;Quadruple - [MVA T_3, D, null]
+MOVE #4,.R1
+MOVE .R1,#-4[.IX]
+
+;Quadruple - [STP T_3, T_4, null]
+MOVE #-4[.IX],.R1
+MOVE [.R1], .R2
+MOVE #-5[.IX],[.R2]
+
+;Quadruple - [MVA T_6, SUMA, null]
+MOVE #2,.R1
+MOVE .R1,#-7[.IX]
+
+;Quadruple - [STP T_6, null, null]
+MOVE #-7[.IX],.R1
+MOVE [.R1], .R2
+MOVE ,[.R2]
+
+;Quadruple - [MVA T_12, SUMA, null]
+MOVE #2,.R1
+MOVE .R1,#-13[.IX]
+
+;Quadruple - [MVP T_13, T_12, null]
+MOVE #-13[.IX],.R1
+MOVE [.R1], .R2
+MOVE [.R2], #-14[.IX]
+
+;Quadruple - [WINT T_13, null, null]
+WRINT #-14[.IX]
+WRCHAR #10
 
 ;Quadruple - [HALT null, null, null]
 HALT
