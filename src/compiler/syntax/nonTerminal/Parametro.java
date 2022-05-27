@@ -7,6 +7,7 @@ public class Parametro extends NonTerminal {
     
     private SymbolIF simbolo;
     private TemporalIF temporal;
+    private Expresion expresion;
     private boolean esExpresion = false;
     private boolean esPasoReferencia = true;
 
@@ -17,8 +18,9 @@ public class Parametro extends NonTerminal {
         this.esPasoReferencia = esPasoReferencia;
     }
 
-    public Parametro(TemporalIF temporal) {
+    public Parametro(Expresion expresion, TemporalIF temporal) {
         super();
+        this.expresion = expresion;
         this.temporal = temporal;
         this.esExpresion = true;
         this.esPasoReferencia = false;
@@ -54,5 +56,13 @@ public class Parametro extends NonTerminal {
 
     public void setEsPasoReferencia(boolean esPasoReferencia) {
         this.esPasoReferencia = esPasoReferencia;
+    }
+
+    public Expresion getExpresion() {
+        return expresion;
+    }
+
+    public void setExpresion(Expresion expresion) {
+        this.expresion = expresion;
     }
 }

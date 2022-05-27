@@ -1,5 +1,8 @@
 package compiler.syntax.nonTerminal;
 
-public class DefSubprograma {
-    
+public class DefSubprograma extends NonTerminal {
+
+    public DefSubprograma() {
+        super();
+    }
 }

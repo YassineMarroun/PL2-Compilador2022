@@ -111,11 +111,11 @@ non terminal DefVariables 				defvariables;
 non terminal TypeIF						tipovariable;
 non terminal ListaVariables 			listavariables;
 non terminal  							seccionvariables;
-non terminal  							defsubprograma;
+non terminal DefSubprograma  			defsubprograma;
 non terminal							puntoycomaopcional;
 
 non terminal TypeIF 					tiporetornofuncion;
-non terminal  							seccionsubprograma;
+non terminal SeccionSubprograma 		seccionsubprograma;
 non terminal DefPrincipal 				defprincipal;
 non terminal SelectorValorOReferencia	selectorvalororeferencia;
 
@@ -128,7 +128,7 @@ non terminal Expresion					expresionlvl5;
 non terminal MiembroVector				miembrovector;
 non terminal							procedimiento;
 non terminal							funcion;
-non terminal							selectorpof;
+non terminal SelectorPof				selectorpof;
 
 non terminal ParametroFuncionOProc		parametrofuncionoproc;
 non terminal LlamadaFuncion				llamadafuncion; 
@@ -518,11 +518,39 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 selectorpof ::= procedimiento
 | funcion;
 
-defsubprograma ::= selectorpof defsubprograma
-| epsilon;
+defsubprograma ::= selectorpof:sub defsubprograma:defSub {:
+	
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 
-seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma
-| epsilon;
+	cb.addQuadruples(sub.getIntermediateCode());
+	cb.addQuadruples(defSub.getIntermediateCode());
+	defSub.setIntermediateCode(cb.create());
+
+	RESULT = defSub;
+:}
+| epsilon {:
+	DefSubprograma def = new DefSubprograma();
+	RESULT = def;
+:};
+
+seccionsubprograma ::= COMIENZOSUBPROGRAMAS defsubprograma:def {:
+	SeccionSubprograma seccion = new SeccionSubprograma();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+
+	cb.addQuadruples(def.getIntermediateCode());
+	seccion.setIntermediateCode(cb.create());
+	
+	RESULT = seccion;
+:}
+| epsilon {:
+	SeccionSubprograma seccion = new SeccionSubprograma();
+	RESULT = seccion;
+:};
 
 // Definición de programa principal
 defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
@@ -964,21 +992,39 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 			llamada.comprobarLlamada();
 			
 			// CÓDIGO INTERMEDIO
-			ScopeIF ambito = scopeManager.getCurrentScope();
 			IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 			TemporalFactory tF = new TemporalFactory(ambito);
-			TemporalIF temp = tF.create();
-	
-			ArrayList<SymbolVariable> parametros = llamada.getParametros();
-			// Se recorre el listado de parámetros
-			for (SymbolVariable sym : parametros) {
-				cb.addQuadruple("PARAM");
-			}
-	
-			Procedure procedimiento = new Procedure(llamada.getNombreProcedure, ambito, llamada.getParametros());
-			cb.addQuadruple("CALL", procedimiento);
+			ArrayList<Parametro> parametrosFunc = parametros.getParametros();
 
-			s.setIntermediateCode(cb.create());
+			// Se recorre el listado de parámetros
+			for(Parametro param : parametrosFunc) {
+				// Generar el Código Intermedio de cada parámetro
+				if(param.isEsExpresion()) {
+					cb.addQuadruples(param.getExpresion().getIntermediateCode());
+					cb.addQuadruple("PARAM", param.getTemporal());
+				} else {
+					SymbolIF simbolo = param.getSimbolo();
+					if(simbolo instanceof SymbolConstantEntero) {
+						TemporalIF temp = tF.create();
+						SymbolConstantEntero sEntero = (SymbolConstantEntero)simbolo;
+						cb.addQuadruple("MV", temp, new Value(sEntero.getValorEntero()));
+						cb.addQuadruple("PARAM", temp);
+					} else if(simbolo instanceof SymbolConstantLogico) {
+						TemporalIF temp = tF.create();
+						SymbolConstantLogico sLogico = (SymbolConstantLogico)simbolo;
+						cb.addQuadruple("MV", temp, sLogico.getValorLogico());
+						cb.addQuadruple("PARAM", temp);
+					} else if(simbolo instanceof SymbolVariable) {
+						TemporalIF temp = tF.create();
+						Variable var = new Variable((SymbolVariable)simbolo);
+						cb.addQuadruple("MVA", temp, var);
+						cb.addQuadruple("PARAM", temp);
+					}
+				}
+			}
+			Procedure procedimiento = new Procedure(llamada.getNombreProcedure(), ambito, ((TypeProcedure)tipo).getParametros());
+			cb.addQuadruple("CALL", procedimiento);
+			llamada.setIntermediateCode(cb.create());
 			
 			RESULT = llamada;
 		} else {
@@ -993,21 +1039,7 @@ sentenciallamadafuncion ::= llamadafuncion:llamada DSENTENCIAS {:
 	SentenciaLlamadaFuncion s = new SentenciaLlamadaFuncion();
 
 	// CÓDIGO INTERMEDIO
-	ScopeIF ambito = scopeManager.getCurrentScope();
-	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
-	TemporalFactory tF = new TemporalFactory(ambito);
-	TemporalIF temp = tF.create();
-	
-	ArrayList<SymbolVariable> parametros = llamada.getParametros();
-	// Se recorre el listado de parámetros
-	for (SymbolVariable sym : parametros) {
-		cb.addQuadruple("PARAM");
-	}
-	
-	Procedure procedimiento = new Procedure(llamada.getNombreProcedure, ambito, llamada.getParametros());
-	cb.addQuadruple("CALL", procedimiento);
-
-	s.setIntermediateCode(cb.create());
+	s.setIntermediateCode(llamada.getIntermediateCode());
 
 	RESULT = s;
 :};

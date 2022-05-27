@@ -11,7 +11,7 @@ public class ListaVariables extends NonTerminal {
     }
 
     public void addSelector(SelectorValorOReferencia selector) {
-        variables.add(selector);
+        variables.add(0, selector);
     }
 
     public ArrayList<SelectorValorOReferencia> getVariables() {

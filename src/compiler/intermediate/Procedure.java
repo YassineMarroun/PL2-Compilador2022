@@ -16,6 +16,13 @@ public class Procedure
     private String  name     = null;
     private ScopeIF scope    = null;
     private ArrayList<SymbolVariable> parametrosProcedure = new ArrayList<SymbolVariable>();
+
+    public Procedure(String name, ScopeIF scope, ArrayList<SymbolVariable> parametrosProcedure) {
+        super();
+        this.name = name;
+        this.scope = scope;
+        this.parametrosProcedure = parametrosProcedure;
+    }
         
     /**
      * Constructor for Variable.
@@ -103,5 +110,21 @@ public class Procedure
     public final String toString ()
     {    
         return name;
+    }
+
+    public ArrayList<SymbolVariable> getParametrosProcedure() {
+        return parametrosProcedure;
+    }
+
+    public void setParametrosProcedure(ArrayList<SymbolVariable> parametrosProcedure) {
+        this.parametrosProcedure = parametrosProcedure;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScope(ScopeIF scope) {
+        this.scope = scope;
     }
 }

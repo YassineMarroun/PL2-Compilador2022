@@ -31,7 +31,7 @@ public class ParametroFuncionOProc extends NonTerminal {
                     String nombreIDExp = exp.getIdentificador();
                     param = new Parametro(scopeManager.searchSymbol(nombreIDExp), false);
                 } else {
-                    param = new Parametro(exp.getTemporal());
+                    param = new Parametro(exp, exp.getTemporal());
                 }
             }
             parametros.add(param);

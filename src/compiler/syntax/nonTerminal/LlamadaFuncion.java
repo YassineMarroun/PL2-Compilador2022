@@ -32,7 +32,7 @@ public class LlamadaFuncion extends NonTerminal {
                 Expresion expresionLlamada = parametrosLlamada.get(i).getExpresion();
                 TypeIF tipoLlamada = expresionLlamada.getTipoExpresion();
 
-                // Los nomsbres de los tipos tienen que ser iguales
+                // Los nombres de los tipos tienen que ser iguales
                 if(!tipoDeclaracion.getName().equalsIgnoreCase(tipoLlamada.getName())) {
                     semanticErrorManager.semanticFatalError("Error semantico: tipo incorrecto en los parametros de la llamada a la funcion");
                 }
@@ -45,7 +45,7 @@ public class LlamadaFuncion extends NonTerminal {
     }
 
     public ArrayList<SymbolVariable> getParametros() {
-        return this.tipoSubprograma
+        return this.tipoSubprograma.getParametros();
     }
 
     public TypeProcedure getTipoSubprograma() {
