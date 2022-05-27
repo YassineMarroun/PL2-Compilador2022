@@ -962,6 +962,24 @@ llamadafuncion ::= IDEN:id PIZQUIERDO parametrofuncionoproc:parametros PDERECHO 
 		if(tipo instanceof TypeProcedure) {
 			LlamadaFuncion llamada = new LlamadaFuncion((TypeProcedure)tipo, parametros.getVariables());
 			llamada.comprobarLlamada();
+			
+			// CÓDIGO INTERMEDIO
+			ScopeIF ambito = scopeManager.getCurrentScope();
+			IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+			TemporalFactory tF = new TemporalFactory(ambito);
+			TemporalIF temp = tF.create();
+	
+			ArrayList<SymbolVariable> parametros = llamada.getParametros();
+			// Se recorre el listado de parámetros
+			for (SymbolVariable sym : parametros) {
+				cb.addQuadruple("PARAM");
+			}
+	
+			Procedure procedimiento = new Procedure(llamada.getNombreProcedure, ambito, llamada.getParametros());
+			cb.addQuadruple("CALL", procedimiento);
+
+			s.setIntermediateCode(cb.create());
+			
 			RESULT = llamada;
 		} else {
 			semanticErrorManager.semanticFatalError("Error semantico: " + nombre + " no es un subprograma");
@@ -979,9 +997,15 @@ sentenciallamadafuncion ::= llamadafuncion:llamada DSENTENCIAS {:
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 	TemporalFactory tF = new TemporalFactory(ambito);
 	TemporalIF temp = tF.create();
-
-	// Pendiente
-	cb.addQuadruple("CALL");
+	
+	ArrayList<SymbolVariable> parametros = llamada.getParametros();
+	// Se recorre el listado de parámetros
+	for (SymbolVariable sym : parametros) {
+		cb.addQuadruple("PARAM");
+	}
+	
+	Procedure procedimiento = new Procedure(llamada.getNombreProcedure, ambito, llamada.getParametros());
+	cb.addQuadruple("CALL", procedimiento);
 
 	s.setIntermediateCode(cb.create());
 

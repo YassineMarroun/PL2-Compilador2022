@@ -318,6 +318,10 @@ public class ExecutionEnvironmentEns2001
                 break;
             case "CALL":
                 break;
+            case "PARAM":
+                break;
+            case "RETURN":
+                break;
         }
         return translate.toString(); 
     }

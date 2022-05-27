@@ -7,7 +7,7 @@ import compiler.semantic.type.TypeProcedure;
 import es.uned.lsi.compiler.semantic.SemanticErrorManager;
 import es.uned.lsi.compiler.semantic.type.TypeIF;
 
-public class LlamadaFuncion {
+public class LlamadaFuncion extends NonTerminal {
     
     private TypeProcedure tipoSubprograma;
     private ArrayList<SelectorValorOReferencia> parametrosLlamada;
@@ -38,6 +38,14 @@ public class LlamadaFuncion {
                 }
             }
         }
+    }
+
+    public String getNombreProcedure() {
+        return this.tipoSubprograma.getName();
+    }
+
+    public ArrayList<SymbolVariable> getParametros() {
+        return this.tipoSubprograma
     }
 
     public TypeProcedure getTipoSubprograma() {
