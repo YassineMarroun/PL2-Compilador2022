@@ -126,8 +126,8 @@ non terminal Expresion					expresionlvl4;
 non terminal Expresion					expresionlvl5;
 
 non terminal MiembroVector				miembrovector;
-non terminal							procedimiento;
-non terminal							funcion;
+non terminal SelectorPof				procedimiento;
+non terminal SelectorPof				funcion;
 non terminal SelectorPof				selectorpof;
 
 non terminal ParametroFuncionOProc		parametrofuncionoproc;
@@ -467,7 +467,7 @@ procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	tiposTabla.addType(logico);
 	
 	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " abierto");
-:} PIZQUIERDO defvariables:parametros PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia listaSentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
+:} PIZQUIERDO defvariables:parametros PDERECHO DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO sentencia:sentencia listaSentencias:sentencias FINBLOQUESENTENCIAS DSENTENCIAS {:
 	String nombre = id.getLexema().toUpperCase();
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	ScopeIF ambitoPadre = scopeManager.getParentScope();
@@ -475,6 +475,18 @@ procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	
 	TypeProcedure tipo = new TypeProcedure(ambitoPadre, nombre, parametros.getVariables());
 	tiposTablaPadre.addType(tipo);
+
+	SelectorPof s = new SelectorPof();
+	Procedure procedimiento = new Procedure(nombre, ambito, parametros.getVariables());
+	int level = ambito.getLevel();
+
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruple("INLABEL", procedimiento.getCodeLabel(), new Value(level));
+	cb.addQuadruples(sentencia.getIntermediateCode());
+	cb.addQuadruples(sentencias.getIntermediateCode());
+
+	s.setIntermediateCode(cb.create());
+	RESULT = s;
 	
 	syntaxErrorManager.syntaxInfo("Ambito procedimiento " + nombre + " cerrado");
 	scopeManager.closeScope();
@@ -511,12 +523,28 @@ funcion ::= DECLAREFUNCION IDEN:id {:
 		semanticErrorManager.semanticFatalError("Funcion " + nombre + " no tiene sentencia DEVOLVER");
 	}
 
+	SelectorPof s = new SelectorPof();
+	Procedure procedimiento = new Procedure(nombre, ambito, parametros.getVariables());
+	int level = ambito.getLevel();
+
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruple("INLABEL", procedimiento.getCodeLabel(), new Value(level));
+	cb.addQuadruples(sentencia.getIntermediateCode());
+	cb.addQuadruples(sentencias.getIntermediateCode());
+
+	s.setIntermediateCode(cb.create());
+	RESULT = s;
+
 	syntaxErrorManager.syntaxInfo("Ambito funcion " + nombre + " cerrado");
 	scopeManager.closeScope();
 :};
 
-selectorpof ::= procedimiento
-| funcion;
+selectorpof ::= procedimiento:proc {:
+	RESULT = proc;
+:}
+| funcion:func {:
+	RESULT = func;
+:};
 
 defsubprograma ::= selectorpof:sub defsubprograma:defSub {:
 	
@@ -565,12 +593,13 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	TypeTableIF tiposTabla = ambito.getTypeTable();
 	tiposTabla.addType(entero);
 	tiposTabla.addType(logico);
-:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma COMIENZO listaSentencias:sentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
+:} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma:subpr COMIENZO listaSentencias:sentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
 	DefPrincipal defP = new DefPrincipal();
 
 	// CÓDIGO INTERMEDIO
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(subpr.getIntermediateCode());
 	cb.addQuadruples(sentencias.getIntermediateCode());
 	defP.setIntermediateCode(cb.create());
 
@@ -1291,12 +1320,21 @@ sentenciaEscribir ::= ESCRIBIR PIZQUIERDO parametroEscribir:parametro PDERECHO D
 :};
 
 // devolver
-sentenciaDevolver ::= FRETURN expresion DSENTENCIAS {:
+sentenciaDevolver ::= FRETURN expresion:exp DSENTENCIAS {:
 
 	// Recuperar el nombre del ámbito actual
 	String nombre = scopeManager.getCurrentScope().getName().toUpperCase();
 	TypeIF tipoSubprograma = scopeManager.searchType(nombre);
-
 	SentenciaDevolver s = new SentenciaDevolver();
+
+	// CÓDIGO INTERMEDIO
+	ScopeIF ambito = scopeManager.getCurrentScope();
+	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+	cb.addQuadruples(exp.getIntermediateCode());
+	cb.addQuadruple("RETURN", exp.getTemporal());
+
+	s.setIntermediateCode(cb.create());
+	s.setTemporal(exp.getTemporal());
+
 	RESULT = s;
 :};

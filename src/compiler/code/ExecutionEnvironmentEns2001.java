@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import compiler.intermediate.MemoriaPrograma;
+import compiler.intermediate.Procedure;
 import compiler.intermediate.Textos;
 import compiler.intermediate.Value;
 import compiler.intermediate.Variable;
@@ -131,7 +132,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
 
                 // Registro de Activación del Programa Principal
-                int sizeProgramaPrincipal = STACK_ADDRESS - memoria.sizePrincipal;
+                int sizeProgramaPrincipal = STACK_ADDRESS - memoria.sizePrincipal + 2;
                 translate.append("MOVE #" + sizeProgramaPrincipal + ", .SP");
                 translate.append("\n");
                 translate.append("MOVE #" + DISPLAY_ADDRESS + ", .R0");
@@ -317,8 +318,49 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 break;
             case "CALL":
+                Procedure procedimiento = (Procedure)quadruple.getResult();
+                String nombreAmbito = procedimiento.getName();
+                int desplaza = MemoriaPrograma.sizeAmbito(nombreAmbito);
+                int nivelLlamante = Display.getDisplay().getNivelActual();
+                int nivelLlamado = procedimiento.getScope().getLevel() + 1;
+
+                translate.append("PUSH #0"); // Para el valor de retorno
+                translate.append("\n");
+                translate.append("PUSH .IX");
+                translate.append("\n");
+                translate.append("MOVE .SP, .IX");
+                translate.append("\n");
+                translate.append("INC .IX");
+                translate.append("\n");
+                translate.append("SUB .SP," + desplaza);
+                translate.append("\n");
+                translate.append("MOVE .A, .SP");
+                translate.append("\n");
+                
+                int posicionDisplayLlamado = DISPLAY_ADDRESS + nivelLlamado;
+                translate.append("MOVE .IX, /" + posicionDisplayLlamado);
+                translate.append("\n");
+                translate.append("CALL /" + procedimiento.getCodeLabel());
+                translate.append("\n");
+
+                int posicionDisplayLlamante = DISPLAY_ADDRESS + nivelLlamante;
+                translate.append("MOVE [.IX], /" + posicionDisplayLlamante);
+                translate.append("\n");
+                // Se actualiza el nivel del Display
+                Display.getDisplay().setNivelActual(nivelLlamante);
+                int sizeParametros = procedimiento.getParametrosProcedure().size() + 1;
+                translate.append("MOVE .IX, .SP");
+                translate.append("\n");
+                translate.append("ADD .SP, #" + sizeParametros);
+                translate.append("\n");
+                translate.append("MOVE .A .SP");
+                translate.append("\n");
+                translate.append("MOVE [.IX], .IX");
+                translate.append("\n");
                 break;
             case "PARAM":
+                translate.append("PUSH " + getDireccion(quadruple.getResult()));
+                translate.append("\n");
                 break;
             case "RETURN":
                 break;

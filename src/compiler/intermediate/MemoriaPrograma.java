@@ -15,11 +15,15 @@ import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
 public class MemoriaPrograma {
 
     public int sizeTextos = 0;
+    public int sizePrincipal = 0;
     public int direccionInicio = 2;
     public int inicioTextos = 2;
-    public int sizePrincipal = 0;
-    public HashMap<String, Integer> ambitosSize = new HashMap<String, Integer>();
+    public static HashMap<String, Integer> ambitosSize = new HashMap<String, Integer>();
  
+    public static int sizeAmbito(String ambito) {
+        return ambitosSize.get(ambito);
+    }
+
     public void asignarMemoria() {
 
         int direccionLocal = 1;

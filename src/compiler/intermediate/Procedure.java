@@ -2,6 +2,8 @@ package compiler.intermediate;
 
 import java.util.ArrayList;
 import compiler.semantic.symbol.SymbolVariable;
+import es.uned.lsi.compiler.intermediate.LabelFactory;
+import es.uned.lsi.compiler.intermediate.LabelFactoryIF;
 import es.uned.lsi.compiler.intermediate.LabelIF;
 import es.uned.lsi.compiler.intermediate.ProcedureIF;
 import es.uned.lsi.compiler.semantic.ScopeIF;
@@ -16,12 +18,16 @@ public class Procedure
     private String  name     = null;
     private ScopeIF scope    = null;
     private ArrayList<SymbolVariable> parametrosProcedure = new ArrayList<SymbolVariable>();
+    private LabelIF etiquetaProcedimiento = null;
 
     public Procedure(String name, ScopeIF scope, ArrayList<SymbolVariable> parametrosProcedure) {
         super();
         this.name = name;
         this.scope = scope;
         this.parametrosProcedure = parametrosProcedure;
+        // Se crea una etiqueta para el procedimiento
+        LabelFactoryIF lF = new LabelFactory();
+        etiquetaProcedimiento = lF.create(name);
     }
         
     /**
@@ -34,6 +40,9 @@ public class Procedure
         super ();
         this.name = name;
         this.scope = scope;
+        // Se crea una etiqueta para el procedimiento
+        LabelFactoryIF lF = new LabelFactory();
+        etiquetaProcedimiento = lF.create(name);
     }
 
     /**
@@ -63,7 +72,7 @@ public class Procedure
     @Override
     public final LabelIF getCodeLabel ()
     {
-        return null;
+        return etiquetaProcedimiento;
     }
 
     /**
