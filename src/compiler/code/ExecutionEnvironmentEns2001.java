@@ -132,7 +132,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
 
                 // Registro de Activación del Programa Principal
-                int sizeProgramaPrincipal = STACK_ADDRESS - memoria.sizePrincipal + 2;
+                int sizeProgramaPrincipal = STACK_ADDRESS - MemoriaPrograma.sizePrincipal + 2;
                 translate.append("MOVE #" + sizeProgramaPrincipal + ", .SP");
                 translate.append("\n");
                 translate.append("MOVE #" + DISPLAY_ADDRESS + ", .R0");
@@ -353,7 +353,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 translate.append("ADD .SP, #" + sizeParametros);
                 translate.append("\n");
-                translate.append("MOVE .A .SP");
+                translate.append("MOVE .A, .SP");
                 translate.append("\n");
                 translate.append("MOVE [.IX], .IX");
                 translate.append("\n");
@@ -363,6 +363,19 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 break;
             case "RETURN":
+                // Return para funciones
+                if(quadruple.getResult() != null) {
+                    translate.append("ADD #1, [.IX]");
+                    translate.append("\n");
+                    translate.append("MOVE " + getDireccion(quadruple.getResult()) + ", [.A");
+                    translate.append("\n");
+                    translate.append("MOVE [.IX], [.R0]");
+                    translate.append("\n");
+                    translate.append("RET");
+                }
+
+                // Return para procedimientos
+
                 break;
         }
         return translate.toString(); 

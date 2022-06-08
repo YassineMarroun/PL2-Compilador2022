@@ -1,6 +1,6 @@
 {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch31505\stshfloch31506\stshfhich31506\stshfbi0\deflang1033\deflangfe1033\themelang3082\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f2\fbidi \fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}
 {\f3\fbidi \froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\f10\fbidi \fnil\fcharset2\fprq2{\*\panose 05000000000000000000}Wingdings;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}
-{\f43\fbidi \froman\fcharset0\fprq2{\*\panose 02020404030301010803}Garamond;}{\f44\fbidi \fnil\fcharset0\fprq0{\*\panose 020b0604020202020204}Liberation Sans{\*\falt Arial};}
+{\f43\fbidi \froman\fcharset0\fprq2{\*\panose 00000000000000000000}Garamond;}{\f44\fbidi \fnil\fcharset0\fprq0{\*\panose 020b0604020202020204}Liberation Sans{\*\falt Arial};}
 {\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\fdbmajor\f31501\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
 {\fhimajor\f31502\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria;}{\fbimajor\f31503\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
 {\flominor\f31504\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\fdbminor\f31505\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
@@ -94,7 +94,7 @@ Normal Table;}{\*\cs15 \additive \rtlch\fcs1 \ab\af0\afs32 \ltrch\fcs0 \b\fs32\k
 \fi-360\li3600\lin3600 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li4320\lin4320 }
 {\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698689\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 \fi-360\li5040\lin5040 }{\listlevel\levelnfc23\levelnfcn23
 \leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li5760\lin5760 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0
-\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li6480\lin6480 }{\listname ;}\listid536089393}{\list\listtemplateid-1894486800\listhybrid{\listlevel\levelnfc23
+\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li6480\lin6480 }{\listname ;}\listid536089393}{\list\listtemplateid392860918\listhybrid{\listlevel\levelnfc23
 \levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\leveltext\leveltemplateid67698689\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 \fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0
 \levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li1440\lin1440 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360
 \levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li2160\lin2160 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext
@@ -102,24 +102,33 @@ Normal Table;}{\*\cs15 \additive \rtlch\fcs1 \ab\af0\afs32 \ltrch\fcs0 \b\fs32\k
 \'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li3600\lin3600 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}
 \f10\fbias0 \fi-360\li4320\lin4320 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698689\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 
 \fi-360\li5040\lin5040 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li5760\lin5760 }{\listlevel
-\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li6480\lin6480 }{\listname ;}\listid1978073589}
-{\list\listtemplateid707938534{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace0\levelindent0{\leveltext\'02\'00.;}{\levelnumbers\'01;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-360\li720\lin720 }{\listlevel\levelnfc0
-\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'04\'00.\'01.;}{\levelnumbers\'01\'03;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-360\li720\lin720 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0
-\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'06\'00.\'01.\'02.;}{\levelnumbers\'01\'03\'05;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-720\li1080\lin1080 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0
-\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'08\'00.\'01.\'02.\'03.;}{\levelnumbers\'01\'03\'05\'07;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-720\li1080\lin1080 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0
-\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0a\'00.\'01.\'02.\'03.\'04.;}{\levelnumbers\'01\'03\'05\'07\'09;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1080\li1440\lin1440 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0
-\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0c\'00.\'01.\'02.\'03.\'04.\'05.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1080\li1440\lin1440 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0
-\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0e\'00.\'01.\'02.\'03.\'04.\'05.\'06.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b\'0d;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1440\li1800\lin1800 }{\listlevel\levelnfc0\levelnfcn0
-\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'10\'00.\'01.\'02.\'03.\'04.\'05.\'06.\'07.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b\'0d\'0f;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1440\li1800\lin1800 }
-{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'12\'00.\'01.\'02.\'03.\'04.\'05.\'06.\'07.\'08.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b\'0d\'0f\'11;}\rtlch\fcs1 \af0 
-\ltrch\fcs0 \fbias0 \fi-1800\li2160\lin2160 }{\listname ;}\listid2014913574}}{\*\listoverridetable{\listoverride\listid2014913574\listoverridecount0\ls1}{\listoverride\listid536089393\listoverridecount0\ls2}{\listoverride\listid1978073589
-\listoverridecount0\ls3}}{\*\pgptbl {\pgp\ipgp2\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp3\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}}{\*\rsidtbl \rsid21286\rsid289369\rsid594578\rsid788588\rsid1275927\rsid1462132\rsid1524978\rsid1771259\rsid1919162
-\rsid2957650\rsid3367102\rsid3813844\rsid4279088\rsid4462638\rsid5244383\rsid6493529\rsid6632158\rsid7106105\rsid8592463\rsid8651008\rsid8744498\rsid9382841\rsid9583934\rsid9702011\rsid10707741\rsid11865965\rsid12268669\rsid12282126\rsid12412555
-\rsid12655276\rsid12674697\rsid13057471\rsid13073322\rsid13512760\rsid13580955\rsid13843654\rsid14300661\rsid14565950\rsid14628481\rsid15482301\rsid16011366\rsid16718474}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0
-\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info{\title PR\'c1CTICA DE PROCESADORES DE LENGUAJES}{\author LSI UNED}{\operator YASSINE MARROUN NETTAH}{\creatim\yr2013\mo10\dy21\hr15\min25}{\revtim\yr2022\mo5\dy19\hr15\min34}{\version30}{\edmins317}
-{\nofpages5}{\nofwords758}{\nofchars4325}{\nofcharsws5073}{\vern31}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw11905\paperh16837\margl1700\margr1700\margt1416\margb1416\gutter0\ltrsect 
+\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li6480\lin6480 }{\listname ;}\listid1812140036}
+{\list\listtemplateid-1894486800\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\leveltext\leveltemplateid67698689\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 \fi-360\li720\lin720 }
+{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li1440\lin1440 }{\listlevel\levelnfc23\levelnfcn23
+\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li2160\lin2160 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0
+\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698689\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 \fi-360\li2880\lin2880 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative
+\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 \fi-360\li3600\lin3600 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext
+\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li4320\lin4320 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698689
+\'01\u-3913 ?;}{\levelnumbers;}\f3\fbias0 \fi-360\li5040\lin5040 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698691\'01o;}{\levelnumbers;}\f2\fbias0 
+\fi-360\li5760\lin5760 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\lvltentative\levelspace360\levelindent0{\leveltext\leveltemplateid67698693\'01\u-3929 ?;}{\levelnumbers;}\f10\fbias0 \fi-360\li6480\lin6480 }
+{\listname ;}\listid1978073589}{\list\listtemplateid707938534{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace0\levelindent0{\leveltext\'02\'00.;}{\levelnumbers\'01;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 
+\fi-360\li720\lin720 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'04\'00.\'01.;}{\levelnumbers\'01\'03;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-360\li720\lin720 }
+{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'06\'00.\'01.\'02.;}{\levelnumbers\'01\'03\'05;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-720\li1080\lin1080 }{\listlevel
+\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'08\'00.\'01.\'02.\'03.;}{\levelnumbers\'01\'03\'05\'07;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-720\li1080\lin1080 }{\listlevel\levelnfc0
+\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0a\'00.\'01.\'02.\'03.\'04.;}{\levelnumbers\'01\'03\'05\'07\'09;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1080\li1440\lin1440 }{\listlevel\levelnfc0
+\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0c\'00.\'01.\'02.\'03.\'04.\'05.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1080\li1440\lin1440 }{\listlevel
+\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'0e\'00.\'01.\'02.\'03.\'04.\'05.\'06.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b\'0d;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 
+\fi-1440\li1800\lin1800 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'10\'00.\'01.\'02.\'03.\'04.\'05.\'06.\'07.;}{\levelnumbers\'01\'03\'05\'07\'09\'0b\'0d\'0f;}
+\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1440\li1800\lin1800 }{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levellegal\levelspace0\levelindent0{\leveltext\'12\'00.\'01.\'02.\'03.\'04.\'05.\'06.\'07.\'08.;}{\levelnumbers
+\'01\'03\'05\'07\'09\'0b\'0d\'0f\'11;}\rtlch\fcs1 \af0 \ltrch\fcs0 \fbias0 \fi-1800\li2160\lin2160 }{\listname ;}\listid2014913574}}{\*\listoverridetable{\listoverride\listid2014913574\listoverridecount0\ls1}{\listoverride\listid536089393
+\listoverridecount0\ls2}{\listoverride\listid1978073589\listoverridecount0\ls3}{\listoverride\listid1812140036\listoverridecount0\ls4}}{\*\pgptbl {\pgp\ipgp2\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp3\itap0\li0\ri0\sb0\sa0}{\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}}
+{\*\rsidtbl \rsid21286\rsid289369\rsid594578\rsid788588\rsid1275927\rsid1462132\rsid1524978\rsid1710180\rsid1771259\rsid1919162\rsid2578466\rsid2957650\rsid3367102\rsid3813844\rsid4279088\rsid4462638\rsid5244383\rsid5989961\rsid6493529\rsid6512528
+\rsid6632158\rsid7106105\rsid8084537\rsid8592463\rsid8651008\rsid8744498\rsid9382841\rsid9583934\rsid9702011\rsid10707741\rsid11865965\rsid12268669\rsid12282126\rsid12412555\rsid12655276\rsid12674697\rsid13057471\rsid13073322\rsid13512760\rsid13580955
+\rsid13843654\rsid14300661\rsid14565950\rsid14628481\rsid15482301\rsid16011366\rsid16718474}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info
+{\title PR\'c1CTICA DE PROCESADORES DE LENGUAJES}{\author LSI UNED}{\operator YASSINE MARROUN NETTAH}{\creatim\yr2013\mo10\dy21\hr15\min25}{\revtim\yr2022\mo6\dy7\hr17\min15}{\version35}{\edmins352}{\nofpages5}{\nofwords852}{\nofchars4857}
+{\nofcharsws5698}{\vern31}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw11905\paperh16837\margl1700\margr1700\margt1416\margb1416\gutter0\ltrsect 
 \widowctrl\ftnbj\aenddoc\hyphhotz425\trackmoves0\trackformatting1\donotembedsysfont0\relyonvml0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0\horzdoc\dghspace120\dgvspace120
-\dghorigin1701\dgvorigin1984\dghshow0\dgvshow3\jcompress\viewkind1\viewscale100\rsidroot13057471 \fet0{\*\wgrffmtfilter 2450}\ilfomacatclnup0{\*\docvar {__Grammarly_42____i}{H4sIAAAAAAAEAKtWckksSQxILCpxzi/NK1GyMqwFAAEhoTITAAAA}}
+\dghorigin1701\dgvorigin1984\dghshow0\dgvshow3\jcompress\viewkind1\viewscale110\rsidroot13057471 \fet0{\*\wgrffmtfilter 2450}\ilfomacatclnup0{\*\docvar {__Grammarly_42____i}{H4sIAAAAAAAEAKtWckksSQxILCpxzi/NK1GyMqwFAAEhoTITAAAA}}
 {\*\docvar {__Grammarly_42___1}{H4sIAAAAAAAEAKtWcslP9kxRslIyNDY0M7S0MDS0NDA3MDQ0MjRV0lEKTi0uzszPAykwrAUAxJZFOywAAAA=}}\ltrpar \sectd \ltrsect\sbknone\linex0\headery708\footery709\colsx360\sectdefaultcl\sftnbj {\*\pnseclvl1
 \pnucrm\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang {\pntxta )}}{\*\pnseclvl5
 \pndec\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl8\pnlcltr\pnstart1\pnindent720\pnhang 
@@ -142,8 +151,8 @@ Normal Table;}{\*\cs15 \additive \rtlch\fcs1 \ab\af0\afs32 \ltrch\fcs0 \b\fs32\k
 \par \hich\af0\dbch\af31505\loch\f0 \hich\f0 TEL\'c9\loch\f0 FONO DE CONTACTO:}{\rtlch\fcs1 \af0 \ltrch\fcs0 \lang2070\langfe3082\langnp2070\insrsid12655276 \hich\af0\dbch\af31505\loch\f0  603\~249 743}{\rtlch\fcs1 \af0 \ltrch\fcs0 
 \lang2070\langfe3082\langnp2070\insrsid3813844 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12282126 \loch\af0\dbch\af31505\hich\f0 \'bf\loch\f0 \hich\f0 REALIZAS LA PARTE OPCIONAL? (S\'cd\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid9702011 \hich\af0\dbch\af31505\loch\f0 o}{\rtlch\fcs1 \af0 \ltrch\fcs0 
-\insrsid12282126 \hich\af0\dbch\af31505\loch\f0  NO):}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid13843654 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid14300661 \hich\af0\dbch\af31505\loch\f0 S\loch\af0\dbch\af31505\hich\f0 \'cd}{
-\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12282126 
+\insrsid12282126 \hich\af0\dbch\af31505\loch\f0  NO):}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid13843654 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid14300661 \hich\af0\dbch\af31505\loch\f0 \hich\f0 S\'cd}{\rtlch\fcs1 \af0 
+\ltrch\fcs0 \insrsid12282126 
 \par }\pard \ltrpar\ql \li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid3813844 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid21286 
 \par 
@@ -254,8 +263,9 @@ todos de acceso y modificaci\'f3\loch\f0 n para aquellos atributos que }{\rtlch\
 \ltrch\fcs0 \b\i\insrsid2957650\charrsid13073322 \hich\af0\dbch\af31505\loch\f0 NonTerminal}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 \hich\af0\dbch\af31505\loch\f0 \hich\f0  y de la que heredan todos los s\'ed\loch\f0 mbolos no termin
 \hich\af0\dbch\af31505\loch\f0 ales.}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6493529 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 
-\par \hich\af0\dbch\af31505\loch\f0 El }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid16718474 \hich\af0\dbch\af31505\loch\f0 juego de instrucciones}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 \hich\af0\dbch\af31505\loch\f0 \hich\f0 
- que hemos necesito implementar para generar el c\'f3\loch\f0 digo intermedio es el siguiente\tab \tab \tab \tab \tab \tab 
+\par \hich\af0\dbch\af31505\loch\f0 El }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid16718474 \hich\af0\dbch\af31505\loch\f0 juego de instrucciones}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 \hich\af0\dbch\af31505\loch\f0  que }{\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid6512528 \hich\af0\dbch\af31505\loch\f0 se h\hich\af0\dbch\af31505\loch\f0 a}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 \hich\af0\dbch\af31505\loch\f0  implementa}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 do}{
+\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2957650 \hich\af0\dbch\af31505\loch\f0 \hich\f0  para generar el c\'f3\loch\f0 digo intermedio es el siguiente\tab \tab \tab \tab \tab \tab 
 \par 
 \par \ltrrow}\trowd \irow0\irowband0\ltrrow\ts54\trqc\trgaph108\trrh454\trleft-108\trbrdrt\brdrs\brdrw10 \trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrh\brdrs\brdrw10 \trbrdrv\brdrs\brdrw10 
 \trftsWidth1\trftsWidthB3\trautofit1\trpaddl108\trpaddr108\trpaddfl3\trpaddft3\trpaddfb3\trpaddfr3\tblrsid4279088\tbllkhdrrows\tbllkhdrcols\tbllknocolband\tblind0\tblindtype3 \clvertalc\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 
@@ -593,9 +603,13 @@ digo final
 \rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid1524978 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 
 \par \hich\af0\dbch\af31505\loch\f0 He completado tanto la parte obligator\hich\af0\dbch\af31505\loch\f0 \hich\f0 ia como la parte opcional de la Pr\'e1\loch\f0 ctica, }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid594578 \hich\af0\dbch\af31505\loch\f0 \hich\f0 adem
-\'e1\loch\f0 \hich\f0 s de las pruebas realizadas por m\'ed\loch\f0  mismo,}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid594578 \hich\af0\dbch\af31505\loch\f0 con }{\rtlch\fcs1 \af0 
-\ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0 \hich\f0 los casos de prueba que el Equipo Docente pone a disposici\'f3\loch\f0 n del estudiante, el resultado ha sido satisfactorio}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid289369 
-\hich\af0\dbch\af31505\loch\f0 , incluido el testCase06.pl1 que contiene subprogram\hich\af0\dbch\af31505\loch\f0 as.}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid1524978 
+\'e1\loch\f0 \hich\f0 s de las pruebas realizadas por m\'ed\loch\f0  mismo}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0  para ir comprobando que se compila \hich\af0\dbch\af31505\loch\f0 perfectamente cada fase que se ha 
+\hich\af0\dbch\af31505\loch\f0 ido incluyendo}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid594578 ,}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 todos}
+{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid594578 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0 \hich\f0 los casos de prueba que el Equipo Docente pone a disposici\'f3\loch\f0 n del estudiante
+\hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 nos \hich\af0\dbch\af31505\loch\f0 dan}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 
+\ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 el }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8592463 \hich\af0\dbch\af31505\loch\f0 resultado\hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 
+\hich\af0\dbch\af31505\loch\f0 que se debe obtener}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid289369 \hich\af0\dbch\af31505\loch\f0 , incluido el testCase06.pl1 que contiene subprogram\hich\af0\dbch\af31505\loch\f0 as.}{\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid1524978 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \ul\insrsid8592463 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \ul\insrsid289369\charrsid1524978 
 \par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af0 \ltrch\fcs0 \lang1034\langfe3082\langnp1034\langfenp3082\insrsid21286 \hich\af0\dbch\af31505\loch\f0 3.2.\tab}}\pard \ltrpar
@@ -642,19 +656,23 @@ n de memoria para el enlace de control y cuantas posiciones de memoria sean nece
 \clbrdrr\brdrs\brdrw10 \cltxlrtb\clftsWidth1\clshdrawnil \cellx2519\row }\pard \ltrpar\ql \li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid21286 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid594578 
 \par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Siguiendo este esquema, la direcci\'f3\loch\f0 n de retorno, los }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid289369 \hich\af0\dbch\af31505\loch\f0 temporales y las variables locales}{\rtlch\fcs1 \af0 \ltrch\fcs0 
 \insrsid594578 \hich\af0\dbch\af31505\loch\f0 \hich\f0  van a tener un desplazamiento negativo respecto al Frame Pointer, sin embargo el valor de retorno y los par\'e1\loch\f0 \hich\f0 metros tendr\'e1\loch\f0 n un desplazamiento positivo.
-\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid21286 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 
+\par \hich\af0\dbch\af31505\loch\f0 En cuanto al uso de memoria\hich\af0\dbch\af31505\loch\f0 :
+\par 
+\par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af0 \ltrch\fcs0 \f3\lang1034\langfe3082\langnp1034\langfenp3082\insrsid6512528 \loch\af3\dbch\af31505\hich\f3 \'b7\tab}}\pard \ltrpar
+\ql \fi-360\li720\ri0\widctlpar\wrapdefault\faauto\ls4\rin0\lin720\itap0\pararsid6512528 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 Las variables globales\hich\af0\dbch\af31505\loch\f0 \hich\f0  y el c\'f3\loch\f0 digo }{
+\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid5989961 \hich\af0\dbch\af31505\loch\f0 van a}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0  ocupar de}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid5989961 \hich\af0\dbch\af31505\loch\f0 sde}{
+\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 \hich\f0  la posici\'f3\loch\f0 n 0 a la 65.000.
+\par }\pard \ltrpar\ql \li720\ri0\widctlpar\wrapdefault\faauto\rin0\lin720\itap0\pararsid2578466 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 
+\par {\listtext\pard\plain\ltrpar \rtlch\fcs1 \af0 \ltrch\fcs0 \f3\lang1034\langfe3082\langnp1034\langfenp3082\insrsid6512528 \loch\af3\dbch\af31505\hich\f3 \'b7\tab}}\pard \ltrpar
+\ql \fi-360\li720\ri0\widctlpar\wrapdefault\faauto\ls4\rin0\lin720\itap0\pararsid21286 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 El Display (array de \hich\af0\dbch\af31505\loch\f0 elementos donde cada }{\rtlch\fcs1 
+\af0 \ltrch\fcs0 \insrsid2578466 \hich\af0\dbch\af31505\loch\f0 elemento}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0  almacena un Frame Poin\hich\af0\dbch\af31505\loch\f0 \hich\f0 ter de un Registro de Activaci\'f3
+\loch\f0 n c\hich\af0\dbch\af31505\loch\f0 o\hich\af0\dbch\af31505\loch\f0 ncreto\hich\af0\dbch\af31505\loch\f0 ) para el acceso a las referencias no lo\hich\af0\dbch\af31505\loch\f0 cales}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 
+\hich\af0\dbch\af31505\loch\f0 , ocupa desde}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid6512528 \hich\af0\dbch\af31505\loch\f0 \hich\f0  la posici\'f3\loch\f0 n 65.001}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 ,\hich\af0\dbch\af31505\loch\f0  
+\hich\af0\dbch\af31505\loch\f0 pudiendo \hich\af0\dbch\af31505\loch\f0 llegar\hich\af0\dbch\af31505\loch\f0  hasta \hich\af0\dbch\af31505\loch\f0 e\hich\af0\dbch\af31505\loch\f0 \hich\f0 l final de memoria, posici\'f3\loch\f0 n 65.535.
+\par }\pard \ltrpar\ql \li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid21286 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid1275927 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 
 \par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid1275927 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
-\par 
 \par 
 \par 
 \par 
@@ -682,9 +700,15 @@ mo implementar el juego de instrucciones y comprender el direccionamiento.
 \par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Sin duda, la Pr\'e1\loch\f0 \hich\f0 ctica m\'e1\loch\f0 \hich\f0 s larga que he tenido en todo el Grado, pero gracias a esta y la Pr\'e1\loch\f0 ctica de Procesadores del Lenguaje I,\hich\af0\dbch\af31505\loch\f0 
  entiendo perfectamente el comportamiento de un compilador}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12674697 \hich\af0\dbch\af31505\loch\f0 \hich\f0 , adem\'e1\loch\f0 \hich\f0 s de la complejidad que supone la implementaci\'f3\loch\f0 n de este.}{
 \rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid16718474 
-\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12674697 \hich\af0\dbch\af31505\loch\f0 \hich\f0 La Pr\'e1\loch\f0 \hich\f0 ctica se desarrolla con un lenguaje de programaci\'f3\loch\f0 \hich\f0 n muy reducido, pero el c\'f3\loch\f0 \hich\f0 
-digo para la implementaci\'f3\loch\f0 n del compilador de Java,\hich\af0\dbch\af31505\loch\f0  por ejemplo, debe ser realmente }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid289369 \hich\af0\dbch\af31505\loch\f0 complejo y }{\rtlch\fcs1 \af0 \ltrch\fcs0 
-\insrsid12674697 \hich\af0\dbch\af31505\loch\f0 extenso. }{\rtlch\fcs1 \af0 \ltrch\fcs0 \lang3082\langfe3082\langnp3082\insrsid12674697\charrsid16718474 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8084537 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Ayuda que la implementaci\'f3\loch\f0 n\hich\af0\dbch\af31505\loch\f0  del proye\hich\af0\dbch\af31505\loch\f0 \hich\f0 
+cto sea en Java, que es el lenguaje de programaci\'f3\loch\f0 \hich\f0 n que m\'e1\loch\f0 s hemos usado durante todo el\hich\af0\dbch\af31505\loch\f0  Grad\hich\af0\dbch\af31505\loch\f0 o}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8084537 
+\hich\af0\dbch\af31505\loch\f0 , y con el que mejor me \hich\af0\dbch\af31505\loch\f0 desenvuelvo.}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid2578466 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8084537 
+\par \hich\af0\dbch\af31505\loch\f0 En l}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12674697 \hich\af0\dbch\af31505\loch\f0 \hich\f0 a Pr\'e1\loch\f0 ctica se desarrolla }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8084537 \hich\af0\dbch\af31505\loch\f0 
+un compilador para}{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12674697 \hich\af0\dbch\af31505\loch\f0 \hich\f0  un lenguaje de programaci\'f3\loch\f0 \hich\f0 n muy reducido, pero el c\'f3\loch\f0 \hich\f0 digo para la implementaci\'f3\loch\f0 
+n del compilador de Java,\hich\af0\dbch\af31505\loch\f0  por ejemplo, debe ser realmente }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid289369 \hich\af0\dbch\af31505\loch\f0 complejo y }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid12674697 
+\hich\af0\dbch\af31505\loch\f0 extenso. }{\rtlch\fcs1 \af0 \ltrch\fcs0 \lang3082\langfe3082\langnp3082\insrsid12674697\charrsid16718474 
 \par }{\*\themedata 504b030414000600080000002100e9de0fbfff0000001c020000130000005b436f6e74656e745f54797065735d2e786d6cac91cb4ec3301045f748fc83e52d4a
 9cb2400825e982c78ec7a27cc0c8992416c9d8b2a755fbf74cd25442a820166c2cd933f79e3be372bd1f07b5c3989ca74aaff2422b24eb1b475da5df374fd9ad
 5689811a183c61a50f98f4babebc2837878049899a52a57be670674cb23d8e90721f90a4d2fa3802cb35762680fd800ecd7551dc18eb899138e3c943d7e503b6
@@ -804,8 +828,8 @@ fffffffffffffffffdfffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e50000000000000000000000002024
-3624856bd801feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
+ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e5000000000000000000000000c031
+8c60817ad801feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000105000000000000}}

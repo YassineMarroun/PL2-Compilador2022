@@ -15,7 +15,7 @@ import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
 public class MemoriaPrograma {
 
     public int sizeTextos = 0;
-    public int sizePrincipal = 0;
+    public static int sizePrincipal = 0;
     public int direccionInicio = 2;
     public int inicioTextos = 2;
     public static HashMap<String, Integer> ambitosSize = new HashMap<String, Integer>();
@@ -69,7 +69,7 @@ public class MemoriaPrograma {
             ambitosSize.put(ambitoNombre, direccionLocal);
         
             if(ambito.getLevel() == 0) {
-                this.sizePrincipal = direccionLocal;
+                MemoriaPrograma.sizePrincipal = direccionLocal;
             }
         }    
         
