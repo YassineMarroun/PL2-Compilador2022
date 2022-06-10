@@ -141,6 +141,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 translate.append("MOVE #" + FP_ADDRESS + ", .IX");
                 translate.append("\n");
+                translate.append("BR /" + quadruple.getFirstOperand());
                 break;
             case "HALT":
                 translate.append("HALT");
@@ -332,7 +333,7 @@ public class ExecutionEnvironmentEns2001
                 translate.append("\n");
                 translate.append("INC .IX");
                 translate.append("\n");
-                translate.append("SUB .SP," + desplaza);
+                translate.append("SUB .SP, #" + desplaza);
                 translate.append("\n");
                 translate.append("MOVE .A, .SP");
                 translate.append("\n");
@@ -367,20 +368,37 @@ public class ExecutionEnvironmentEns2001
                 if(quadruple.getResult() != null) {
                     translate.append("ADD #1, [.IX]");
                     translate.append("\n");
-                    translate.append("MOVE " + getDireccion(quadruple.getResult()) + ", [.A");
+                    translate.append("MOVE " + getDireccion(quadruple.getResult()) + ", [.A]");
                     translate.append("\n");
                     translate.append("MOVE [.IX], [.R0]");
                     translate.append("\n");
-                    translate.append("RET");
                 }
-
-                // Return para procedimientos
-
+                // Return para procedimientos y funciones
+                translate.append("RET");
                 break;
         }
         return translate.toString(); 
     }
 
+
+    private String getDireccion(OperandIF operando) {
+        
+        if(operando instanceof TemporalIF) {
+            return "/" + ((TemporalIF)operando).getAddress();
+        }
+
+        if(operando instanceof Value) {
+            return "#" + ((Value)operando).getValue();
+        }
+
+        if(operando instanceof Variable) {
+            return "/" + ((Variable)operando).getSymbol().getDireccionMemoria();
+        }
+
+        return "";
+    }
+
+    /*
     private String getDireccion(OperandIF operando) {
 
         if(operando instanceof TemporalIF) {
@@ -399,7 +417,9 @@ public class ExecutionEnvironmentEns2001
 
         return "";
     }
+    */
 
+    
     private boolean esLocal(Variable variable) {
         return variable.getScope().getLevel() == Display.getDisplay().getNivelActual();
     }

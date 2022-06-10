@@ -205,7 +205,7 @@ axiom ::= defprincipal:defP {:
 	MemoriaPrograma memoria = new MemoriaPrograma();
 	memoria.asignarMemoria();
 
-	cb.addQuadruple("INICIO", new Value(memoria.direccionInicio));
+	cb.addQuadruple("INICIO", new Value(memoria.direccionInicio), defP.getLabelPrincipal());
 	cb.addQuadruples(defP.getIntermediateCode());
 	cb.addQuadruple("HALT");
 
@@ -484,6 +484,7 @@ procedimiento ::= COMIENZOPROCEDIMIENTO IDEN:id {:
 	cb.addQuadruple("INLABEL", procedimiento.getCodeLabel(), new Value(level));
 	cb.addQuadruples(sentencia.getIntermediateCode());
 	cb.addQuadruples(sentencias.getIntermediateCode());
+	cb.addQuadruple("RETURN");
 
 	s.setIntermediateCode(cb.create());
 	RESULT = s;
@@ -594,12 +595,16 @@ defprincipal ::= COMIENZOPROGRAMA IDEN:id {:
 	tiposTabla.addType(entero);
 	tiposTabla.addType(logico);
 :} DELIMFUNC seccionconstantes secciontipos seccionvariables seccionsubprograma:subpr COMIENZO listaSentencias:sentencias FINBLOQUESENTENCIAS FINPROGRAMA {:
-	DefPrincipal defP = new DefPrincipal();
+	
+	LabelFactoryIF lF = new LabelFactory();
+	LabelIF labelPrincipal = lF.create();
+	DefPrincipal defP = new DefPrincipal(labelPrincipal);
 
 	// CÓDIGO INTERMEDIO
 	ScopeIF ambito = scopeManager.getCurrentScope();
 	IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
 	cb.addQuadruples(subpr.getIntermediateCode());
+	cb.addQuadruple("INLABEL", labelPrincipal);
 	cb.addQuadruples(sentencias.getIntermediateCode());
 	defP.setIntermediateCode(cb.create());
 
@@ -707,6 +712,17 @@ expresion ::= expresion:exp1 MENORQUE expresion:exp2 {:
 	if(tipo instanceof TypeFunction) {
 		TypeIF tipoRetorno = ((TypeFunction)tipo).getTipoRetorno();
 		Expresion exp = new Expresion(tipoRetorno);
+
+		// CÓDIGO INTERMEDIO
+		ScopeIF ambito = scopeManager.getCurrentScope();
+		IntermediateCodeBuilder cb = new IntermediateCodeBuilder(ambito);
+		TemporalFactory tF = new TemporalFactory(ambito);
+		TemporalIF temp = tF.create();
+		cb.addQuadruples(llamada.getIntermediateCode());
+		cb.addQuadruple("RETFUN", temp);
+		exp.setIntermediateCode(cb.create());
+		exp.setTemporal(temp);
+
 		RESULT = exp;
 	} else {
 		semanticErrorManager.semanticFatalError("Error semantico: expresion de llamada a funcion debe ser una funcion");

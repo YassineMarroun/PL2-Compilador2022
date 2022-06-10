@@ -15,9 +15,9 @@ import es.uned.lsi.compiler.semantic.symbol.SymbolTableIF;
 public class MemoriaPrograma {
 
     public int sizeTextos = 0;
-    public static int sizePrincipal = 0;
     public int direccionInicio = 2;
     public int inicioTextos = 2;
+    public static int sizePrincipal = 0;
     public static HashMap<String, Integer> ambitosSize = new HashMap<String, Integer>();
  
     public static int sizeAmbito(String ambito) {
@@ -61,8 +61,14 @@ public class MemoriaPrograma {
             // Direcciones de memoria para los temporales: direcciones locales
             TemporalTableIF tablaTemporales = ambito.getTemporalTable();
             for(TemporalIF temporal : tablaTemporales.getTemporals()) {
-            	temporal.setAddress(direccionLocal);
-                direccionLocal++;
+            	
+                if(ambito.getLevel() == 0) {
+                    temporal.setAddress(direccionInicio);
+                    direccionInicio++;
+                } else {
+                    temporal.setAddress(direccionLocal);
+                    direccionLocal++;
+                }
             }
 
             // Se añade el ámbito y su tamaño en el HashMap

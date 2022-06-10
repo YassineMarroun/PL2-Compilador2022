@@ -19,9 +19,7 @@ public class Display {
         return nivelActual;
     }
 
-    public void setNivelActual(int nivelActual) {
-        nivelActual = nivelActual;
+    public void setNivelActual(int actual) {
+        nivelActual = actual;
     }
-    
-
 }

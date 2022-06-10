@@ -10,4 +10,12 @@ public class DefPrincipal extends NonTerminal {
         super();
         this.labelPrincipal = labelPrincipal;
     }
+
+    public LabelIF getLabelPrincipal() {
+        return labelPrincipal;
+    }
+
+    public void setLabelPrincipal(LabelIF labelPrincipal) {
+        this.labelPrincipal = labelPrincipal;
+    }
 }
