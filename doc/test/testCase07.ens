@@ -1,0 +1,91 @@
+;Quadruple - [INICIO 65, L_4, null]
+BR /65
+ORG 10
+text_1: DATA "b es mayor que a"
+text_3: DATA "a y b son iguales"
+text_2: DATA "a es mayor que b"
+ORG 65
+MOVE #65001, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
+BR /L_4
+;Quadruple - [INLABEL L_4, null, null]
+L_4:
+NOP
+
+;Quadruple - [MV T_0, 10, null]
+MOVE #10,/2
+
+;Quadruple - [MV T_1, 20, null]
+MOVE #20,/3
+
+;Quadruple - [LS T_2, T_0, T_1]
+CMP /2,/3
+BN /L_5
+MOVE #0,/4
+BR /L_6
+L_5:
+MOVE #1,/4
+L_6:
+
+;Quadruple - [BRTRUE T_2, L_2, null]
+CMP #1, /4
+BZ /L_2
+
+;Quadruple - [MV T_3, 20, null]
+MOVE #20,/5
+
+;Quadruple - [MV T_4, 10, null]
+MOVE #10,/6
+
+;Quadruple - [LS T_5, T_3, T_4]
+CMP /5,/6
+BN /L_7
+MOVE #0,/7
+BR /L_8
+L_7:
+MOVE #1,/7
+L_8:
+
+;Quadruple - [BRTRUE T_5, L_0, null]
+CMP #1, /7
+BZ /L_0
+
+;Quadruple - [WSTRING text_3, null, null]
+WRSTR /text_3
+WRCHAR #10
+
+;Quadruple - [BR L_1, null, null]
+BR /L_1
+
+;Quadruple - [INLABEL L_0, null, null]
+L_0:
+NOP
+
+;Quadruple - [WSTRING text_2, null, null]
+WRSTR /text_2
+WRCHAR #10
+
+;Quadruple - [INLABEL L_1, null, null]
+L_1:
+NOP
+
+;Quadruple - [BR L_3, null, null]
+BR /L_3
+
+;Quadruple - [INLABEL L_2, null, null]
+L_2:
+NOP
+
+;Quadruple - [WSTRING text_1, null, null]
+WRSTR /text_1
+WRCHAR #10
+
+;Quadruple - [INLABEL L_3, null, null]
+L_3:
+NOP
+
+;Quadruple - [HALT null, null, null]
+HALT
+

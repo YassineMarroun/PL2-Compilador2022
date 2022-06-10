@@ -1,9 +1,17 @@
-;Quadruple - [INICIO 54, null, null]
+;Quadruple - [INICIO 54, L_2, null]
 BR /54
 ORG 39
 text_1: DATA "cierto"
 text_2: DATA "falso"
 ORG 54
+MOVE #65001, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
+BR /L_2
+;Quadruple - [INLABEL L_2, null, null]
+L_2:
+NOP
 
 ;Quadruple - [MV T_1, 10, null]
 MOVE #10,/7
@@ -118,12 +126,12 @@ MOVE #20,/32
 
 ;Quadruple - [LS T_27, T_25, T_26]
 CMP /31,/32
-BN /L_2
+BN /L_3
 MOVE #0,/33
-BR /L_3
-L_2:
-MOVE #1,/33
+BR /L_4
 L_3:
+MOVE #1,/33
+L_4:
 
 ;Quadruple - [AND T_28, T_24, T_27]
 AND /30,/33
@@ -150,6 +158,10 @@ MOVE [.R2], /37
 ;Quadruple - [BRTRUE T_31, L_0, null]
 CMP #1, /37
 BZ /L_0
+
+;Quadruple - [WSTRING text_2, null, null]
+WRSTR /text_2
+WRCHAR #10
 
 ;Quadruple - [BR L_1, null, null]
 BR /L_1

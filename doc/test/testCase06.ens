@@ -1,102 +1,140 @@
-;Quadruple - [INICIO 5, null, null]
-BR /5
-ORG 5
-ORG 5
-MOVE #64985, .SP
+;Quadruple - [INICIO 22, L_2, null]
+BR /22
+ORG 22
+ORG 22
+MOVE #65001, .SP
 MOVE #65001, .R0
 MOVE #64999, [.R0]
 MOVE #64999, .IX
-
+BR /L_2
 ;Quadruple - [INLABEL L_SUMAR, 1, null]
 L_SUMAR:
 NOP
 
 ;Quadruple - [MVA T_3, A, null]
 MOVE #1,.R1
-MOVE .R1,#-7[.IX]
+MOVE .R1,/7
 
 ;Quadruple - [MVP T_4, T_3, null]
-MOVE #-7[.IX],.R1
+MOVE #7,.R1
 MOVE [.R1], .R2
-MOVE [.R2], #-8[.IX]
+MOVE [.R2], /8
 
 ;Quadruple - [MVA T_5, B, null]
 MOVE #3,.R1
-MOVE .R1,#-9[.IX]
+MOVE .R1,/9
 
 ;Quadruple - [MVP T_6, T_5, null]
-MOVE #-9[.IX],.R1
+MOVE #9,.R1
 MOVE [.R1], .R2
-MOVE [.R2], #-10[.IX]
+MOVE [.R2], /10
 
 ;Quadruple - [ADD T_7, T_4, T_6]
-ADD #-8[.IX],#-10[.IX]
-MOVE .A, #-11[.IX]
+ADD /8,/10
+MOVE .A, /11
 
 ;Quadruple - [MVA T_2, SUMA, null]
 MOVE #2,.R1
-MOVE .R1,#-6[.IX]
+MOVE .R1,/6
 
 ;Quadruple - [STP T_2, T_7, null]
-MOVE #-6[.IX],.R1
+MOVE #6,.R1
 MOVE [.R1], .R2
-MOVE #-11[.IX],[.R2]
+MOVE /11,[.R2]
 
 ;Quadruple - [MVA T_9, SUMA, null]
 MOVE #2,.R1
-MOVE .R1,#-13[.IX]
+MOVE .R1,/13
 
 ;Quadruple - [MVP T_10, T_9, null]
-MOVE #-13[.IX],.R1
+MOVE #13,.R1
 MOVE [.R1], .R2
-MOVE [.R2], #-14[.IX]
+MOVE [.R2], /14
 
 ;Quadruple - [RETURN T_10, null, null]
+ADD #1, [.IX]
+MOVE /14, [.A]
+MOVE [.IX], [.R0]
+RET
+;Quadruple - [INLABEL L_2, null, null]
+L_2:
+NOP
 
 ;Quadruple - [MV T_1, 5, null]
-MOVE #5,#-2[.IX]
+MOVE #5,/6
 
 ;Quadruple - [MVA T_0, C, null]
 MOVE #3,.R1
-MOVE .R1,#-1[.IX]
+MOVE .R1,/5
 
 ;Quadruple - [STP T_0, T_1, null]
-MOVE #-1[.IX],.R1
+MOVE #5,.R1
 MOVE [.R1], .R2
-MOVE #-2[.IX],[.R2]
+MOVE /6,[.R2]
 
 ;Quadruple - [MV T_4, 18, null]
-MOVE #18,#-5[.IX]
+MOVE #18,/9
 
 ;Quadruple - [MVA T_3, D, null]
 MOVE #4,.R1
-MOVE .R1,#-4[.IX]
+MOVE .R1,/8
 
 ;Quadruple - [STP T_3, T_4, null]
-MOVE #-4[.IX],.R1
+MOVE #8,.R1
 MOVE [.R1], .R2
-MOVE #-5[.IX],[.R2]
+MOVE /9,[.R2]
+
+;Quadruple - [MVA T_11, C, null]
+MOVE #3,.R1
+MOVE .R1,/16
+
+;Quadruple - [PARAM T_11, null, null]
+PUSH /16
+
+;Quadruple - [MVA T_12, D, null]
+MOVE #4,.R1
+MOVE .R1,/17
+
+;Quadruple - [PARAM T_12, null, null]
+PUSH /17
+
+;Quadruple - [CALL SUMAR, null, null]
+PUSH #0
+PUSH .IX
+MOVE .SP, .IX
+INC .IX
+SUB .SP, #15
+MOVE .A, .SP
+MOVE .IX, /65002
+CALL /L_SUMAR
+MOVE [.IX], /65001
+MOVE .IX, .SP
+ADD .SP, #3
+MOVE .A, .SP
+MOVE [.IX], .IX
+
+;Quadruple - [RETFUN T_13, null, null]
 
 ;Quadruple - [MVA T_6, SUMA, null]
 MOVE #2,.R1
-MOVE .R1,#-7[.IX]
+MOVE .R1,/11
 
-;Quadruple - [STP T_6, null, null]
-MOVE #-7[.IX],.R1
+;Quadruple - [STP T_6, T_13, null]
+MOVE #11,.R1
 MOVE [.R1], .R2
-MOVE ,[.R2]
+MOVE /18,[.R2]
 
-;Quadruple - [MVA T_14, SUMA, null]
+;Quadruple - [MVA T_15, SUMA, null]
 MOVE #2,.R1
-MOVE .R1,#-15[.IX]
+MOVE .R1,/20
 
-;Quadruple - [MVP T_15, T_14, null]
-MOVE #-15[.IX],.R1
+;Quadruple - [MVP T_16, T_15, null]
+MOVE #20,.R1
 MOVE [.R1], .R2
-MOVE [.R2], #-16[.IX]
+MOVE [.R2], /21
 
-;Quadruple - [WINT T_15, null, null]
-WRINT #-16[.IX]
+;Quadruple - [WINT T_16, null, null]
+WRINT /21
 WRCHAR #10
 
 ;Quadruple - [HALT null, null, null]

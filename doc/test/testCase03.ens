@@ -1,7 +1,15 @@
-;Quadruple - [INICIO 5, null, null]
+;Quadruple - [INICIO 5, L_0, null]
 BR /5
 ORG 5
 ORG 5
+MOVE #65001, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
+BR /L_0
+;Quadruple - [INLABEL L_0, null, null]
+L_0:
+NOP
 
 ;Quadruple - [MV T_0, 8, null]
 MOVE #8,/2

@@ -1,0 +1,262 @@
+;Quadruple - [INICIO 76, L_0, null]
+BR /76
+ORG 76
+ORG 76
+MOVE #65001, .SP
+MOVE #65001, .R0
+MOVE #64999, [.R0]
+MOVE #64999, .IX
+BR /L_0
+;Quadruple - [INLABEL L_0, null, null]
+L_0:
+NOP
+
+;Quadruple - [MV T_7, 1, null]
+MOVE #1,/15
+
+;Quadruple - [MV T_2, 1, null]
+MOVE #1,/10
+
+;Quadruple - [SUB T_3, T_2, 1]
+SUB /10,#1
+MOVE .A,/11
+
+;Quadruple - [MVA T_4, V, null]
+MOVE #3,.R1
+MOVE .R1,/12
+
+;Quadruple - [ADD T_5, T_4, T_3]
+ADD /12,/11
+MOVE .A, /13
+
+;Quadruple - [STP T_5, T_7, null]
+MOVE #13,.R1
+MOVE [.R1], .R2
+MOVE /15,[.R2]
+
+;Quadruple - [MV T_14, 3, null]
+MOVE #3,/22
+
+;Quadruple - [MV T_9, 3, null]
+MOVE #3,/17
+
+;Quadruple - [SUB T_10, T_9, 1]
+SUB /17,#1
+MOVE .A,/18
+
+;Quadruple - [MVA T_11, V, null]
+MOVE #3,.R1
+MOVE .R1,/19
+
+;Quadruple - [ADD T_12, T_11, T_10]
+ADD /19,/18
+MOVE .A, /20
+
+;Quadruple - [STP T_12, T_14, null]
+MOVE #20,.R1
+MOVE [.R1], .R2
+MOVE /22,[.R2]
+
+;Quadruple - [MV T_21, 5, null]
+MOVE #5,/29
+
+;Quadruple - [MV T_16, 5, null]
+MOVE #5,/24
+
+;Quadruple - [SUB T_17, T_16, 1]
+SUB /24,#1
+MOVE .A,/25
+
+;Quadruple - [MVA T_18, V, null]
+MOVE #3,.R1
+MOVE .R1,/26
+
+;Quadruple - [ADD T_19, T_18, T_17]
+ADD /26,/25
+MOVE .A, /27
+
+;Quadruple - [STP T_19, T_21, null]
+MOVE #27,.R1
+MOVE [.R1], .R2
+MOVE /29,[.R2]
+
+;Quadruple - [MV T_28, 1, null]
+MOVE #1,/36
+
+;Quadruple - [SUB T_29, T_28, 1]
+SUB /36,#1
+MOVE .A,/37
+
+;Quadruple - [MVA T_30, V, null]
+MOVE #3,.R1
+MOVE .R1,/38
+
+;Quadruple - [ADD T_31, T_30, T_29]
+ADD /38,/37
+MOVE .A, /39
+
+;Quadruple - [MVP T_32, T_31, null]
+MOVE #39,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /40
+
+;Quadruple - [MV T_33, 1, null]
+MOVE #1,/41
+
+;Quadruple - [ADD T_34, T_32, T_33]
+ADD /40,/41
+MOVE .A, /42
+
+;Quadruple - [MV T_23, 2, null]
+MOVE #2,/31
+
+;Quadruple - [SUB T_24, T_23, 1]
+SUB /31,#1
+MOVE .A,/32
+
+;Quadruple - [MVA T_25, V, null]
+MOVE #3,.R1
+MOVE .R1,/33
+
+;Quadruple - [ADD T_26, T_25, T_24]
+ADD /33,/32
+MOVE .A, /34
+
+;Quadruple - [STP T_26, T_34, null]
+MOVE #34,.R1
+MOVE [.R1], .R2
+MOVE /42,[.R2]
+
+;Quadruple - [MV T_41, 3, null]
+MOVE #3,/49
+
+;Quadruple - [SUB T_42, T_41, 1]
+SUB /49,#1
+MOVE .A,/50
+
+;Quadruple - [MVA T_43, V, null]
+MOVE #3,.R1
+MOVE .R1,/51
+
+;Quadruple - [ADD T_44, T_43, T_42]
+ADD /51,/50
+MOVE .A, /52
+
+;Quadruple - [MVP T_45, T_44, null]
+MOVE #52,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /53
+
+;Quadruple - [MV T_46, 5, null]
+MOVE #5,/54
+
+;Quadruple - [SUB T_47, T_46, 1]
+SUB /54,#1
+MOVE .A,/55
+
+;Quadruple - [MVA T_48, V, null]
+MOVE #3,.R1
+MOVE .R1,/56
+
+;Quadruple - [ADD T_49, T_48, T_47]
+ADD /56,/55
+MOVE .A, /57
+
+;Quadruple - [MVP T_50, T_49, null]
+MOVE #57,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /58
+
+;Quadruple - [MUL T_51, T_45, T_50]
+MUL /53,/58
+MOVE .A, /59
+
+;Quadruple - [MV T_52, 10, null]
+MOVE #10,/60
+
+;Quadruple - [ADD T_53, T_51, T_52]
+ADD /59,/60
+MOVE .A, /61
+
+;Quadruple - [MV T_36, 4, null]
+MOVE #4,/44
+
+;Quadruple - [SUB T_37, T_36, 1]
+SUB /44,#1
+MOVE .A,/45
+
+;Quadruple - [MVA T_38, V, null]
+MOVE #3,.R1
+MOVE .R1,/46
+
+;Quadruple - [ADD T_39, T_38, T_37]
+ADD /46,/45
+MOVE .A, /47
+
+;Quadruple - [STP T_39, T_53, null]
+MOVE #47,.R1
+MOVE [.R1], .R2
+MOVE /61,[.R2]
+
+;Quadruple - [MV T_56, 3, null]
+MOVE #3,/64
+
+;Quadruple - [SUB T_57, T_56, 1]
+SUB /64,#1
+MOVE .A,/65
+
+;Quadruple - [MVA T_58, V, null]
+MOVE #3,.R1
+MOVE .R1,/66
+
+;Quadruple - [ADD T_59, T_58, T_57]
+ADD /66,/65
+MOVE .A, /67
+
+;Quadruple - [MVP T_60, T_59, null]
+MOVE #67,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /68
+
+;Quadruple - [SUB T_61, T_60, 1]
+SUB /68,#1
+MOVE .A,/69
+
+;Quadruple - [MVA T_62, V, null]
+MOVE #3,.R1
+MOVE .R1,/70
+
+;Quadruple - [ADD T_63, T_62, T_61]
+ADD /70,/69
+MOVE .A, /71
+
+;Quadruple - [MVP T_64, T_63, null]
+MOVE #71,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /72
+
+;Quadruple - [MVA T_55, A, null]
+MOVE #2,.R1
+MOVE .R1,/63
+
+;Quadruple - [STP T_55, T_64, null]
+MOVE #63,.R1
+MOVE [.R1], .R2
+MOVE /72,[.R2]
+
+;Quadruple - [MVA T_66, A, null]
+MOVE #2,.R1
+MOVE .R1,/74
+
+;Quadruple - [MVP T_67, T_66, null]
+MOVE #74,.R1
+MOVE [.R1], .R2
+MOVE [.R2], /75
+
+;Quadruple - [WINT T_67, null, null]
+WRINT /75
+WRCHAR #10
+
+;Quadruple - [HALT null, null, null]
+HALT
+
